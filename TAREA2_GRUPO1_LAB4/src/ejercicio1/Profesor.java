@@ -34,4 +34,11 @@ public class Profesor extends Empleado {
 	public void setAntiguedadDocente(int antiguedadDocente) {
 		this.antiguedadDocente = antiguedadDocente;
 	}
+
+	public String toString() {
+		
+		return super.toString() + ", CARGO=" + cargo + ", ANTIGÜEDAD=" + antiguedadDocente;
+		
+		
+	}
 }
