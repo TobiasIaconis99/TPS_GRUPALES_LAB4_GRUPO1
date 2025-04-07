@@ -45,7 +45,7 @@ public class Profesor extends Empleado implements Comparable<Profesor> {
 	@Override
 	public int compareTo(Profesor o) {
 	    if (this.antiguedadDocente < o.antiguedadDocente) {
-	        return 1;
+	        return -1;
 	    } else if (this.antiguedadDocente > o.antiguedadDocente) {
 	        return -1;
 	    } else {
