@@ -1,7 +1,5 @@
 package ejercicio2;
 
-import java.sql.Date;
-
 
 public class ProductoFresco extends Producto {
 	
@@ -19,7 +17,7 @@ public class ProductoFresco extends Producto {
     public ProductoFresco() {
     	super("01/10/2026","1");
     	fechaEnvasado = "30/02/2020";
-    	paisOrigen= "Argentina";
+    	paisOrigen = "Argentina";
     }
 	
 	

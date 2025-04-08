@@ -1,7 +1,5 @@
 package ejercicio2;
 
-import java.sql.Date;
-
 public class ProductoCongelado extends Producto {
 	
 	private int temperaturaRecomendada;
@@ -12,6 +10,7 @@ public class ProductoCongelado extends Producto {
 	    super(fechaDeCaducidad, numeroLote);
 	    this.temperaturaRecomendada = temperaturaRecomendada;
 	}
+	
 	public ProductoCongelado() {
 	    super("08/04/2025", "1");
 	    this.temperaturaRecomendada = 10;

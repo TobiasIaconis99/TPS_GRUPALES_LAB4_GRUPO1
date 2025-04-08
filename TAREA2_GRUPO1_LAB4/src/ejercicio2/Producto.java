@@ -14,7 +14,7 @@ public class Producto {
 	 
 	public Producto() {
 		fechaDeCaducidad = "2025/06/05";
-		numeroLote = "0001";
+		numeroLote = "1";
 	}
 
 	// Getter y Setter 
