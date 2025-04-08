@@ -103,10 +103,10 @@ public class Empleado {
 		if (getClass() != obj.getClass())
 			return false;
 		Empleado other = (Empleado) obj;
-		return edad == other.edad && id == other.id && Objects.equals(nombre, other.nombre);
+		return edad == other.edad && Objects.equals(nombre, other.nombre);
 	}
-	
-	
+
+
 	
 
 	}
