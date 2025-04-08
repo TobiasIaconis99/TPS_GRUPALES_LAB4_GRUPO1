@@ -2,6 +2,7 @@ package ejercicio1;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class mainEjercicio1_a {
 
@@ -17,7 +18,7 @@ public class mainEjercicio1_a {
 		profesoresList.add(new Profesor("Elena", 30, "Profesor titular", 5));
 		
 		
-		Iterator<Profesor> iterator = profesoresList.iterator();
+		ListIterator<Profesor> iterator = profesoresList.listIterator();
 		while (iterator.hasNext()) {
 			Profesor p = iterator.next();
 			System.out.println(p.toString());
