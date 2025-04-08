@@ -1,8 +1,8 @@
 package ejercicio3;
 
 public class Edificio implements  IEdificio{
-	int numOficinas;
-	double superficie;
+	private int numOficinas;
+	private double superficie;
 	
 	public Edificio(int numOficinas,double superficie) {
 		this.numOficinas = numOficinas;

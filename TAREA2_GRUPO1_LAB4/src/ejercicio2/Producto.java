@@ -2,8 +2,8 @@ package ejercicio2;
 
 public class Producto {
 	
-	 String fechaDeCaducidad;
-	 String numeroLote;
+	 private String fechaDeCaducidad;
+	 private String numeroLote;
 	 
 	 
 	 // constructor	 

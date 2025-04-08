@@ -2,7 +2,7 @@ package ejercicio2;
 
 public class ProductoRefrigerado extends Producto {
 
-	int codigoOrganismo;
+	private int codigoOrganismo;
 	
 	// Constructor
 	public ProductoRefrigerado(String fechaDeCaducidad, String numeroLote, int codigoOrganismo) {
