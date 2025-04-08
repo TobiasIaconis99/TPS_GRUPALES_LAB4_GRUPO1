@@ -39,8 +39,7 @@ public class Profesor extends Empleado implements Comparable<Profesor> {
 
 	public String toString() {
 		
-		return "ID: " + super.getId() + ", Nombre: " + super.getNombre() + ", Edad:" + super.getEdad() + ", Cargo: " + cargo +", Antigüedad docente: " + antiguedadDocente;
-		//return super.toString() + ", CARGO=" + cargo + ", ANTIGÜEDAD=" + antiguedadDocente;		
+		return "ID: " + super.getId() + ", Nombre: " + super.getNombre() + ", Edad:" + super.getEdad() + ", Cargo: " + cargo +", Antigüedad docente: " + antiguedadDocente;	
 		
 	}
 
