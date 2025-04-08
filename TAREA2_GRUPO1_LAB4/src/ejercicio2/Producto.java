@@ -36,9 +36,9 @@ public class Producto {
 	}
 	
 	
-	// Método para mostrar información	 
-	public void mostrarInformacion() {
-	     System.out.println("Fecha de Caducidad: " + fechaDeCaducidad);
-	     System.out.println("Número de Lote: " + numeroLote);
-	 }
+	
+	@Override
+	public String toString() {
+		return "Producto [fechaDeCaducidad=" + fechaDeCaducidad + ", numeroLote=" + numeroLote + "]";
+	}
 }

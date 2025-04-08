@@ -38,12 +38,11 @@ public class ProductoFresco extends Producto {
 	public void setPaisOrigen(String paisOrigen) {
 	    this.paisOrigen = paisOrigen;
 	}
-	    
-	// metodo para mostrar informacion
-	public void mostrarInformacion() {
-	    super.mostrarInformacion();
-	    System.out.println("Fecha de Envasado: " + fechaEnvasado);
-	    System.out.println("País de Origen: " + paisOrigen);
-	}
 
+	@Override
+	public String toString() {
+		return "ProductoFresco [fechaEnvasado=" + fechaEnvasado + ", paisOrigen=" + paisOrigen + "]";
+	}
+	    
+	
 }

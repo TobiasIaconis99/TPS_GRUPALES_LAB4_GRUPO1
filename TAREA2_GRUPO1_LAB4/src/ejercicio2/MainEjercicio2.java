@@ -10,10 +10,12 @@ public class MainEjercicio2 {
 		ProductoRefrigerado pRefrigerado = new ProductoRefrigerado();
 		
 		
-		p.mostrarInformacion();
-		pCongelado.mostrarInformacion();
-		pFresco.mostrarInformacion();
-		pRefrigerado.mostrarInformacion();
+		System.out.println(p.toString());
+		System.out.println(pCongelado.toString());
+		System.out.println(pFresco.toString());
+		System.out.println(pRefrigerado.toString());
+		
+		
 		
 	}
 

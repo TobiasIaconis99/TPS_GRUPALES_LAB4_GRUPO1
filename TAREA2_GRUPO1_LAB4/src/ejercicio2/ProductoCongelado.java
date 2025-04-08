@@ -23,12 +23,12 @@ public class ProductoCongelado extends Producto {
 	public void setTemperaturaRecomendada(int temperaturaRecomendada) {
 		this.temperaturaRecomendada = temperaturaRecomendada;
 	}
-	
-	// Método para mostrar información
-	public void mostrarInformacion() {
-	    super.mostrarInformacion();
-	    System.out.println("Temperatura Recomendada: " + temperaturaRecomendada + "°C");
-	}
 
+	@Override
+	public String toString() {
+		return "ProductoCongelado [temperaturaRecomendada=" + temperaturaRecomendada + "]";
+	}
+	
+	
 
 }

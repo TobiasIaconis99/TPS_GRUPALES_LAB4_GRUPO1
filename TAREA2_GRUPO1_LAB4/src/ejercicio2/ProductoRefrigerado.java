@@ -23,12 +23,13 @@ public class ProductoRefrigerado extends Producto {
 	public void setCodigoOrganismo(int codigoOrganismo) {
 		this.codigoOrganismo = codigoOrganismo;
 	}
-	
-	
-	// Método para mostrar información
-	public void mostrarInformacion() {
-	    super.mostrarInformacion();
-	    System.out.println("Código del Organismo de Supervisión: " + codigoOrganismo);
+
+	@Override
+	public String toString() {
+		return "ProductoRefrigerado [codigoOrganismo=" + codigoOrganismo + "]";
 	}
+	
+	
+	
 
 }
