@@ -1,5 +1,7 @@
 package ejercicio1;
 
+import java.util.Objects;
+
 public class Empleado {
 
 	// Atributos
@@ -86,6 +88,26 @@ public class Empleado {
 	return cont+1;
 
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(edad, id, nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Empleado other = (Empleado) obj;
+		return edad == other.edad && id == other.id && Objects.equals(nombre, other.nombre);
+	}
+	
+	
+	
 
 	}
 

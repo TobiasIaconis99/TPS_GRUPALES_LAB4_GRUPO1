@@ -22,7 +22,7 @@ public class mainEjercicio1_a {
 			Profesor p = iterator.next();
 			System.out.println(p.toString());
 		}
-		
+
 
 	}
 
