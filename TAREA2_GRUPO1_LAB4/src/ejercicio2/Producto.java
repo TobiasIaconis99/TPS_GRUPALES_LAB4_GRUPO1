@@ -3,22 +3,26 @@ package ejercicio2;
 import java.sql.Date;
 
 public class Producto {
-	 Date fechaDeCaducidad;
+	 String fechaDeCaducidad;
 	 String numeroLote;
 	 
 	 // constructor
 	 
-	 public Producto(Date fechaDeCaducidad, String numeroLote) {
+	 public Producto(String fechaDeCaducidad, String numeroLote) {
 	        this.fechaDeCaducidad = fechaDeCaducidad;
 	        this.numeroLote = numeroLote;
 	    }
+	 public Producto() {
+		 fechaDeCaducidad = "2025/06/05";
+		 numeroLote = "1";
+	 }
 
 	// Getter y Setter 
-	    public Date getFechaDeCaducidad() {
+	    public String getFechaDeCaducidad() {
 	        return fechaDeCaducidad;
 	    }
 
-	    public void setFechaDeCaducidad(Date fechaDeCaducidad) {
+	    public void setFechaDeCaducidad(String fechaDeCaducidad) {
 	        this.fechaDeCaducidad = fechaDeCaducidad;
 	    }
 

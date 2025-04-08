@@ -7,10 +7,16 @@ public class ProductoRefrigerado extends Producto {
 int codigoOrganismo;
 
 // Constructor
-public ProductoRefrigerado(Date fechaDeCaducidad, String numeroLote, int codigoOrganismo) {
+public ProductoRefrigerado(String fechaDeCaducidad, String numeroLote, int codigoOrganismo) {
     super(fechaDeCaducidad, numeroLote);
     this.codigoOrganismo = codigoOrganismo;
 }
+
+public ProductoRefrigerado() {
+    super("10/10/2026", "33");
+    this.codigoOrganismo = 4;
+}
+
 
 public int getCodigoOrganismo() {
 	return codigoOrganismo;
