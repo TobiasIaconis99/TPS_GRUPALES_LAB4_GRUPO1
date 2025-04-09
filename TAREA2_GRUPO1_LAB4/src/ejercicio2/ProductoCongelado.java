@@ -26,7 +26,7 @@ public class ProductoCongelado extends Producto {
 
 	@Override
 	public String toString() {
-		return "ProductoCongelado [temperaturaRecomendada=" + temperaturaRecomendada + "]";
+		return super.toString() + "ProductoCongelado [temperaturaRecomendada=" + this.getFechaDeCaducidad() + "]";
 	}
 	
 	

@@ -2,7 +2,9 @@ package ejercicio2;
 
 public class Producto {
 	
+
 	 private String fechaDeCaducidad;
+
 	 private String numeroLote;
 	 
 	 
@@ -39,6 +41,6 @@ public class Producto {
 	
 	@Override
 	public String toString() {
-		return "PRODUCTO Fecha De Caducidad= " + fechaDeCaducidad + ", Numero de lote= " + numeroLote;
+		return  "PRODUCTO Fecha De Caducidad= " + this.getFechaDeCaducidad() + ", Numero de lote= " + this.getNumeroLote();
 	}
 }

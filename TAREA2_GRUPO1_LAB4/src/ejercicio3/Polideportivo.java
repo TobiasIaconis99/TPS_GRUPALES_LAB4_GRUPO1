@@ -25,5 +25,10 @@ public class Polideportivo implements instalacionDeportiva, IEdificio {
         return nombre;
     }
 
-
+@Override
+public String toString() {
+	// TODO Auto-generated method stub
+	return "Nombre:" + nombre + "Superficie:" + superficie + "Tipo de Instalacion:" + tipoInstalacion;
+}
+    
 }

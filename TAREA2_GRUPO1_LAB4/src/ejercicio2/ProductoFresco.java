@@ -30,7 +30,6 @@ public class ProductoFresco extends Producto {
 	    this.fechaEnvasado = fechaEnvasado;
 	}
 
-	// Getter y Setter para paisOrigen
 	public String getPaisOrigen() {
 	    return paisOrigen;
 	}
@@ -41,7 +40,7 @@ public class ProductoFresco extends Producto {
 
 	@Override
 	public String toString() {
-		return "ProductoFresco [fechaEnvasado=" + fechaEnvasado + ", paisOrigen=" + paisOrigen + "]";
+		return super.toString() + "ProductoFresco [fechaEnvasado=" + fechaEnvasado + ", paisOrigen=" + paisOrigen + "]";
 	}
 	    
 	
