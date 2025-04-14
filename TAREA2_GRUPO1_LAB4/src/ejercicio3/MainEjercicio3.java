@@ -21,12 +21,16 @@ public class MainEjercicio3 {
 
 	        Iterator<IEdificio> iterator = edificios.iterator();
 	        
-	       
 	        while(iterator.hasNext()) {
-	        	
-	        	IEdificio edificio = iterator.next();
-	        	System.out.println(edificio);
-	        	
+	            IEdificio e = iterator.next();
+
+	            if (e instanceof Edificio) {
+	                Edificio ed = (Edificio) e;
+	                System.out.println(ed.toString());
+	            } else if (e instanceof Polideportivo) {
+	                Polideportivo p = (Polideportivo) e;
+	                System.out.println(p.toString());
+	            }
 	        }
 
 	}
