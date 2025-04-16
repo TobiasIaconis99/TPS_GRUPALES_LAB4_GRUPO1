@@ -15,6 +15,14 @@ this.Apellido = Apellido;
 this.DNI = DNI;
 }
 
+public boolean verificarDniInvalido(String dni) throws DniInvalido {
+    for (int i = 0; i < dni.length(); i++) {
+        if (!Character.isDigit(dni.charAt(i))) {
+            throw new DniInvalido();
+        }
+    }
+    return false;
+}
 
 public String getNombre() {
 return Nombre;
