@@ -135,7 +135,17 @@ public class Archivo {
 			}
 		}
 	}
+	public void procesarLista(TreeSet<Persona> lista) {
+	    
+	    
+	    for (Persona p : lista) {
+	        System.out.println(p); 
+	    }
 
+	    
+	}
+
+	
 	public String getRuta() {
 		return ruta;
 	}
