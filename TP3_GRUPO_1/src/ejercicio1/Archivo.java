@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.TreeSet;
 
 public class Archivo {
 
@@ -100,6 +101,38 @@ public class Archivo {
 
 		} catch (IOException e) {
 			System.out.println("No se encontro el archivo");
+		}
+	}
+	public void leer_a_TreeSet(TreeSet<Persona> set) {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(ruta));
+			String linea;
+			while((linea = br.readLine()) != null) {
+				String[] clave = linea.split("-");
+				Persona p = new Persona();
+				
+				try {
+					if(p.verificarDniInvalido(clave[2])) {
+						p.setNombre(clave[0]);
+						p.setApellido(clave[1]);
+						p.setDNI(clave[2]);
+						set.add(p);
+					}
+				} catch (DniInvalido e) {
+					System.out.println(e.getMessage() + " [" + "Nombre=" + clave[0] + ", Apellido=" + clave[1] + ", DNI=" + clave[2] + "]");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
