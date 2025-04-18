@@ -14,6 +14,17 @@ public class Principal {
 			archivo.leer_a_TreeSet(tsPersonas);
 			
 			
+
+			archivo.setRuta("Resultado.txt");
+			
+			if(!archivo.existe()) {
+				archivo.creaArchivo();
+			}
+			System.out.println("datos cargados en Resultado.txt: ");
+			  for (Persona p : tsPersonas) {
+		 	        System.out.println(p);
+		 	    	archivo.escribe_lineas(p.ObjetoPersonatoString());
+		 	    }
 		}
 	}
 

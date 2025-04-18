@@ -15,7 +15,7 @@ public class Persona implements Comparable<Persona> {
 		this.DNI = DNI;
 	}
 	
-	public boolean verificarDniInvalido(String dni) throws DniInvalido {
+	public static boolean verificarDniInvalido(String dni) throws DniInvalido {
 		boolean b = true;
 		for (int i = 0; i < dni.length(); i++) {
 			if(!Character.isDigit(dni.charAt(i))) {
@@ -58,6 +58,10 @@ public class Persona implements Comparable<Persona> {
 	@Override
 	public String toString() {
 		return "Persona [Nombre=" + Nombre + ", Apellido=" + Apellido + ", DNI=" + DNI + "]";
+	}
+	
+	public String ObjetoPersonatoString() {
+		return Nombre + "-" + Apellido + "-" + DNI + "\n";
 	}
 	
 	@Override

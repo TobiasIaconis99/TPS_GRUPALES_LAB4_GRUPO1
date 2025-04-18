@@ -113,7 +113,7 @@ public class Archivo {
 				Persona p = new Persona();
 				
 				try {
-					if(p.verificarDniInvalido(clave[2])) {
+					if(Persona.verificarDniInvalido(clave[2])) {
 						p.setNombre(clave[0]);
 						p.setApellido(clave[1]);
 						p.setDNI(clave[2]);
@@ -135,7 +135,18 @@ public class Archivo {
 			}
 		}
 	}
-
+public void procesarLista(TreeSet<Persona> lista) {
+ 	    
+ 	    
+ 	    for (Persona p : lista) {
+ 	        //System.out.println(p);
+ 	    	
+ 	    }
+ 
+ 	    
+ 	}
+ 
+ 	
 	public String getRuta() {
 		return ruta;
 	}
