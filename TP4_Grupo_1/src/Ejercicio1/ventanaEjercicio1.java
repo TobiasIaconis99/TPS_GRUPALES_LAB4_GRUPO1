@@ -41,41 +41,43 @@ public class ventanaEjercicio1 extends JFrame {
 	public ventanaEjercicio1() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 414, 326);
+		setTitle("Ejercicio 1");
 		getContentPane().setLayout(null);
 		
+		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(45, 40, 46, 14);
+		lblNombre.setBounds(45, 40, 68, 14);
 		getContentPane().add(lblNombre);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(157, 34, 168, 20);
+		txtNombre.setBounds(169, 40, 168, 20);
 		getContentPane().add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		JLabel lblApellido = new JLabel("Apellidos");
-		lblApellido.setBounds(45, 77, 46, 14);
+		lblApellido.setBounds(45, 77, 68, 14);
 		getContentPane().add(lblApellido);
 		
 		txtApellido = new JTextField();
-		txtApellido.setBounds(157, 71, 168, 20);
+		txtApellido.setBounds(169, 77, 168, 20);
 		getContentPane().add(txtApellido);
 		txtApellido.setColumns(10);
 		
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(45, 118, 46, 14);
+		lblTelefono.setBounds(45, 118, 68, 14);
 		getContentPane().add(lblTelefono);
 		
 		txtTelefono = new JTextField();
-		txtTelefono.setBounds(157, 112, 168, 20);
+		txtTelefono.setBounds(169, 118, 168, 20);
 		getContentPane().add(txtTelefono);
 		txtTelefono.setColumns(10);
 		
 		JLabel lblFechaNacimiento = new JLabel("Fecha nacimiento");
-		lblFechaNacimiento.setBounds(46, 161, 91, 14);
+		lblFechaNacimiento.setBounds(46, 161, 112, 14);
 		getContentPane().add(lblFechaNacimiento);
 		
 		txtFechaNacimiento = new JTextField();
-		txtFechaNacimiento.setBounds(156, 155, 169, 20);
+		txtFechaNacimiento.setBounds(168, 161, 169, 20);
 		getContentPane().add(txtFechaNacimiento);
 		txtFechaNacimiento.setColumns(10);
 		
