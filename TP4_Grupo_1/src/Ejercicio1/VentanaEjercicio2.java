@@ -11,23 +11,23 @@ public class VentanaEjercicio2 extends JFrame {
 	// ATRIBUTOS -------------------------------------------------------------
 	private static final long serialVersionUID = 1L;
     private JTextField txtPromedio, txtCondicion; // Promedio y condicion del estudiante
-    private JTextField textField;
-    private JTextField textField_1;
-    private JTextField textField_2;
-    private JTextField textField_3;
+    private JTextField txtNota1;
+    private JTextField txtNota2;
+    private JTextField txtNota3;
     private JTextField textField_4;
+    private JTextField textField_3;
 
     // CONFIGURACION DE LA VENTANA -------------------------------------------------------------
     
     public VentanaEjercicio2() {
         super("Promedio"); // Titulo de ventana
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Solo cierra la ventana actual
-        setSize(500, 500); // Tamaño de la ventana
+        setSize(495, 437); // Tamaño de la ventana
         setLocationRelativeTo(null);
         getContentPane().setLayout(null);
         
         JPanel panelPromedio = new JPanel();
-        panelPromedio.setBounds(25, 256, 263, 122);
+        panelPromedio.setBounds(25, 256, 284, 122);
         getContentPane().add(panelPromedio);
         panelPromedio.setLayout(null);
         panelPromedio.setBorder(BorderFactory.createCompoundBorder(
@@ -36,42 +36,42 @@ public class VentanaEjercicio2 extends JFrame {
         		));
         
         JLabel lblPromedio = new JLabel("Promedio:");
-        lblPromedio.setBounds(36, 41, 46, 14);
+        lblPromedio.setBounds(36, 41, 67, 14);
         panelPromedio.add(lblPromedio);
         
         JLabel lblCondicion = new JLabel("Condicion:");
-        lblCondicion.setBounds(36, 82, 46, 14);
+        lblCondicion.setBounds(36, 82, 67, 14);
         panelPromedio.add(lblCondicion);
         
-        textField_3 = new JTextField();
-        textField_3.setBounds(111, 38, 86, 20);
-        panelPromedio.add(textField_3);
-        textField_3.setColumns(10);
-        
         textField_4 = new JTextField();
-        textField_4.setBounds(111, 79, 86, 20);
+        textField_4.setBounds(104, 79, 139, 20);
         panelPromedio.add(textField_4);
         textField_4.setColumns(10);
         
+        textField_3 = new JTextField();
+        textField_3.setColumns(10);
+        textField_3.setBounds(104, 38, 139, 20);
+        panelPromedio.add(textField_3);
+        
         JPanel panel_2 = new JPanel();
-        panel_2.setBounds(335, 11, 125, 426);
+        panel_2.setBounds(335, 11, 134, 351);
         getContentPane().add(panel_2);
         panel_2.setLayout(null);
         
         JButton btnCalcular = new JButton("CALCULAR");
-        btnCalcular.setBounds(26, 55, 89, 23);
+        btnCalcular.setBounds(10, 75, 105, 40);
         panel_2.add(btnCalcular);
         
         JButton btnNuevo = new JButton("NUEVO");
-        btnNuevo.setBounds(26, 118, 89, 23);
+        btnNuevo.setBounds(10, 118, 105, 40);
         panel_2.add(btnNuevo);
         
         JButton btnSalir = new JButton("SALIR");
-        btnSalir.setBounds(26, 179, 89, 23);
+        btnSalir.setBounds(10, 161, 105, 40);
         panel_2.add(btnSalir);
         
         JPanel panelNotas = new JPanel();
-        panelNotas.setBounds(25, 36, 263, 200);
+        panelNotas.setBounds(25, 36, 284, 200);
         getContentPane().add(panelNotas);
         panelNotas.setLayout(null);
         panelNotas.setBorder(BorderFactory.createCompoundBorder(
@@ -79,40 +79,40 @@ public class VentanaEjercicio2 extends JFrame {
         		BorderFactory.createEmptyBorder(10, 10, 10, 10)
         		));
         
-        JLabel lblNewLabel = new JLabel("Nota 1:");
-        lblNewLabel.setBounds(25, 44, 46, 14);
-        panelNotas.add(lblNewLabel);
+        JLabel lblNota1 = new JLabel("Nota 1:");
+        lblNota1.setBounds(25, 44, 46, 14);
+        panelNotas.add(lblNota1);
         
-        JLabel lblNewLabel_1 = new JLabel("Nota 2:");
-        lblNewLabel_1.setBounds(25, 75, 46, 14);
-        panelNotas.add(lblNewLabel_1);
+        JLabel lblNota2 = new JLabel("Nota 2:");
+        lblNota2.setBounds(25, 75, 46, 14);
+        panelNotas.add(lblNota2);
         
-        textField = new JTextField();
-        textField.setBounds(106, 41, 116, 20);
-        panelNotas.add(textField);
-        textField.setColumns(10);
+        txtNota1 = new JTextField();
+        txtNota1.setBounds(106, 41, 139, 20);
+        panelNotas.add(txtNota1);
+        txtNota1.setColumns(10);
         
-        textField_1 = new JTextField();
-        textField_1.setBounds(106, 72, 116, 20);
-        panelNotas.add(textField_1);
-        textField_1.setColumns(10);
+        txtNota2 = new JTextField();
+        txtNota2.setBounds(106, 72, 139, 20);
+        panelNotas.add(txtNota2);
+        txtNota2.setColumns(10);
         
-        JLabel lblNewLabel_2 = new JLabel("Nota 3:");
-        lblNewLabel_2.setBounds(25, 106, 46, 14);
-        panelNotas.add(lblNewLabel_2);
+        JLabel lblNota3 = new JLabel("Nota 3:");
+        lblNota3.setBounds(25, 106, 46, 14);
+        panelNotas.add(lblNota3);
         
-        textField_2 = new JTextField();
-        textField_2.setBounds(106, 103, 116, 20);
-        panelNotas.add(textField_2);
-        textField_2.setColumns(10);
+        txtNota3 = new JTextField();
+        txtNota3.setBounds(106, 103, 139, 20);
+        panelNotas.add(txtNota3);
+        txtNota3.setColumns(10);
         
-        JLabel lblNewLabel_3 = new JLabel("TPS");
-        lblNewLabel_3.setBounds(25, 138, 46, 14);
-        panelNotas.add(lblNewLabel_3);
+        JLabel lblTPS = new JLabel("TPS");
+        lblTPS.setBounds(25, 138, 46, 14);
+        panelNotas.add(lblTPS);
         
-        JComboBox comboBox = new JComboBox();
-        comboBox.setBounds(106, 134, 116, 22);
-        panelNotas.add(comboBox);
+        JComboBox comboBoxCondicion = new JComboBox();
+        comboBoxCondicion.setBounds(106, 134, 139, 22);
+        panelNotas.add(comboBoxCondicion);
         
     }
     
