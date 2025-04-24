@@ -67,9 +67,22 @@ public class VentanaEjercicio2 extends JFrame {
         getContentPane().add(panelIzquierdo); // Agrego los campos de notas y tp al panel
 
         // PANEL DERECHO para los botones (panelBotones)
-        JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
+        JPanel panelBotones = new JPanel();
         panelBotones.setBorder(BorderFactory.createEmptyBorder(150, 50, 150, 50));
         getContentPane().add(panelBotones); // Agrego los botones al panel
+        panelBotones.setLayout(null);
+        
+        JButton btnCalcular = new JButton("Calcular");
+        btnCalcular.setBounds(96, 98, 124, 47);
+        panelBotones.add(btnCalcular);
+        
+        JButton btnNuevo = new JButton("Nuevo");
+        btnNuevo.setBounds(96, 152, 124, 47);
+        panelBotones.add(btnNuevo);
+        
+        JButton btnSalir = new JButton("Salir");
+        btnSalir.setBounds(96, 207, 124, 47);
+        panelBotones.add(btnSalir);
         
     }
     
