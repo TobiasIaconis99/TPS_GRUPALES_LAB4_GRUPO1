@@ -14,8 +14,8 @@ public class VentanaEjercicio2 extends JFrame {
     private JTextField txtNota1;
     private JTextField txtNota2;
     private JTextField txtNota3;
-    private JTextField textField_4;
-    private JTextField textField_3;
+    private JTextField txt_Condicion;
+    private JTextField txt_Promedio;
 
     // CONFIGURACION DE LA VENTANA -------------------------------------------------------------
     
@@ -43,15 +43,15 @@ public class VentanaEjercicio2 extends JFrame {
         lblCondicion.setBounds(36, 82, 67, 14);
         panelPromedio.add(lblCondicion);
         
-        textField_4 = new JTextField();
-        textField_4.setBounds(104, 79, 139, 20);
-        panelPromedio.add(textField_4);
-        textField_4.setColumns(10);
+        txt_Condicion = new JTextField();
+        txt_Condicion.setBounds(104, 79, 139, 20);
+        panelPromedio.add(txt_Condicion);
+        txt_Condicion.setColumns(10);
         
-        textField_3 = new JTextField();
-        textField_3.setColumns(10);
-        textField_3.setBounds(104, 38, 139, 20);
-        panelPromedio.add(textField_3);
+        txt_Promedio = new JTextField();
+        txt_Promedio.setColumns(10);
+        txt_Promedio.setBounds(104, 38, 139, 20);
+        panelPromedio.add(txt_Promedio);
         
         JPanel panel_2 = new JPanel();
         panel_2.setBounds(335, 11, 134, 351);
