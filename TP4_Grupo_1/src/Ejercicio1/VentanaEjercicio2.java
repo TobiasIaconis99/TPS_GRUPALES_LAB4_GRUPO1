@@ -11,6 +11,8 @@ public class VentanaEjercicio2 extends JFrame {
 	private JTextField txtNota1, txtNota2, txtNota3; // Notas
     private JTextField txtPromedio, txtCondicion; // Promedio y condicion del estudiante
     private JComboBox<String> comboTps; // Pelector del estado de los tps
+    private JTextField textField;
+    private JTextField textField_1;
 
     // CONFIGURACION DE LA VENTANA -------------------------------------------------------------
     
@@ -57,13 +59,32 @@ public class VentanaEjercicio2 extends JFrame {
 
         // SUBPANEL IZQUIERDO ABAJO de salida (panelSalida)
         // Solo para mostrar el promedio y la condicion del alumno     
-        JPanel panelSalida = new JPanel(new GridLayout(5, 2, 5, 5));
+        JPanel panelSalida = new JPanel();
         panelSalida.setBorder(BorderFactory.createCompoundBorder(
         	    BorderFactory.createTitledBorder("Notas del estudiante"),
         	    BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         panelIzquierdo.add(Box.createVerticalStrut(10));
         panelIzquierdo.add(panelSalida);
+        panelSalida.setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("New label");
+        lblNewLabel.setBounds(10, 28, 46, 14);
+        panelSalida.add(lblNewLabel);
+        
+        JLabel lblNewLabel_1 = new JLabel("New label");
+        lblNewLabel_1.setBounds(10, 60, 46, 14);
+        panelSalida.add(lblNewLabel_1);
+        
+        textField = new JTextField();
+        textField.setBounds(66, 25, 86, 20);
+        panelSalida.add(textField);
+        textField.setColumns(10);
+        
+        textField_1 = new JTextField();
+        textField_1.setBounds(66, 57, 86, 20);
+        panelSalida.add(textField_1);
+        textField_1.setColumns(10);
         getContentPane().add(panelIzquierdo); // Agrego los campos de notas y tp al panel
 
         // PANEL DERECHO para los botones (panelBotones)
