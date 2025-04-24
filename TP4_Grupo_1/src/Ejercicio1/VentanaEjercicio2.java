@@ -58,18 +58,6 @@ public class VentanaEjercicio2 extends JFrame {
         getContentPane().add(panel_2);
         panel_2.setLayout(null);
         
-        JButton btnCalcular = new JButton("CALCULAR");
-        btnCalcular.setBounds(10, 75, 105, 40);
-        panel_2.add(btnCalcular);
-        
-        JButton btnNuevo = new JButton("NUEVO");
-        btnNuevo.setBounds(10, 118, 105, 40);
-        panel_2.add(btnNuevo);
-        
-        JButton btnSalir = new JButton("SALIR");
-        btnSalir.setBounds(10, 161, 105, 40);
-        panel_2.add(btnSalir);
-        
         JPanel panelNotas = new JPanel();
         panelNotas.setBounds(25, 36, 284, 200);
         getContentPane().add(panelNotas);
