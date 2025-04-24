@@ -54,7 +54,7 @@ public class VentanaEjercicio2 extends JFrame {
         panelPromedio.add(txt_Promedio);
         
         JPanel panel_2 = new JPanel();
-        panel_2.setBounds(335, 11, 134, 351);
+        panel_2.setBounds(335, 11, 134, 354);
         getContentPane().add(panel_2);
         panel_2.setLayout(null);
         
