@@ -36,11 +36,11 @@ public class VentanaEjercicio2 extends JFrame {
         		));
         
         JLabel lblPromedio = new JLabel("Promedio:");
-        lblPromedio.setBounds(36, 41, 67, 14);
+        lblPromedio.setBounds(27, 41, 67, 14);
         panelPromedio.add(lblPromedio);
         
         JLabel lblCondicion = new JLabel("Condicion:");
-        lblCondicion.setBounds(36, 82, 67, 14);
+        lblCondicion.setBounds(27, 82, 67, 14);
         panelPromedio.add(lblCondicion);
         
         txt_Condicion = new JTextField();
