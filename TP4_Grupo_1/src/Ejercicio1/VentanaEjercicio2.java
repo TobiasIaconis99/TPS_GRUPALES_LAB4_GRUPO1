@@ -53,11 +53,6 @@ public class VentanaEjercicio2 extends JFrame {
         txt_Promedio.setBounds(104, 38, 139, 20);
         panelPromedio.add(txt_Promedio);
         
-        JPanel panel_2 = new JPanel();
-        panel_2.setBounds(335, 11, 134, 354);
-        getContentPane().add(panel_2);
-        panel_2.setLayout(null);
-        
         JPanel panelNotas = new JPanel();
         panelNotas.setBounds(25, 36, 284, 200);
         getContentPane().add(panelNotas);
@@ -103,6 +98,23 @@ public class VentanaEjercicio2 extends JFrame {
         comboTps.addItem("Aprobado");
         comboTps.addItem("Desaprobado");
         panelNotas.add(comboTps);
+        
+        JPanel panel_2 = new JPanel();
+        panel_2.setLayout(null);
+        panel_2.setBounds(335, 11, 134, 354);
+        getContentPane().add(panel_2);
+        
+        JButton btnCalcular = new JButton("CALCULAR");
+        btnCalcular.setBounds(10, 75, 105, 40);
+        panel_2.add(btnCalcular);
+        
+        JButton btnNuevo = new JButton("NUEVO");
+        btnNuevo.setBounds(10, 118, 105, 40);
+        panel_2.add(btnNuevo);
+        
+        JButton btnSalir = new JButton("SALIR");
+        btnSalir.setBounds(10, 161, 105, 40);
+        panel_2.add(btnSalir);
         
     }
     
