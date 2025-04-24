@@ -112,6 +112,8 @@ public class VentanaEjercicio2 extends JFrame {
         
         JComboBox comboTps = new JComboBox();
         comboTps.setBounds(106, 134, 139, 22);
+        comboTps.addItem("Aprobado");
+        comboTps.addItem("Desaprobado");
         panelNotas.add(comboTps);
         
     }
