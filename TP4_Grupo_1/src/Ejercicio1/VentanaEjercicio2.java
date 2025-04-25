@@ -111,6 +111,11 @@ public class VentanaEjercicio2 extends JFrame {
         panel_2.add(btnNuevo);
         
         JButton btnSalir = new JButton("SALIR");
+        btnSalir.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		dispose();
+        	}
+        });
         btnSalir.setBounds(10, 161, 105, 40);
         panel_2.add(btnSalir);
         
@@ -130,9 +135,13 @@ public class VentanaEjercicio2 extends JFrame {
     private void calcularCondicion() {
         try {
         	// Notas y tp
-            double nota1 = Double.parseDouble(txtNota1.getText());
+           /* double nota1 = Double.parseDouble(txtNota1.getText());
             double nota2 = Double.parseDouble(txtNota2.getText());
-            double nota3 = Double.parseDouble(txtNota3.getText());
+            double nota3 = Double.parseDouble(txtNota3.getText());*/
+        	double nota1 = Double.parseDouble(txtNota1.getText().replace(',', '.'));
+            double nota2 = Double.parseDouble(txtNota2.getText().replace(',', '.'));
+            double nota3 = Double.parseDouble(txtNota3.getText().replace(',', '.'));
+            
             String tp = (String) comboTps.getSelectedItem();
             
             List<Double> notas = List.of(nota1, nota2, nota3);
