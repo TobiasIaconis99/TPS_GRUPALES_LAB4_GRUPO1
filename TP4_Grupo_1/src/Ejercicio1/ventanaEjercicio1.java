@@ -39,7 +39,7 @@ public class ventanaEjercicio1 extends JFrame {
 	 * Create the frame.
 	 */
 	public ventanaEjercicio1() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 414, 326);
 		setTitle("Ejercicio 1");
 		getContentPane().setLayout(null);
@@ -82,10 +82,41 @@ public class ventanaEjercicio1 extends JFrame {
 		txtFechaNacimiento.setColumns(10);
 		
 		JLabel lblDatosIngresados = new JLabel("Los datos ingresados fueron:");
-		lblDatosIngresados.setBounds(32, 249, 183, 14);
+		lblDatosIngresados.setBounds(32, 249, 342, 27);
 		getContentPane().add(lblDatosIngresados);
 		
 		JButton btnMostrar = new JButton("Mostrar");
+		btnMostrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				        boolean todosCompletos = true;
+
+				        // Metemos los campos en un array
+				        JTextField[] campos = { txtNombre, txtApellido, txtTelefono, txtFechaNacimiento };
+
+				        // Recorremos y validamos
+				        for (JTextField campo : campos) {
+				            if (campo.getText().trim().isEmpty()) {
+				                campo.setBackground(java.awt.Color.RED);
+				                todosCompletos = false;
+				            } else {
+				                campo.setBackground(java.awt.Color.WHITE);
+				            }
+				        }
+
+				        if (todosCompletos) {
+				        	lblDatosIngresados.setText("Los datos ingresados fueron: " +
+				            		txtNombre.getText() + " " + txtApellido.getText() + ", " + txtTelefono.getText() + ", " + txtFechaNacimiento.getText());
+				                for(JTextField campo : campos) {
+				                	campo.setText("");
+				                }
+				            ;
+				        } else {
+				        	lblDatosIngresados.setText("COMPLETE TODOS LOS CAMPOS");
+				        }
+				    }
+			
+		});
 		btnMostrar.setBounds(236, 198, 89, 23);
 		getContentPane().add(btnMostrar);
 		
