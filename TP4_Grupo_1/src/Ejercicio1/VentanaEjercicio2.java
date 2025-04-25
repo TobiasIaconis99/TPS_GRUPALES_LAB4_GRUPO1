@@ -4,6 +4,7 @@ package Ejercicio1;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class VentanaEjercicio2 extends JFrame {
 
@@ -134,11 +135,17 @@ public class VentanaEjercicio2 extends JFrame {
             double nota3 = Double.parseDouble(txtNota3.getText());
             String tp = (String) comboTps.getSelectedItem();
             
-            // Validación de rango 1 a 10
-            if (!esNotaValida(nota1) || !esNotaValida(nota2) || !esNotaValida(nota3)) {
+            List<Double> notas = List.of(nota1, nota2, nota3);
+            if (notas.stream().anyMatch(n -> !esNotaValida(n))) {
                 JOptionPane.showMessageDialog(this, "LAS NOTAS DEBEN SER DEL 1 AL 10", "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
+            // Validación de rango 1 a 10
+           // if (!esNotaValida(nota1) || !esNotaValida(nota2) || !esNotaValida(nota3)) {
+             //   JOptionPane.showMessageDialog(this, "LAS NOTAS DEBEN SER DEL 1 AL 10", "ERROR", JOptionPane.ERROR_MESSAGE);
+               // return;
+           // }
 
             // Calculo del promedio
             double promedio = (nota1 + nota2 + nota3) / 3;
