@@ -58,7 +58,7 @@ public class VentanaPrincipal extends JFrame {
 		JButton btnEjercicio1 = new JButton("Ejercicio 1");
 		btnEjercicio1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventanaEjercicio1 ventana = new ventanaEjercicio1();
+				VentanaEjercicio1 ventana = new VentanaEjercicio1();
 				
 				ventana.cambiarVisibilidad(true);
 			}

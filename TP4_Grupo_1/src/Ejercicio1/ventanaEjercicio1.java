@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ventanaEjercicio1 extends JFrame {
+public class VentanaEjercicio1 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtNombre;
@@ -19,26 +19,7 @@ public class ventanaEjercicio1 extends JFrame {
 	private JTextField txtTelefono;
 	private JTextField txtFechaNacimiento;
 
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ventanaEjercicio1 frame = new ventanaEjercicio1();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the frame.
-	 */
-	public ventanaEjercicio1() {
+	public VentanaEjercicio1() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 414, 326);
 		setTitle("Ejercicio 1");
@@ -110,7 +91,7 @@ public class ventanaEjercicio1 extends JFrame {
 				                for(JTextField campo : campos) {
 				                	campo.setText("");
 				                }
-				            ;
+				            
 				        } else {
 				        	lblDatosIngresados.setText("COMPLETE TODOS LOS CAMPOS");
 				        }
@@ -120,8 +101,6 @@ public class ventanaEjercicio1 extends JFrame {
 		btnMostrar.setBounds(236, 198, 89, 23);
 		getContentPane().add(btnMostrar);
 		
-		JButton btnMostrarInfo = new JButton("Mostrar");
-		btnMostrarInfo.setBounds(242, 198, 89, 23);
 		
 	}
 	public void cambiarVisibilidad(boolean estado) {
