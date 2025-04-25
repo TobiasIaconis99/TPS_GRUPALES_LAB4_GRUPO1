@@ -109,6 +109,21 @@ public class VentanaEjercicio2 extends JFrame {
         JButton btnNuevo = new JButton("NUEVO");
         btnNuevo.setBounds(10, 118, 105, 40);
         panel_2.add(btnNuevo);
+
+
+        btnNuevo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtNota1.setText("");
+                txtNota2.setText("");
+                txtNota3.setText("");
+                txt_Promedio.setText("");
+                txt_Condicion.setText("");
+                comboTps.setSelectedIndex(0); 
+                txtNota1.requestFocus(); 
+            }
+        });
+
         
         JButton btnSalir = new JButton("SALIR");
         btnSalir.addActionListener(new ActionListener() {
@@ -130,6 +145,7 @@ public class VentanaEjercicio2 extends JFrame {
         });
         
     }  
+    
     
  // FUNCION PARA CALCULAR -------------------------------------------------------------
     private void calcularCondicion() {
@@ -190,6 +206,7 @@ public class VentanaEjercicio2 extends JFrame {
             JOptionPane.showMessageDialog(this, "DATOS MAL INGRESADOS", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
     
     // Valida si la nota esta entre el 1 y el 10.
     private boolean esNotaValida(double nota) {
