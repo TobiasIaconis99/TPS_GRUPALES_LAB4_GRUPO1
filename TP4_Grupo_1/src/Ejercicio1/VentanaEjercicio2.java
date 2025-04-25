@@ -2,20 +2,19 @@ package Ejercicio1;
 
 // Importo todas las clases del paquete javax.swing, java.awt y eventos de AWT.
 import javax.swing.*;
-import javax.swing.border.Border;
-
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class VentanaEjercicio2 extends JFrame {
 
 	// ATRIBUTOS -------------------------------------------------------------
 	private static final long serialVersionUID = 1L;
-    private JTextField txtPromedio, txtCondicion; // Promedio y condicion del estudiante
     private JTextField txtNota1;
     private JTextField txtNota2;
     private JTextField txtNota3;
     private JTextField txt_Condicion;
     private JTextField txt_Promedio;
+    private JComboBox<String> comboTps;
 
     // CONFIGURACION DE LA VENTANA -------------------------------------------------------------
     
@@ -93,10 +92,8 @@ public class VentanaEjercicio2 extends JFrame {
         lblTPS.setBounds(25, 138, 46, 14);
         panelNotas.add(lblTPS);
         
-        JComboBox comboTps = new JComboBox();
-        comboTps.setBounds(106, 134, 139, 22);
-        comboTps.addItem("Aprobado");
-        comboTps.addItem("Desaprobado");
+        comboTps = new JComboBox<>(new String[]{"Aprobado", "Desaprobado"});
+        comboTps.setBounds(106, 134, 139, 22);       
         panelNotas.add(comboTps);
         
         JPanel panel_2 = new JPanel();
@@ -116,6 +113,71 @@ public class VentanaEjercicio2 extends JFrame {
         btnSalir.setBounds(10, 161, 105, 40);
         panel_2.add(btnSalir);
         
+        // FUNCIONALIDADES DE LA VENTANA -------------------------------------------------------------
+
+        // Funcionalidad del boton CALCULAR
+        btnCalcular.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+                calcularCondicion();
+            }
+        });
+        
+    }  
+    
+ // FUNCION PARA CALCULAR -------------------------------------------------------------
+    private void calcularCondicion() {
+        try {
+        	// Notas y tp
+            double nota1 = Double.parseDouble(txtNota1.getText());
+            double nota2 = Double.parseDouble(txtNota2.getText());
+            double nota3 = Double.parseDouble(txtNota3.getText());
+            String tp = (String) comboTps.getSelectedItem();
+            
+            // Validación de rango 1 a 10
+            if (!esNotaValida(nota1) || !esNotaValida(nota2) || !esNotaValida(nota3)) {
+                JOptionPane.showMessageDialog(this, "LAS NOTAS DEBEN SER DEL 1 AL 10", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Calculo del promedio
+            double promedio = (nota1 + nota2 + nota3) / 3;
+            txt_Promedio.setText(String.format("%.2f", promedio));
+
+            //Decido la condicion del estudiante solo con el promedio de notas
+            String condicion;
+            
+            if (tp.equals("Desaprobado") || nota1 < 6 || nota2 < 6 || nota3 < 6) {
+            	
+	            // Siempre que el TP esté en condición Desaprobado,
+	            // la condición del alumno es libre independientemente de las tres notas numéricas obtenidas.
+	            // Si alguna de las tres notas del alumno es inferior a 6, la condición del alumno es libre 
+	            // independientemente de la nota del TP.
+                condicion = "Libre";
+                
+            }else if (nota1 >= 8 && nota2 >= 8 && nota3 >= 8) {
+            	
+            	//Si la nota de los tres parciales es superior o igual a 8 y el TP se encuentra aprobado, 
+            	// entonces la condición es promocionado. 
+                condicion = "Promocionado";
+                
+            }else {
+            	
+            	//Si los tres parciales se encuentran en el rango de notas entre 6 y 8 y el Tp se encuentra aprobado,
+            	// entonces la condición es regular.
+                condicion = "Regular";
+            }
+
+            txt_Condicion.setText(condicion);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "DATOS MAL INGRESADOS", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    // Valida si la nota esta entre el 1 y el 10.
+    private boolean esNotaValida(double nota) {
+        return nota >= 1 && nota <= 10;
     }
     
     public void cambiarVisibilidad(boolean estado) {
