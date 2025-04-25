@@ -31,7 +31,7 @@ public class VentanaEjercicio2 extends JFrame {
         getContentPane().add(panelPromedio);
         panelPromedio.setLayout(null);
         panelPromedio.setBorder(BorderFactory.createCompoundBorder(
-        		BorderFactory.createTitledBorder("Notas del estudiante"),
+        		BorderFactory.createTitledBorder("Promedio del estudiante"),
         		BorderFactory.createEmptyBorder(10, 10, 10, 10)
         		));
         
