@@ -101,25 +101,36 @@ public class VentanaEjercicio3 extends JFrame {
     private void mostrarInformacion() {
         StringBuilder mensaje = new StringBuilder();
 
-        // Validar que eligió las opciones correspondientes
         if (!rdbtnWindows.isSelected() && !rdbtnMac.isSelected() && !rdbtnLinux.isSelected()) {
             JOptionPane.showMessageDialog(this, "Por favor, selecciona un sistema operativo.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-     
+
         if (!chckbxProgramacion.isSelected() && !chckbxAdministracion.isSelected() && !chckbxDisenoGrafico.isSelected()) {
             JOptionPane.showMessageDialog(this, "Por favor, selecciona al menos una especialidad.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
         String horasTexto = textField.getText().trim();
 
+        if (horasTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad de horas.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-     if (horasTexto.isEmpty()) {
-         JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad de horas.", "Error", JOptionPane.ERROR_MESSAGE);
-         return;
-     }
+        // --- VALIDACIÓN DE SOLO NÚMEROS ---
+        try {
+            int horas = Integer.parseInt(horasTexto);
+            if (horas < 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad de horas no puede ser negativa.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa solo números en la cantidad de horas.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // -----------------------------------
 
-        
         if (rdbtnWindows.isSelected()) {
             mensaje.append("Windows");
         } else if (rdbtnMac.isSelected()) {
@@ -138,11 +149,11 @@ public class VentanaEjercicio3 extends JFrame {
             mensaje.append(" - Diseño Gráfico");
         }
 
-        String horas = textField.getText();
-        mensaje.append(" - ").append(horas).append(" Hs");
+        mensaje.append(" - ").append(horasTexto).append(" Hs");
 
         JOptionPane.showMessageDialog(this, mensaje.toString(), "Mensaje", JOptionPane.INFORMATION_MESSAGE);
     }
+
 
     public void cambiarVisibilidad(boolean estado) {
         setVisible(estado);
