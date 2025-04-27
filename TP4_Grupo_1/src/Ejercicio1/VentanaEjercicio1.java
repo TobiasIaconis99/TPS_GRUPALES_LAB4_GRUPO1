@@ -114,53 +114,57 @@ public class VentanaEjercicio1 extends JFrame {
 				}
 			}
 		});
-		btnMostrar.setBounds(236, 198, 89, 23);
+		btnMostrar.setBounds(258, 204, 89, 23);
 		getContentPane().add(btnMostrar);
 
 		// Campos para mostrar los datos (Inicialmente invisibles)
-		lblMostrarNombre = new JLabel("Nombre ingresado:");
-		lblMostrarNombre.setBounds(45, 240, 120, 20);
+		lblMostrarNombre = new JLabel("Nombre:");
+		lblMostrarNombre.setBounds(55, 260, 90, 20);
 		lblMostrarNombre.setVisible(false);
 		getContentPane().add(lblMostrarNombre);
 		
 		txtMostrarNombre = new JTextField();
-		txtMostrarNombre.setBounds(169, 240, 168, 20);
+		txtMostrarNombre.setBounds(169, 260, 168, 20);
 		txtMostrarNombre.setEditable(false);
 		txtMostrarNombre.setVisible(false);
 		getContentPane().add(txtMostrarNombre);
 		
-		lblMostrarApellido = new JLabel("Apellido ingresado:");
-		lblMostrarApellido.setBounds(45, 270, 120, 20);
+		lblMostrarApellido = new JLabel("Apellido:");
+		lblMostrarApellido.setBounds(55, 290, 90, 20);
 		lblMostrarApellido.setVisible(false);
 		getContentPane().add(lblMostrarApellido);
 		
 		txtMostrarApellido = new JTextField();
-		txtMostrarApellido.setBounds(169, 270, 168, 20);
+		txtMostrarApellido.setBounds(169, 290, 168, 20);
 		txtMostrarApellido.setEditable(false);
 		txtMostrarApellido.setVisible(false);
 		getContentPane().add(txtMostrarApellido);
 		
-		lblMostrarTelefono = new JLabel("Teléfono ingresado:");
-		lblMostrarTelefono.setBounds(45, 300, 120, 20);
+		lblMostrarTelefono = new JLabel("Teléfono:");
+		lblMostrarTelefono.setBounds(55, 320, 90, 20);
 		lblMostrarTelefono.setVisible(false);
 		getContentPane().add(lblMostrarTelefono);
 		
 		txtMostrarTelefono = new JTextField();
-		txtMostrarTelefono.setBounds(169, 300, 168, 20);
+		txtMostrarTelefono.setBounds(169, 320, 168, 20);
 		txtMostrarTelefono.setEditable(false);
 		txtMostrarTelefono.setVisible(false);
 		getContentPane().add(txtMostrarTelefono);
 		
-		lblMostrarFechaNacimiento = new JLabel("Fecha nacimiento:");
-		lblMostrarFechaNacimiento.setBounds(45, 330, 120, 20);
+		lblMostrarFechaNacimiento = new JLabel("Fecha:");
+		lblMostrarFechaNacimiento.setBounds(55, 350, 90, 20);
 		lblMostrarFechaNacimiento.setVisible(false);
 		getContentPane().add(lblMostrarFechaNacimiento);
 		
 		txtMostrarFechaNacimiento = new JTextField();
-		txtMostrarFechaNacimiento.setBounds(169, 330, 168, 20);
+		txtMostrarFechaNacimiento.setBounds(169, 350, 168, 20);
 		txtMostrarFechaNacimiento.setEditable(false);
 		txtMostrarFechaNacimiento.setVisible(false);
 		getContentPane().add(txtMostrarFechaNacimiento);
+		
+		JLabel lblNewLabel = new JLabel("Los datos ingresados fueron:");
+		lblNewLabel.setBounds(45, 235, 177, 14);
+		getContentPane().add(lblNewLabel);
 	}
 	
 	public void cambiarVisibilidad(boolean estado) {
