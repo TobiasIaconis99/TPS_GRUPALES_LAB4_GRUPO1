@@ -22,9 +22,9 @@ public class VentanaEjercicio3 extends JFrame {
     private JCheckBox chckbxDisenoGrafico;
 
     public VentanaEjercicio3() {
+    	setTitle("Seleccion Multiple");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 450, 420);
-        setTitle("Ejercicio 3");
         getContentPane().setLayout(null);
 
         JPanel panelSistOperativo = new JPanel();
@@ -77,7 +77,7 @@ public class VentanaEjercicio3 extends JFrame {
         panel.add(chckbxDisenoGrafico);
 
         JPanel panelHoras = new JPanel();
-        panelHoras.setBorder(new LineBorder(new Color(0, 0, 0)));
+        panelHoras.setBorder(null);
         panelHoras.setBounds(28, 260, 377, 110);
         getContentPane().add(panelHoras);
         panelHoras.setLayout(null);
