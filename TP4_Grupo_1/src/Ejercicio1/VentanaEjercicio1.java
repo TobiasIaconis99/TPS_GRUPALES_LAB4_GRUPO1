@@ -28,7 +28,7 @@ public class VentanaEjercicio1 extends JFrame {
 	private JLabel lblMostrarFechaNacimiento;
 
 	public VentanaEjercicio1() {
-		setTitle("Contacto");
+		setTitle("Contactos");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 420);
 		getContentPane().setLayout(null);
