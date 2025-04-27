@@ -101,6 +101,25 @@ public class VentanaEjercicio3 extends JFrame {
     private void mostrarInformacion() {
         StringBuilder mensaje = new StringBuilder();
 
+        // Validar que eligió las opciones correspondientes
+        if (!rdbtnWindows.isSelected() && !rdbtnMac.isSelected() && !rdbtnLinux.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un sistema operativo.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+     
+        if (!chckbxProgramacion.isSelected() && !chckbxAdministracion.isSelected() && !chckbxDisenoGrafico.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona al menos una especialidad.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String horasTexto = textField.getText().trim();
+
+
+     if (horasTexto.isEmpty()) {
+         JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad de horas.", "Error", JOptionPane.ERROR_MESSAGE);
+         return;
+     }
+
+        
         if (rdbtnWindows.isSelected()) {
             mensaje.append("Windows");
         } else if (rdbtnMac.isSelected()) {
