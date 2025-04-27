@@ -114,50 +114,50 @@ public class VentanaEjercicio1 extends JFrame {
 				}
 			}
 		});
-		btnMostrar.setBounds(236, 198, 89, 23);
+		btnMostrar.setBounds(254, 198, 89, 23);
 		getContentPane().add(btnMostrar);
 
 		// Campos para mostrar los datos (Inicialmente invisibles)
 		lblMostrarNombre = new JLabel("Nombre");
-		lblMostrarNombre.setBounds(45, 257, 72, 20);
+		lblMostrarNombre.setBounds(55, 257, 72, 20);
 		lblMostrarNombre.setVisible(false);
 		getContentPane().add(lblMostrarNombre);
 		
 		txtMostrarNombre = new JTextField();
-		txtMostrarNombre.setBounds(127, 257, 168, 20);
+		txtMostrarNombre.setBounds(137, 257, 168, 20);
 		txtMostrarNombre.setEditable(false);
 		txtMostrarNombre.setVisible(false);
 		getContentPane().add(txtMostrarNombre);
 		
 		lblMostrarApellido = new JLabel("Apellido");
-		lblMostrarApellido.setBounds(45, 288, 56, 20);
+		lblMostrarApellido.setBounds(55, 288, 56, 20);
 		lblMostrarApellido.setVisible(false);
 		getContentPane().add(lblMostrarApellido);
 		
 		txtMostrarApellido = new JTextField();
-		txtMostrarApellido.setBounds(127, 288, 168, 20);
+		txtMostrarApellido.setBounds(137, 288, 168, 20);
 		txtMostrarApellido.setEditable(false);
 		txtMostrarApellido.setVisible(false);
 		getContentPane().add(txtMostrarApellido);
 		
 		lblMostrarTelefono = new JLabel("Teléfono");
-		lblMostrarTelefono.setBounds(45, 319, 63, 20);
+		lblMostrarTelefono.setBounds(55, 319, 63, 20);
 		lblMostrarTelefono.setVisible(false);
 		getContentPane().add(lblMostrarTelefono);
 		
 		txtMostrarTelefono = new JTextField();
-		txtMostrarTelefono.setBounds(127, 319, 168, 20);
+		txtMostrarTelefono.setBounds(137, 319, 168, 20);
 		txtMostrarTelefono.setEditable(false);
 		txtMostrarTelefono.setVisible(false);
 		getContentPane().add(txtMostrarTelefono);
 		
 		lblMostrarFechaNacimiento = new JLabel("Fecha");
-		lblMostrarFechaNacimiento.setBounds(45, 350, 63, 20);
+		lblMostrarFechaNacimiento.setBounds(55, 350, 63, 20);
 		lblMostrarFechaNacimiento.setVisible(false);
 		getContentPane().add(lblMostrarFechaNacimiento);
 		
 		txtMostrarFechaNacimiento = new JTextField();
-		txtMostrarFechaNacimiento.setBounds(127, 350, 168, 20);
+		txtMostrarFechaNacimiento.setBounds(137, 350, 168, 20);
 		txtMostrarFechaNacimiento.setEditable(false);
 		txtMostrarFechaNacimiento.setVisible(false);
 		getContentPane().add(txtMostrarFechaNacimiento);
