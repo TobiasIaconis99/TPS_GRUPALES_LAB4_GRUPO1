@@ -59,7 +59,7 @@ public class VentanaPrincipal extends JFrame {
 		btnEjercicio3.setBounds(165, 170, 142, 21);
 		contentPane.add(btnEjercicio3);
 		
-		JLabel lblGrupoNro1 = new JLabel("Grupo NRO: 1");
+		JLabel lblGrupoNro1 = new JLabel("GRUPO NRO: 1");
 		lblGrupoNro1.setBounds(93, 44, 83, 21);
 		contentPane.add(lblGrupoNro1);
 	}
