@@ -1,42 +1,66 @@
 package ejercicio1;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import java.awt.BorderLayout;
+import javax.swing.JPanel;
 
 public class VentanaPrincipal extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
 
-	public VentanaPrincipal() {
-		setTitle("Programa");
-		setSize(450, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
+    public VentanaPrincipal() {
+        setTitle("Programa");
+        setSize(450, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+        contentPane = new JPanel(new BorderLayout());
+        setContentPane(contentPane);
 
-		JMenu menuPeliculas = new JMenu("Películas");
-		menuBar.add(menuPeliculas);
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
 
-		JMenuItem itemAgregar = new JMenuItem("Agregar");
-		JMenuItem itemListar = new JMenuItem("Listar");
+        JMenu menuPeliculas = new JMenu("Películas");
+        menuBar.add(menuPeliculas);
 
-		menuPeliculas.add(itemAgregar);
-		menuPeliculas.add(itemListar);
-	}
+        JMenuItem itemAgregar = new JMenuItem("Agregar");
+        JMenuItem itemListar = new JMenuItem("Listar");
 
-	public void CambiarVisivilidad(boolean estado) {
-		setVisible(estado);
-	}
+        menuPeliculas.add(itemAgregar);
+        menuPeliculas.add(itemListar);
+
+        // Acción del menú "Agregar"
+        itemAgregar.addActionListener(e -> {
+            contentPane.removeAll();
+            PanelIngresoPeliculas panel = new PanelIngresoPeliculas();
+            contentPane.add(panel, BorderLayout.CENTER);
+            contentPane.revalidate();
+            contentPane.repaint();
+        });
+
+        // Acción del menú "Listar" (sin implementar aún)
+        itemListar.addActionListener(e -> {
+            contentPane.removeAll();
+            //  PanelListadoPeliculas panel = new ...
+            contentPane.revalidate();
+            contentPane.repaint();
+        });
+    }
+
+    public void CambiarVisibilidad(boolean estado) {
+        setVisible(estado);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            VentanaPrincipal ventana = new VentanaPrincipal();
+            ventana.CambiarVisibilidad(true);
+        });
+    }
 }
-

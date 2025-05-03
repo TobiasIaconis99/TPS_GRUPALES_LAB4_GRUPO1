@@ -9,13 +9,6 @@ public class Peliculas {
     private static int cont = 0;
 
     // Constructores
-    public Peliculas() {
-        cont++;
-        id = cont;
-        nombre = "Sin nombre";
-        categoria = null; 
-    }
-
     public Peliculas(String nombre, Categorias categoria) {
         cont++;
         id = cont;
