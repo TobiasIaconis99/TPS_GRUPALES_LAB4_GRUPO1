@@ -3,6 +3,7 @@ package ejercicio1;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,7 +39,22 @@ public class VentanaPrincipal extends JFrame {
         // Acción del menú "Agregar"
         itemAgregar.addActionListener(e -> {
             contentPane.removeAll();
+
+            // Crear el panel
             PanelIngresoPeliculas panel = new PanelIngresoPeliculas();
+
+            // Crear y llenar el modelo del combo
+            DefaultComboBoxModel<Categorias> modelo = new DefaultComboBoxModel<>();
+            modelo.addElement(new Categorias("Seleccione un genero"));
+            modelo.addElement(new Categorias("Terror"));
+            modelo.addElement(new Categorias("Accion"));
+            modelo.addElement(new Categorias("Suspenso"));
+            modelo.addElement(new Categorias("Romantica"));
+
+            // Asignar modelo al combo
+            panel.setCategoriasComboModel(modelo);
+
+            // Agregar el panel
             contentPane.add(panel, BorderLayout.CENTER);
             contentPane.revalidate();
             contentPane.repaint();
@@ -47,7 +63,7 @@ public class VentanaPrincipal extends JFrame {
         // Acción del menú "Listar" (sin implementar aún)
         itemListar.addActionListener(e -> {
             contentPane.removeAll();
-            //  PanelListadoPeliculas panel = new ...
+            // PanelListadoPeliculas panel = new ...
             contentPane.revalidate();
             contentPane.repaint();
         });
