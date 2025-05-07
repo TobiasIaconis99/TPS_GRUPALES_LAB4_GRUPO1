@@ -4,69 +4,55 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class VentanaPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private static  DefaultListModel<Peliculas> listModel;
 
     public VentanaPrincipal() {
-        setTitle("Programa");
-        setSize(450, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 475, 399);
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
-        JMenu menuPeliculas = new JMenu("Películas");
-        menuBar.add(menuPeliculas);
+        JMenu mnPeliculas = new JMenu("Peliculas");
+        menuBar.add(mnPeliculas);
 
-        JMenuItem itemAgregar = new JMenuItem("Agregar");
-        JMenuItem itemListar = new JMenuItem("Listar");
+        listModel = new DefaultListModel<Peliculas>();
 
-        menuPeliculas.add(itemAgregar);
-        menuPeliculas.add(itemListar);
+        contentPane = new JPanel();
+        contentPane.setLayout(null); 
+        setContentPane(contentPane); 
 
-        // Acción del menú "Agregar"
-        itemAgregar.addActionListener(e -> {
-            contentPane.removeAll();
-
-            // Crear el panel
-            PanelIngresoPeliculas panel = new PanelIngresoPeliculas();
-
-            // Crear y llenar el modelo del combo
-            DefaultComboBoxModel<Categorias> modelo = new DefaultComboBoxModel<>();
-            modelo.addElement(new Categorias("Seleccione un genero"));
-            modelo.addElement(new Categorias("Terror"));
-            modelo.addElement(new Categorias("Accion"));
-            modelo.addElement(new Categorias("Suspenso"));
-            modelo.addElement(new Categorias("Romantica"));
-
-            // Asignar modelo al combo
-            panel.setCategoriasComboModel(modelo);
-
-            // Agregar el panel
-            contentPane.add(panel, BorderLayout.CENTER);
-            contentPane.revalidate();
-            contentPane.repaint();
+        JMenuItem itemAgregarPeliculas = new JMenuItem("Agregar");
+        itemAgregarPeliculas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                contentPane.removeAll();
+                PanelIngresoPeliculas panelIngreso = new PanelIngresoPeliculas();
+                panelIngreso.setBounds(0, 0, 400, 300);
+                panelIngreso.setDefaultListModel(listModel);
+                contentPane.add(panelIngreso);
+                contentPane.repaint();
+                contentPane.revalidate();
+            }
         });
+        mnPeliculas.add(itemAgregarPeliculas);
 
-        // Acción del menú "Listar" (sin implementar aún)
-        itemListar.addActionListener(e -> {
-            contentPane.removeAll();
-            // PanelListadoPeliculas panel = new ...
-            contentPane.revalidate();
-            contentPane.repaint();
-        });
+        JMenuItem itemListarPelicula = new JMenuItem("Listar");
+        mnPeliculas.add(itemListarPelicula);
     }
 
     public void CambiarVisibilidad(boolean estado) {

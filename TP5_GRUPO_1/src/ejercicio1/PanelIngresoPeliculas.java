@@ -1,7 +1,10 @@
 package ejercicio1;
 
 import javax.swing.*;
+
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PanelIngresoPeliculas extends JPanel {
 
@@ -9,97 +12,69 @@ public class PanelIngresoPeliculas extends JPanel {
     private JComboBox<Categorias> comboGenero;
     private JLabel lblID;
     private JButton btnAceptar;
+    private DefaultListModel<Peliculas> listModel;
+    private JTextField txtNombrePelicula;
 
     public PanelIngresoPeliculas() {
-        // INICIO: CONFIGURACIÓN VISUAL DEL PANEL
-        setBackground(Color.WHITE); // Fondo blanco para el panel
-        setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
-        // FIN: CONFIGURACIÓN VISUAL DEL PANEL
+    	setLayout(null);
+    	
+    	JLabel lblId = new JLabel("ID");
+    	lblId.setBounds(76, 44, 46, 14); 
+    	add(lblId);
+    	
+    	JLabel lblNombrePelicula = new JLabel("Nombre");
+    	lblNombrePelicula.setBounds(76, 75, 46, 14);
+    	add(lblNombrePelicula);
+    	
+    	JLabel lblGeneroPelicula = new JLabel("Genero");
+    	lblGeneroPelicula.setBounds(76, 112, 46, 14);    	
+    	add(lblGeneroPelicula);
+    	
+    	
+    	JLabel lblIDAutomatico = new JLabel("");
+    	lblIDAutomatico.setBounds(187, 44, 46, 14);
+    	lblIDAutomatico.setText(String.valueOf(Peliculas.devuelveProximoID()));
+    	add(lblIDAutomatico);
+    	
+    	
+    	txtNombrePelicula = new JTextField();
+    	txtNombrePelicula.setBounds(187, 72, 138, 20);
+    	add(txtNombrePelicula);
+    	txtNombrePelicula.setColumns(10);
+    	
+    	comboGenero = new JComboBox<>();
+    	comboGenero.setBounds(187, 110, 138, 18);
+    	add(comboGenero);
 
-        dibujarControles();
+    	comboGenero.addItem(new Categorias(0, "Seleccione un genero"));
+    	comboGenero.addItem(new Categorias(1, "Terror"));
+    	comboGenero.addItem(new Categorias(2, "Accion"));
+    	comboGenero.addItem(new Categorias(3, "Suspenso"));
+    	comboGenero.addItem(new Categorias(4, "Romantica"));
+    	
+    	
+    	JButton btnAgregarPelicula = new JButton("Aceptar");
+    	btnAgregarPelicula.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			Categorias categoriaSeleccionada = (Categorias) comboGenero.getSelectedItem();
+    			Peliculas pelicula = new Peliculas(txtNombrePelicula.getText(), categoriaSeleccionada);    			
+    			listModel.addElement(pelicula);
+    			lblIDAutomatico.setText(String.valueOf(Peliculas.devuelveProximoID()));
+    			txtNombrePelicula.setText("");
+    			comboGenero.setSelectedIndex(0);
+    			
+    		}
+    	});
+    	btnAgregarPelicula.setBounds(76, 157, 114, 23);
+    	add(btnAgregarPelicula);
+    	
+
+
+
     }
-
-    public void dibujarControles() {
-        Font fuenteComun = new Font("Tahoma", Font.PLAIN, 18);
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-        // ID
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.EAST;
-        add(new JLabel("ID"), gbc);
-
-        lblID = new JLabel(String.valueOf(Peliculas.devuelveProximoID()));
-        lblID.setFont(fuenteComun);
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(lblID, gbc);
-
-        // Nombre
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.EAST;
-        add(new JLabel("Nombre"), gbc);
-
-        txtNombre = new JTextField(15);
-        txtNombre.setFont(fuenteComun);
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(txtNombre, gbc);
-
-        // Género
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.EAST;
-        add(new JLabel("Género"), gbc);
-
-        comboGenero = new JComboBox<>();
-        comboGenero.setFont(fuenteComun);
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(comboGenero, gbc);
-
-        // Botón Aceptar
-        btnAceptar = new JButton("Aceptar");
-        btnAceptar.setFont(fuenteComun);
-
-        // INICIO: ESTILO VISUAL DEL BOTÓN
-        btnAceptar.setFocusPainted(false);
-        btnAceptar.setBackground(new Color(240, 240, 240));
-        btnAceptar.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(180, 180, 180)),
-                BorderFactory.createEmptyBorder(5, 15, 5, 15)
-        ));
-        // FIN: ESTILO VISUAL DEL BOTÓN
-
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        gbc.anchor = GridBagConstraints.CENTER;
-        add(btnAceptar, gbc);
-    }
-
-    public void setCategoriasComboModel(DefaultComboBoxModel<Categorias> modelo) {
-        comboGenero.setModel(modelo);
-    }
-
-    public JButton getBtnAceptar() {
-        return btnAceptar;
-    }
-
-    public String getNombreIngresado() {
-        return txtNombre.getText().trim();
-    }
-
-    public Categorias getCategoriaSeleccionada() {
-        return (Categorias) comboGenero.getSelectedItem();
-    }
-
-    public int getIdMostrado() {
-        return Integer.parseInt(lblID.getText());
-    }
+    
+	public void setDefaultListModel(DefaultListModel<Peliculas> listModelRecibido)
+	{
+		this.listModel = listModelRecibido;
+	}
 }
