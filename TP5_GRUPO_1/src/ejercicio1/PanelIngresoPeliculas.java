@@ -17,7 +17,7 @@ public class PanelIngresoPeliculas extends JPanel {
     	setLayout(null);
     	
     	JLabel lblId = new JLabel("ID");
-    	lblId.setBounds(45, 44, 46, 14);
+    	lblId.setBounds(45, 44, 46, 14); 
     	add(lblId);
     	
     	JLabel lblNombrePelicula = new JLabel("Nombre");
@@ -25,12 +25,15 @@ public class PanelIngresoPeliculas extends JPanel {
     	add(lblNombrePelicula);
     	
     	JLabel lblGeneroPelicula = new JLabel("Genero");
-    	lblGeneroPelicula.setBounds(45, 142, 46, 14);
+    	lblGeneroPelicula.setBounds(45, 142, 46, 14);    	
     	add(lblGeneroPelicula);
     	
-    	JLabel lblNewLabel_3 = new JLabel("New label");
-    	lblNewLabel_3.setBounds(164, 44, 46, 14);
-    	add(lblNewLabel_3);
+    	
+    	JLabel lblIDAutomatico = new JLabel("");
+    	lblIDAutomatico.setBounds(164, 44, 46, 14);
+    	lblIDAutomatico.setText(String.valueOf(Peliculas.devuelveProximoID()));
+    	add(lblIDAutomatico);
+    	
     	
     	txtNombrePelicula = new JTextField();
     	txtNombrePelicula.setBounds(164, 86, 138, 20);
