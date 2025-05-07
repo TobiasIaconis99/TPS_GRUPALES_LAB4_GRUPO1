@@ -44,6 +44,13 @@ public class PanelIngresoPeliculas extends JPanel {
     	JButton btnNewButton = new JButton("New button");
     	btnNewButton.setBounds(193, 216, 89, 23);
     	add(btnNewButton);
+    	
+        DefaultComboBoxModel<Categorias> modelo = new DefaultComboBoxModel<>();
+        modelo.addElement(new Categorias("Seleccione un genero"));
+        modelo.addElement(new Categorias("Terror"));
+        modelo.addElement(new Categorias("Accion"));
+        modelo.addElement(new Categorias("Suspenso"));
+        modelo.addElement(new Categorias("Romantica"));
 
 
     }
