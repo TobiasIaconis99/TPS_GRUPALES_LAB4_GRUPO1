@@ -11,39 +11,39 @@ public class PanelIngresoPeliculas extends JPanel {
     private JLabel lblID;
     private JButton btnAceptar;
     private DefaultListModel<Peliculas> listModel;
-    private JTextField textField;
+    private JTextField txtNombrePelicula;
 
     public PanelIngresoPeliculas() {
     	setLayout(null);
     	
-    	JLabel lblNewLabel = new JLabel("ID");
-    	lblNewLabel.setBounds(45, 44, 46, 14);
-    	add(lblNewLabel);
+    	JLabel lblId = new JLabel("ID");
+    	lblId.setBounds(45, 44, 46, 14);
+    	add(lblId);
     	
-    	JLabel lblNewLabel_1 = new JLabel("Nombre");
-    	lblNewLabel_1.setBounds(45, 89, 46, 14);
-    	add(lblNewLabel_1);
+    	JLabel lblNombrePelicula = new JLabel("Nombre");
+    	lblNombrePelicula.setBounds(45, 89, 46, 14);
+    	add(lblNombrePelicula);
     	
-    	JLabel lblNewLabel_2 = new JLabel("Genero");
-    	lblNewLabel_2.setBounds(45, 142, 46, 14);
-    	add(lblNewLabel_2);
+    	JLabel lblGeneroPelicula = new JLabel("Genero");
+    	lblGeneroPelicula.setBounds(45, 142, 46, 14);
+    	add(lblGeneroPelicula);
     	
     	JLabel lblNewLabel_3 = new JLabel("New label");
     	lblNewLabel_3.setBounds(164, 44, 46, 14);
     	add(lblNewLabel_3);
     	
-    	textField = new JTextField();
-    	textField.setBounds(164, 86, 138, 20);
-    	add(textField);
-    	textField.setColumns(10);
+    	txtNombrePelicula = new JTextField();
+    	txtNombrePelicula.setBounds(164, 86, 138, 20);
+    	add(txtNombrePelicula);
+    	txtNombrePelicula.setColumns(10);
     	
-    	JComboBox comboBox = new JComboBox();
-    	comboBox.setBounds(164, 138, 121, 22);
-    	add(comboBox);
+    	JComboBox cbxGeneroPeliculas = new JComboBox();
+    	cbxGeneroPeliculas.setBounds(164, 138, 121, 22);
+    	add(cbxGeneroPeliculas);
     	
-    	JButton btnNewButton = new JButton("New button");
-    	btnNewButton.setBounds(193, 216, 89, 23);
-    	add(btnNewButton);
+    	JButton btnAgregarPelicula = new JButton("Aceptar");
+    	btnAgregarPelicula.setBounds(193, 216, 89, 23);
+    	add(btnAgregarPelicula);
     	
         DefaultComboBoxModel<Categorias> modelo = new DefaultComboBoxModel<>();
         modelo.addElement(new Categorias("Seleccione un genero"));

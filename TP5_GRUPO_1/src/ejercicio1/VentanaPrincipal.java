@@ -28,8 +28,8 @@ public class VentanaPrincipal extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
-        JMenu mnNewMenu = new JMenu("New menu");
-        menuBar.add(mnNewMenu);
+        JMenu mnPeliculas = new JMenu("Peliculas");
+        menuBar.add(mnPeliculas);
 
         listModel = new DefaultListModel<Peliculas>();
 
@@ -37,8 +37,8 @@ public class VentanaPrincipal extends JFrame {
         contentPane.setLayout(null); 
         setContentPane(contentPane); 
 
-        JMenuItem mntmNewMenuItem = new JMenuItem("New menu item");
-        mntmNewMenuItem.addActionListener(new ActionListener() {
+        JMenuItem itemAgregarPeliculas = new JMenuItem("Agregar");
+        itemAgregarPeliculas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 contentPane.removeAll();
                 PanelIngresoPeliculas panelIngreso = new PanelIngresoPeliculas();
@@ -49,10 +49,10 @@ public class VentanaPrincipal extends JFrame {
                 contentPane.revalidate();
             }
         });
-        mnNewMenu.add(mntmNewMenuItem);
+        mnPeliculas.add(itemAgregarPeliculas);
 
-        JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
-        mnNewMenu.add(mntmNewMenuItem_1);
+        JMenuItem itemListarPelicula = new JMenuItem("Listar");
+        mnPeliculas.add(itemListarPelicula);
     }
 
     public void CambiarVisibilidad(boolean estado) {
