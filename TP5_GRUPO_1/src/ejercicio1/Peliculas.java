@@ -40,7 +40,7 @@ public class Peliculas {
     // Métodos
     @Override
     public String toString() {
-        return "PELICULA ID=" + id + ", NOMBRE=" + nombre + ", CATEGORIA=" + categoria;
+        return "PELICULA " + id + ", NOMBRE: " + nombre + ", CATEGORIA: " + categoria;
     }
 
     public static int devuelveProximoID() {
