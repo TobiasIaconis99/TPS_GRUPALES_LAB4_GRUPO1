@@ -52,6 +52,17 @@ public class VentanaPrincipal extends JFrame {
         mnPeliculas.add(itemAgregarPeliculas);
 
         JMenuItem itemListarPelicula = new JMenuItem("Listar");
+        itemListarPelicula.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		 contentPane.removeAll();
+                 PanelMostrarPeliculas panelMostrar = new PanelMostrarPeliculas();
+                 panelMostrar.setBounds(0, 0, 400, 300);
+                 panelMostrar.setDefaultListModel(listModel);
+                 contentPane.add(panelMostrar);
+                 contentPane.repaint();
+                 contentPane.revalidate();
+        	}
+        });
         mnPeliculas.add(itemListarPelicula);
     }
 
