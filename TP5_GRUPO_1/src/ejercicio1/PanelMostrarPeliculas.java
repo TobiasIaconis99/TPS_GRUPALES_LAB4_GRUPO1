@@ -8,6 +8,8 @@ import java.util.TreeSet;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class PanelMostrarPeliculas extends JPanel {
 
@@ -24,9 +26,16 @@ public class PanelMostrarPeliculas extends JPanel {
 		lblPelículas.setBounds(43, 107, 62, 13);
 		add(lblPelículas);
 		
-		DefaultListModel<Peliculas> listModel = new DefaultListModel<Peliculas>();
+		listModel = new DefaultListModel<Peliculas>();
 		
 		list = new JList();
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(list.getSelectedIndex() != -1) {
+					listModel.remove(list.getSelectedIndex());
+				}
+			}
+		});
 		list.setBounds(99, 43, 314, 202);
 		add(list);
 		
