@@ -40,7 +40,7 @@ public class Peliculas implements Comparable<Peliculas> {
     // Métodos
     @Override
     public String toString() {
-        return "PELICULA " + id + ", NOMBRE: " + nombre + ", CATEGORIA: " + categoria;
+        return "ID " + id + ", NOMBRE: " + nombre + ", CATEGORIA: " + categoria;
     }
 
     public static int devuelveProximoID() {

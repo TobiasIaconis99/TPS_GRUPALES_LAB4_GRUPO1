@@ -23,7 +23,7 @@ public class PanelMostrarPeliculas extends JPanel {
 		setLayout(null);
 		
 		JLabel lblPelículas = new JLabel("Películas");
-		lblPelículas.setBounds(43, 107, 62, 13);
+		lblPelículas.setBounds(10, 132, 56, 13);
 		add(lblPelículas);
 		
 		listModel = new DefaultListModel<Peliculas>();
@@ -36,7 +36,7 @@ public class PanelMostrarPeliculas extends JPanel {
 				}
 			}
 		});
-		list.setBounds(99, 43, 314, 202);
+		list.setBounds(76, 43, 340, 202);
 		add(list);
 		
 		
