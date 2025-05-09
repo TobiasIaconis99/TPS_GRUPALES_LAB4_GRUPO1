@@ -33,12 +33,12 @@ public class PanelIngresoPeliculas extends JPanel {
         add(lblIDAutomatico);
 
         txtNombrePelicula = new JTextField();
-        txtNombrePelicula.setBounds(187, 72, 138, 20);
+        txtNombrePelicula.setBounds(186, 72, 155, 20);
         add(txtNombrePelicula);
         txtNombrePelicula.setColumns(10);
 
         comboGenero = new JComboBox<>();
-        comboGenero.setBounds(187, 110, 138, 20);
+        comboGenero.setBounds(187, 110, 154, 20);
         add(comboGenero);
 
         comboGenero.addItem(new Categorias(0, "Seleccione un género"));
