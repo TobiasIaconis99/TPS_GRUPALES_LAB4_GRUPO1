@@ -1,6 +1,6 @@
 package ejercicio1;
 
-public class Peliculas {
+public class Peliculas implements Comparable<Peliculas> {
 
     // Atributos
     private final int id;
@@ -46,4 +46,11 @@ public class Peliculas {
     public static int devuelveProximoID() {
         return cont + 1;
     }
+
+	@Override
+	public int compareTo(Peliculas o) {		
+		return this.nombre.compareToIgnoreCase(o.getNombre());
+	}
+    
+    
 }

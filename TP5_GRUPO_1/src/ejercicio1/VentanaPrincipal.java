@@ -70,10 +70,5 @@ public class VentanaPrincipal extends JFrame {
         setVisible(estado);
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            VentanaPrincipal ventana = new VentanaPrincipal();
-            ventana.CambiarVisibilidad(true);
-        });
-    }
+
 }

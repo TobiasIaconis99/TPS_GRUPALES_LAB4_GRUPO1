@@ -2,6 +2,9 @@ package ejercicio1;
 
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
+
+import java.util.TreeSet;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -34,5 +37,23 @@ public class PanelMostrarPeliculas extends JPanel {
 	{
 		this.listModel = listModel;
 		list.setModel(this.listModel);
+		ordenarPeliculasAlfabeticamente();
+	}
+	
+	
+	public void ordenarPeliculasAlfabeticamente() {
+	
+		
+	    TreeSet<Peliculas> peliculasOrdenadasAlfabeticamente = new TreeSet<>();
+	    for (int i = 0; i < listModel.size(); i++) {
+	    	peliculasOrdenadasAlfabeticamente.add(listModel.getElementAt(i));
+	    }
+
+	    listModel.clear();
+	    for (Peliculas p : peliculasOrdenadasAlfabeticamente) {
+	        listModel.addElement(p);
+	    }
+
+	    list.setModel(listModel);
 	}
 }
