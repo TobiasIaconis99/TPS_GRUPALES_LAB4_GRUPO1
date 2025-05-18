@@ -5,11 +5,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaAgregar {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField textFieldNombre;
 	private JTextField textFieldApellido;
 	private JTextField textFieldDNI;
@@ -60,5 +65,17 @@ public class VentanaAgregar {
 		lblDni.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDni.setBounds(64, 125, 46, 14);
 		frame.getContentPane().add(lblDni);
+		
+		JButton btnNewButton = new JButton("Aceptar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(textFieldNombre.getText().isEmpty() || textFieldApellido.getText().isEmpty() || textFieldDNI.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnNewButton.setBounds(90, 170, 89, 23);
+		frame.getContentPane().add(btnNewButton);
 	}
 }
