@@ -1,9 +1,15 @@
 package presentacion.vista;
 
 import java.awt.EventQueue;
+import dao.Personadao;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import dao.Personadao;
+import daolmpl.PersonaDaoImpl;
+import entidades.Persona;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -73,6 +79,20 @@ public class VentanaAgregar {
 				if(textFieldNombre.getText().isEmpty() || textFieldApellido.getText().isEmpty() || textFieldDNI.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos", "Error", JOptionPane.ERROR_MESSAGE);
 				}
+				Persona persona = new Persona();
+				persona.setNombre(textFieldNombre.getText());
+				persona.setApellido(textFieldApellido.getText());
+				persona.setDni(Integer.parseInt(textFieldDNI.getText()));
+				Personadao p= new PersonaDaoImpl(); 
+				
+				 try {
+           p.insert(persona);
+            JOptionPane.showMessageDialog(null, "Registro agregado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al agregar registro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+				
+				
 			}
 		});
 		btnNewButton.setBounds(90, 170, 89, 23);

@@ -2,7 +2,7 @@ package entidades;
 
 public class Persona {
 	
-    private String dni;
+    private int dni;
     private String nombre;
     private String apellido;
 
@@ -10,17 +10,17 @@ public class Persona {
     	
     }
 
-    public Persona(String dni, String nombre, String apellido) {
+    public Persona(int dni, String nombre, String apellido) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
     }
 
-    public String getDni() {
+    public int getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(int dni) {
         this.dni = dni;
     }
 
