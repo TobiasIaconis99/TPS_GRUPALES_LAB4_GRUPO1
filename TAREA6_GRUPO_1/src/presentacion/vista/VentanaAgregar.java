@@ -17,6 +17,8 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class VentanaAgregar {
 
@@ -43,18 +45,45 @@ public class VentanaAgregar {
 		frame.getContentPane().setLayout(null);
 		
 		textFieldNombre = new JTextField();
-		textFieldNombre.setBounds(144, 55, 86, 20);
+		textFieldNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+		        char c = e.getKeyChar();
+		        if (Character.isDigit(c)) {
+		            e.consume();
+		        }				
+			}
+		});
+		textFieldNombre.setBounds(144, 55, 161, 20);
 		frame.getContentPane().add(textFieldNombre);
 		textFieldNombre.setColumns(10);
 		
 		textFieldApellido = new JTextField();
+		textFieldApellido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+		        char c = e.getKeyChar();
+		        if (Character.isDigit(c)) {
+		            e.consume();
+		        }	
+			}
+		});
 		textFieldApellido.setColumns(10);
-		textFieldApellido.setBounds(144, 91, 86, 20);
+		textFieldApellido.setBounds(144, 91, 161, 20);
 		frame.getContentPane().add(textFieldApellido);
 		
 		textFieldDNI = new JTextField();
+		textFieldDNI.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+		        char c = e.getKeyChar();
+		        if (!Character.isDigit(c)) {
+		            e.consume();
+		        }	
+			}
+		});
 		textFieldDNI.setColumns(10);
-		textFieldDNI.setBounds(144, 122, 86, 20);
+		textFieldDNI.setBounds(144, 122, 161, 20);
 		frame.getContentPane().add(textFieldDNI);
 		
 		JLabel lblNombrel = new JLabel("Nombre");
