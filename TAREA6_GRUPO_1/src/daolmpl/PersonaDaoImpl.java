@@ -13,7 +13,7 @@ import entidades.Persona;
 
 	public class PersonaDaoImpl implements Personadao
 	{
-		private static final String insert = "INSERT INTO persona(Nombre, Apellido, DNI) VALUES(?, ?, ?)";
+		private static final String insert = "INSERT INTO personas(Nombre, Apellido, Dni) VALUES(?, ?, ?)";
 	
 			
 		public boolean insert(Persona persona)
