@@ -2,72 +2,90 @@ package presentacion.vista;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class PanelAgregarPersona extends JPanel {
 	
-	private JTextField jTextFieldNombre;
-	private JTextField jTextFieldApellido;
-	private JTextField jTextFileldDNI;
+	private JTextField txtNombre;
+	private JTextField txtApellido;
+	private JTextField txtDNI;
 	private JButton btnAceptar;
-	private JLabel lblDNI;
+
+	/**
+	 * Create the panel.
+	 */
 	public PanelAgregarPersona() {
 		setLayout(null);
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(49, 37, 70, 14);
+		lblNombre.setBounds(36, 69, 56, 16);
 		add(lblNombre);
 		
+		txtNombre = new JTextField();
+		txtNombre.setBounds(124, 66, 116, 22);
+		add(txtNombre);
+		txtNombre.setColumns(10);
+		
 		JLabel lblApellido = new JLabel("Apellido");
-		lblApellido.setBounds(49, 93, 70, 14);
+		lblApellido.setBounds(36, 116, 56, 16);
 		add(lblApellido);
 		
-		lblDNI = new JLabel("Dni");
-		lblDNI.setBounds(49, 149, 70, 14);
-		add(lblDNI);
+		txtApellido = new JTextField();
+		txtApellido.setBounds(124, 113, 116, 22);
+		add(txtApellido);
+		txtApellido.setColumns(10);
 		
-		jTextFieldNombre = new JTextField();
-		jTextFieldNombre.setBounds(159, 34, 149, 20);
-		add(jTextFieldNombre);
-		jTextFieldNombre.setColumns(10);
+		JLabel lblDni = new JLabel("DNI");
+		lblDni.setBounds(36, 184, 56, 16);
+		add(lblDni);
 		
-		jTextFieldApellido = new JTextField();
-		jTextFieldApellido.setBounds(159, 90, 149, 20);
-		add(jTextFieldApellido);
-		jTextFieldApellido.setColumns(10);
+		txtDNI = new JTextField();
+		txtDNI.setBounds(124, 181, 116, 22);
+		add(txtDNI);
+		txtDNI.setColumns(10);
 		
-		jTextFileldDNI = new JTextField();
-		jTextFileldDNI.setBounds(159, 146, 149, 20);
-		add(jTextFileldDNI);
-		jTextFileldDNI.setColumns(10);
-		
-		JButton btnAceptar = new JButton("Aceptar");
-		btnAceptar.setBounds(49, 208, 89, 23);
+		btnAceptar = new JButton("Aceptar");
+		btnAceptar.setBounds(74, 241, 97, 25);
 		add(btnAceptar);
+
 	}
-	public JTextField getjTextFieldNombre() {
-		return jTextFieldNombre;
+
+	public JTextField getTxtNombre() {
+		return txtNombre;
 	}
-	public void setjTextFieldNombre(JTextField jTextFieldNombre) {
-		this.jTextFieldNombre = jTextFieldNombre;
+
+	public void setTxtNombre(JTextField txtNombre) {
+		this.txtNombre = txtNombre;
 	}
-	public JTextField getjTextFieldApellido() {
-		return jTextFieldApellido;
+
+	public JTextField getTxtApellido() {
+		return txtApellido;
 	}
-	public void setjTextFieldApellido(JTextField jTextFieldApellido) {
-		this.jTextFieldApellido = jTextFieldApellido;
+
+	public void setTxtApellido(JTextField txtApellido) {
+		this.txtApellido = txtApellido;
 	}
-	public JTextField getjTexrFileldDNI() {
-		return jTextFileldDNI;
+
+	public JTextField getTxtDNI() {
+		return txtDNI;
 	}
-	public void setjTextFileldDNI(JTextField jTexrFileldDNI) {
-		this.jTextFileldDNI = jTexrFileldDNI;
+
+	public void setTxtDNI(JTextField txtDNI) {
+		this.txtDNI = txtDNI;
 	}
-	
+
 	public JButton getBtnAceptar() {
 		return btnAceptar;
 	}
+
+	public void setBtnAceptar(JButton btnAceptar) {
+		this.btnAceptar = btnAceptar;
+	}
 	
+	public void showMen(String message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
 	
 }

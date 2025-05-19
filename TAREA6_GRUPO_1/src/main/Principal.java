@@ -11,11 +11,12 @@ public class Principal {
 
 	public static void main(String[] args) {
 		
+		// TODO Auto-generated method stub
 		VentanaPrincipal frame = new VentanaPrincipal();
 		PersonaNegocio pNeg = new PersonaNegocioImpl();
 		
 		Controlador cont = new Controlador(frame, pNeg);
 		
-		cont.inicializar();
+		cont.initialize();
 	}
 }

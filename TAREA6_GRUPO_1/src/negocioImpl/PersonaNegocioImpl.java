@@ -8,6 +8,7 @@ import entidades.Persona;
 import negocio.PersonaNegocio;
 
 public class PersonaNegocioImpl implements PersonaNegocio {
+	
 	Personadao personaDao = new PersonaDaoImpl();
 
 	@Override
