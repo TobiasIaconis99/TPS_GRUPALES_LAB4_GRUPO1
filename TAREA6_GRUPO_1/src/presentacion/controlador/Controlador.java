@@ -13,9 +13,6 @@ public class Controlador implements ActionListener, KeyListener {
 	
 	private VentanaPrincipal ventanaPrincipal;
 	private PanelAgregarPersona pnlAgregar;
-	//private PanelListarPersona pnlListar;
-	//private PanelEliminarPersona pnlEliminar;
-	//private PanelModificarPersona pnlModificar;
 	private PersonaNegocio pNegocio;
 
 	public Controlador(VentanaPrincipal frame, PersonaNegocio pn) {
@@ -23,30 +20,12 @@ public class Controlador implements ActionListener, KeyListener {
 		this.pNegocio = pn;
 		
 		this.pnlAgregar = new PanelAgregarPersona();
-		//this.pnlEliminar = new PanelEliminarPersona();
-		//this.pnlListar = new PanelListarPersona();
-		//this.pnlModificar = new PanelModificarPersona();
-		
-		
-		//this.ventanaPrincipal.getMntmAgregar().addActionListener(a -> changeToAdd(a));
-		//this.ventanaPrincipal.getMntmModificar().addActionListener(a -> changeToModify(a));
-		//this.ventanaPrincipal.getMntmListar().addActionListener(a -> changeToList(a));
-		//this.ventanaPrincipal.getMntmEliminar().addActionListener(a -> changeToDelete(a));
-		
-		
+		this.ventanaPrincipal.getMntmAgregar().addActionListener(a -> mostrarPanelAgregar(a));	
 		this.pnlAgregar.getBtnAceptar().addActionListener(a -> btnAgregarPersona(a));
 		this.pnlAgregar.getjTextFieldNombre().addKeyListener(this);
 		this.pnlAgregar.getjTextFieldApellido().addKeyListener(this);
 		this.pnlAgregar.getjTexrFileldDNI().addKeyListener(this);
 		
-		
-		/* EVENTOS PANEL ELIMINAR*/
-		//this.pnlEliminar.getBtnEliminar().addActionListener(a -> onBtnEliminarClick(a));
-		
-		/* Eventos Panel Modificar */
-		//this.pnlModificar.listPerson.addListSelectionListener(a-> onPnlModificar(a));
-		//this.pnlModificar.getBtnModificar().addActionListener(a-> OnBtnModificar(a));
-		//this.pnlModificar.getTxtDNI().setEditable(false);
 	}
 	
 	@Override
@@ -61,8 +40,19 @@ public class Controlador implements ActionListener, KeyListener {
 			e.consume();
 	}
 	
+	public void mostrarPanelAgregar(ActionEvent a) {
+		this.ventanaPrincipal.getContentPane().removeAll();
+		this.ventanaPrincipal.getContentPane().add(pnlAgregar);
+		this.ventanaPrincipal.getContentPane().repaint();
+		this.ventanaPrincipal.getContentPane().revalidate();
+	}
+	
 	public void btnAgregarPersona (ActionEvent a) {
 		
+	}
+	
+	public void inicializar() {
+		this.ventanaPrincipal.setVisible(true);
 	}
 	
 	@Override

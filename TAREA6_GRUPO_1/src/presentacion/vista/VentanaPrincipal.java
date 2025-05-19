@@ -12,6 +12,7 @@ public class VentanaPrincipal extends JFrame {
     private PanelEliminarPersona panelEliminar = new PanelEliminarPersona();
 
     private JPanel panelCentral;
+    private JMenuItem opcionAgregar;
 
     public VentanaPrincipal() {
         setTitle("Programa");
@@ -62,6 +63,10 @@ public class VentanaPrincipal extends JFrame {
         CardLayout cl = (CardLayout) panelCentral.getLayout();
         cl.show(panelCentral, "PANEL_INICIO");
     }
+    
+	public JMenuItem getMntmAgregar() {
+		return opcionAgregar;
+	}
 
     public void CambiarVisibilidad(boolean estado) {
         setVisible(estado);
