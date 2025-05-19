@@ -3,6 +3,7 @@ package main;
 import java.awt.EventQueue;
 
 import negocio.PersonaNegocio;
+import negocioImpl.PersonaNegocioImpl;
 import presentacion.controlador.Controlador;
 import presentacion.vista.VentanaPrincipal;
 
