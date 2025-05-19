@@ -8,15 +8,16 @@ public class VentanaPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private VentanaAgregar ventanaagregar = new VentanaAgregar(); // como antes
+    private VentanaAgregar ventanaagregar = new VentanaAgregar();
     private PanelEliminarPersona panelEliminar = new PanelEliminarPersona();
+    private PanelModificarPersona panelModificar = new PanelModificarPersona();
 
     private JPanel panelCentral;
 
     public VentanaPrincipal() {
         setTitle("Programa");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(600, 400);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -26,7 +27,6 @@ public class VentanaPrincipal extends JFrame {
         JMenuItem opcionAgregar = new JMenuItem("Agregar");
         opcionAgregar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Se usa como antes
                 VentanaAgregar window = new VentanaAgregar();
                 window.frame.setVisible(true);
             }
@@ -48,6 +48,7 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelInicio = new JPanel();
         panelCentral.add(panelInicio, "PANEL_INICIO");
         panelCentral.add(panelEliminar, "PANEL_ELIMINAR");
+        panelCentral.add(panelModificar, "PANEL_MODIFICAR");
 
         add(panelCentral, BorderLayout.CENTER);
 
@@ -56,6 +57,14 @@ public class VentanaPrincipal extends JFrame {
                 panelEliminar.cargarPersonasDesdeBD();
                 CardLayout cl = (CardLayout) panelCentral.getLayout();
                 cl.show(panelCentral, "PANEL_ELIMINAR");
+            }
+        });
+
+        opcionModificar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	panelModificar.cargarPersonasDesdeBD();
+                CardLayout cl = (CardLayout) panelCentral.getLayout();
+                cl.show(panelCentral, "PANEL_MODIFICAR");
             }
         });
 
