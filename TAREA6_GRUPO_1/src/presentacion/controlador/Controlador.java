@@ -20,21 +20,23 @@ import presentacion.vista.VentanaPrincipal;
 
 public class Controlador implements ActionListener, KeyListener {
 	
+	private PersonaNegocio personaaNegocio;
+	
 	private VentanaPrincipal ventanaPrincipal;
-	private PanelAgregarPersona pnlAgregar;
-	private PanelEliminarPersona pnlEliminar;
-	private PanelListarPersona pnlListar;
-	private PanelModificarPersona pnlModificar;
-	private PersonaNegocio pNegocio;
+	private PanelAgregarPersona panelAgregar;
+	private PanelModificarPersona panelModificar;
+	private PanelEliminarPersona panelEliminar;
+	private PanelListarPersona panelListar;
+	
 	
 	public Controlador(VentanaPrincipal frame, PersonaNegocio pn) {
 		this.ventanaPrincipal = frame;
-		this.pNegocio = pn;
+		this.personaaNegocio = pn;
 		
-		this.pnlAgregar = new PanelAgregarPersona();
-		this.pnlEliminar = new PanelEliminarPersona();
-		this.pnlListar = new PanelListarPersona();
-		this.pnlModificar = new PanelModificarPersona();
+		this.panelAgregar = new PanelAgregarPersona();
+		this.panelEliminar = new PanelEliminarPersona();
+		this.panelListar = new PanelListarPersona();
+		this.panelModificar = new PanelModificarPersona();
 		
 		
 		this.ventanaPrincipal.getMntmAgregar().addActionListener(a -> changeToAdd(a));
@@ -42,64 +44,64 @@ public class Controlador implements ActionListener, KeyListener {
 		this.ventanaPrincipal.getMntmListar().addActionListener(a -> changeToList(a));
 		this.ventanaPrincipal.getMntmEliminar().addActionListener(a -> changeToDelete(a));
 		
-		/* Eventos Panel Agregar */
-		this.pnlAgregar.getBtnAceptar().addActionListener(a -> OnBtnAgregarClick_Agregar(a));
-		this.pnlAgregar.getTxtNombre().addKeyListener(this);
-		this.pnlAgregar.getTxtApellido().addKeyListener(this);
-		this.pnlAgregar.getTxtDNI().addKeyListener(this);
 		
-		/* EVENTOS PANEL ELIMINAR*/
-		this.pnlEliminar.getBtnEliminar().addActionListener(a -> onBtnEliminarClick(a));
+		this.panelAgregar.getBtnAceptar().addActionListener(a -> OnBtnAgregarClick_Agregar(a));
+		this.panelAgregar.getTxtNombre().addKeyListener(this);
+		this.panelAgregar.getTxtApellido().addKeyListener(this);
+		this.panelAgregar.getTxtDNI().addKeyListener(this);
 		
-		/* Eventos Panel Modificar */
-		this.pnlModificar.listPerson.addListSelectionListener(a-> onPnlModificar(a));
-		this.pnlModificar.getBtnModificar().addActionListener(a-> OnBtnModificar(a));
-		this.pnlModificar.getTxtDNI().setEditable(false);
+		
+		this.panelEliminar.getBtnEliminar().addActionListener(a -> onBtnEliminarClick(a));
+		
+	
+		this.panelModificar.listPerson.addListSelectionListener(a-> onPnlModificar(a));
+		this.panelModificar.getBtnModificar().addActionListener(a-> OnBtnModificar(a));
+		this.panelModificar.getTxtDNI().setEditable(false);
 	}
 	
 	
 	public void changeToAdd(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
-		this.ventanaPrincipal.getContentPane().add(pnlAgregar);
+		this.ventanaPrincipal.getContentPane().add(panelAgregar);
 		this.ventanaPrincipal.getContentPane().repaint();
 		this.ventanaPrincipal.getContentPane().revalidate();
 	}
 	
 	public void changeToDelete(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
-		this.ventanaPrincipal.getContentPane().add(pnlEliminar);
+		this.ventanaPrincipal.getContentPane().add(panelEliminar);
 		this.ventanaPrincipal.getContentPane().repaint();
 		this.ventanaPrincipal.getContentPane().revalidate();
 		
-		/*Carga los datos en JList*/
+		
 		JlistLoad();
 	}
 	
 	public void changeToModify(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
-		this.ventanaPrincipal.getContentPane().add(pnlModificar);
+		this.ventanaPrincipal.getContentPane().add(panelModificar);
 		this.ventanaPrincipal.getContentPane().repaint();
 		this.ventanaPrincipal.getContentPane().revalidate();
-		/*Carga los datos en JList*/
+	
 		JlistLoad();
 	}
 	
 	public void changeToList(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
-		this.ventanaPrincipal.getContentPane().add(pnlListar);
+		this.ventanaPrincipal.getContentPane().add(panelListar);
 		this.ventanaPrincipal.getContentPane().repaint();
 		this.ventanaPrincipal.getContentPane().revalidate();
-		ArrayList<Persona> list = new ArrayList<Persona>(pNegocio.readAll());
+		ArrayList<Persona> list = new ArrayList<Persona>(personaaNegocio.readAll());
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"dni", "nombre", "apellido"}, 0);
 		
-		//DefaultListModel demoList = new DefaultListModel();
+		
 		
 		for (Persona persona : list) {
-			//demoList.addElement(persona);	
+			
 			model.addRow(new Object[] {persona.getDni(), persona.getNombre(), persona.getApellido()});
 		}
-		this.pnlListar.getTable().setModel(model);
-		//this.pnlModificar.listPerson = new JList(demoList);
+		this.panelListar.getTable().setModel(model);
+		
 	}
 	
 	public void initialize() {
@@ -109,19 +111,19 @@ public class Controlador implements ActionListener, KeyListener {
 	public void OnBtnAgregarClick_Agregar(ActionEvent a) {
 		String insertMessage;
 		boolean isExist = false;
-		String nombre = this.pnlAgregar.getTxtNombre().getText();
-		String apellido = this.pnlAgregar.getTxtApellido().getText();
-		String dni = this.pnlAgregar.getTxtDNI().getText();
+		String nombre = this.panelAgregar.getTxtNombre().getText();
+		String apellido = this.panelAgregar.getTxtApellido().getText();
+		String dni = this.panelAgregar.getTxtDNI().getText();
 		if(nombre.trim().isEmpty() 	 || 
 		   apellido.trim().isEmpty() ||
 		   dni.trim().isEmpty()) {
-			this.pnlAgregar.showMen("Es necesario completar todos los campos");
+			this.panelAgregar.showMen("Es necesario completar todos los campos");
 			return;
 		}
 		
-		/* Guarda los datos de los textbox en una instancia de Persona, trae todos los datos de la base y los compara para ver si existe */
+		
 		Persona nPersona = new Persona(dni, nombre, apellido);
-		ArrayList<Persona> list = new ArrayList<Persona>(pNegocio.readAll());
+		ArrayList<Persona> list = new ArrayList<Persona>(personaaNegocio.readAll());
 		for(Persona auxPersona : list) {
 			if(auxPersona.getDni().equals(nPersona.getDni())) {
 				isExist = true;
@@ -129,36 +131,36 @@ public class Controlador implements ActionListener, KeyListener {
 		}
 		
 		if(!isExist) {
-			/* Prosigue en caso de que no exista */
-			boolean state = pNegocio.insert(nPersona);
+			
+			boolean state = personaaNegocio.insert(nPersona);
 			if(state==true) {
 				insertMessage = "Persona Agregada con exito";
-				this.pnlAgregar.getTxtNombre().setText("");
-				this.pnlAgregar.getTxtApellido().setText("");
-				this.pnlAgregar.getTxtDNI().setText("");
+				this.panelAgregar.getTxtNombre().setText("");
+				this.panelAgregar.getTxtApellido().setText("");
+				this.panelAgregar.getTxtDNI().setText("");
 				}
 			else {
 				insertMessage = "Error al cargar Persona";
-				this.pnlAgregar.getTxtNombre().setText("");
-				this.pnlAgregar.getTxtApellido().setText("");
-				this.pnlAgregar.getTxtDNI().setText("");
+				this.panelAgregar.getTxtNombre().setText("");
+				this.panelAgregar.getTxtApellido().setText("");
+				this.panelAgregar.getTxtDNI().setText("");
 			};
 		}
 		else {
-			this.pnlAgregar.getTxtNombre().setText("");
-			this.pnlAgregar.getTxtApellido().setText("");
-			this.pnlAgregar.getTxtDNI().setText("");
+			this.panelAgregar.getTxtNombre().setText("");
+			this.panelAgregar.getTxtApellido().setText("");
+			this.panelAgregar.getTxtDNI().setText("");
 			insertMessage = "El usuario ya existe";
 		}
 		
-		this.pnlAgregar.showMen(insertMessage);
+		this.panelAgregar.showMen(insertMessage);
 	}
 	
 	public void onBtnEliminarClick(ActionEvent a) {
 		String insertMessage;
 		Persona persona = new Persona();
-		persona = (Persona) this.pnlEliminar.getListPerson().getSelectedValue();
-		boolean state = pNegocio.delete(persona);
+		persona = (Persona) this.panelEliminar.getListPerson().getSelectedValue();
+		boolean state = personaaNegocio.delete(persona);
 		if(state) {
 			insertMessage = "Persona eliminada con exito";
 			
@@ -166,27 +168,27 @@ public class Controlador implements ActionListener, KeyListener {
 			insertMessage = "Error al eliminar Persona";
 		}
 		
-		this.pnlEliminar.showMen(insertMessage);
-		//refresh de JList
+		this.panelEliminar.showMen(insertMessage);
+	
 		JlistLoad();
 	}
 	
 	public void onPnlModificar(ListSelectionEvent a) {
-		Persona aux = (Persona)this.pnlModificar.listPerson.getSelectedValue();
-		//Leandro: Esto lo agrego porque se recupera mal la info del JList (a modificar a futuro)
+		Persona aux = (Persona)this.panelModificar.listPerson.getSelectedValue();
+		
 		Persona persona = new Persona(aux.getApellido(), aux.getNombre(), aux.getDni());
-		//pnlModificar.setTxtNombre(persona.toString());
-		pnlModificar.setTxtApellido(persona.getApellido());
-		pnlModificar.setTxtNombre(persona.getNombre());
-		pnlModificar.setTxtDNI(persona.getDni());
+		
+		panelModificar.setTxtApellido(persona.getApellido());
+		panelModificar.setTxtNombre(persona.getNombre());
+		panelModificar.setTxtDNI(persona.getDni());
 	}
 	
 	public void OnBtnModificar(ActionEvent a) {
 		String insertMessage;
 		Persona persona = new Persona();
-		persona = new Persona(pnlModificar.getTxtDNI().getText(), 
-				pnlModificar.getTxtNombre().getText(), pnlModificar.getTxtApellido().getText());
-		boolean state = pNegocio.update(persona);
+		persona = new Persona(panelModificar.getTxtDNI().getText(), 
+				panelModificar.getTxtNombre().getText(), panelModificar.getTxtApellido().getText());
+		boolean state = personaaNegocio.update(persona);
 		if(state) {
 			insertMessage = "Persona modificada con exito";
 			
@@ -194,19 +196,19 @@ public class Controlador implements ActionListener, KeyListener {
 			insertMessage = "Error al modificar Persona";
 		}
 		
-		this.pnlModificar.showMen(insertMessage);
-		//refresh de JList
+		this.panelModificar.showMen(insertMessage);
+		
 		JlistLoad();
 	}
 	
 	public void JlistLoad() {
 		DefaultListModel<Persona> newListModel = new DefaultListModel<Persona>();
-		ArrayList<Persona> list = new ArrayList<Persona>(pNegocio.readAll());	
+		ArrayList<Persona> list = new ArrayList<Persona>(personaaNegocio.readAll());	
 		for(Persona persona2 : list) {
 			newListModel.addElement(new Persona(persona2.getApellido(),persona2.getNombre() ,persona2.getDni()));
 		}
-		this.pnlEliminar.getListPerson().setModel(newListModel);
-		this.pnlModificar.listPerson.setModel(newListModel);
+		this.panelEliminar.getListPerson().setModel(newListModel);
+		this.panelModificar.listPerson.setModel(newListModel);
 	}
 	
 	
@@ -220,11 +222,11 @@ public class Controlador implements ActionListener, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		if((e.getSource() == pnlAgregar.getTxtNombre() || 
-		   e.getSource() == pnlAgregar.getTxtApellido()) &&
+		if((e.getSource() == panelAgregar.getTxtNombre() || 
+		   e.getSource() == panelAgregar.getTxtApellido()) &&
 		   !Character.isLetter(c))
 			e.consume();
-		else if (e.getSource() == pnlAgregar.getTxtDNI() &&
+		else if (e.getSource() == panelAgregar.getTxtDNI() &&
 				!Character.isDigit(c))
 			e.consume();
 	}

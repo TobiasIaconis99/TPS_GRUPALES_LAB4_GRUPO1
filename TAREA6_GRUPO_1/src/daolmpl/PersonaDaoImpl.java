@@ -21,7 +21,7 @@ public class PersonaDaoImpl implements Personadao
 
 	
 	@Override
-	public boolean agregarPersona(Persona persona) {
+	public boolean insert(Persona persona) {
 		PreparedStatement statement;
 		Connection con = Conexion.getConexion().getSQLConexion();
 		boolean isInsertExitoso = false;
@@ -49,7 +49,7 @@ public class PersonaDaoImpl implements Personadao
 	}
 
 	@Override
-	public boolean borrarPersona(Persona persona) {
+	public boolean delete(Persona persona) {
 		
 		PreparedStatement statement;
 		Connection con = Conexion.getConexion().getSQLConexion();
@@ -76,7 +76,7 @@ public class PersonaDaoImpl implements Personadao
 	}
 
 	@Override
-	public ArrayList<Persona> leerPersonas() {
+	public ArrayList<Persona> readAll() {
 		ArrayList<Persona> personas = new ArrayList<Persona>();
 		Connection cn = Conexion.getConexion().getSQLConexion();
 		try {
@@ -96,7 +96,7 @@ public class PersonaDaoImpl implements Personadao
 	}
 
 	@Override
-	public boolean modficarPersona(Persona persona) {
+	public boolean update(Persona persona) {
 		PreparedStatement statement;
 		Connection con = Conexion.getConexion().getSQLConexion();
 		boolean update = false;

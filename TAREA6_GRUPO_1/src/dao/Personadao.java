@@ -4,11 +4,11 @@ import entidades.Persona;
 
 public interface Personadao {
 	
-	public boolean agregarPersona(Persona persona);
+	public boolean insert(Persona persona);
 	
-	public boolean modficarPersona(Persona persona);
+	public boolean update(Persona persona);
 	
-	public boolean borrarPersona(Persona persona);
+	public boolean delete(Persona persona);
 	
-	public ArrayList<Persona> leerPersonas();
+	public ArrayList<Persona> readAll();
 }
