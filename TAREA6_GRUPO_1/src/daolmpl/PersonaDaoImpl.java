@@ -14,16 +14,17 @@ import entidades.Persona;
 
 public class PersonaDaoImpl implements Personadao
 {
-	private static final String userinsert = "INSERT INTO personas (dni, nombre, apellido) VALUES(?, ?, ?)";
+	private static final String userinsert = "INSERT INTO personas (Dni, Nombre, Apellido) VALUES(?, ?, ?)";
 	private static final String userSelect = "SELECT * FROM personas";
 	private static final String userDelete = "DELETE FROM personas WHERE Dni = ?";
 	private static final String userUpdate = "UPDATE personas SET Nombre = ?, Apellido = ? WHERE DNI = ?";
 
+	
 	@Override
-	public boolean insert(Persona persona) {
+	public boolean agregarPersona(Persona persona) {
 		PreparedStatement statement;
 		Connection con = Conexion.getConexion().getSQLConexion();
-		boolean insertPiola = false;
+		boolean isInsertExitoso = false;
 		
 		try {
 			statement = con.prepareStatement(userinsert);
@@ -32,7 +33,7 @@ public class PersonaDaoImpl implements Personadao
 			statement.setString(3, persona.getApellido());
 			if(statement.executeUpdate() > 0) {
 				con.commit();
-				insertPiola = true;
+				isInsertExitoso = true;
 			}
 			
 		} catch (Exception e) {
@@ -44,11 +45,11 @@ public class PersonaDaoImpl implements Personadao
 			}
 		}
 		
-		return insertPiola;
+		return isInsertExitoso;
 	}
 
 	@Override
-	public boolean delete(Persona persona) {
+	public boolean borrarPersona(Persona persona) {
 		
 		PreparedStatement statement;
 		Connection con = Conexion.getConexion().getSQLConexion();
@@ -75,7 +76,7 @@ public class PersonaDaoImpl implements Personadao
 	}
 
 	@Override
-	public ArrayList<Persona> readAll() {
+	public ArrayList<Persona> leerPersonas() {
 		ArrayList<Persona> personas = new ArrayList<Persona>();
 		Connection cn = Conexion.getConexion().getSQLConexion();
 		try {
@@ -95,7 +96,7 @@ public class PersonaDaoImpl implements Personadao
 	}
 
 	@Override
-	public boolean update(Persona persona) {
+	public boolean modficarPersona(Persona persona) {
 		PreparedStatement statement;
 		Connection con = Conexion.getConexion().getSQLConexion();
 		boolean update = false;
@@ -123,6 +124,4 @@ public class PersonaDaoImpl implements Personadao
 	}
 		
 		
-	}
-
-
+}
