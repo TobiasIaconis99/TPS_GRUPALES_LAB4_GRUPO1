@@ -39,10 +39,10 @@ public class Controlador implements ActionListener, KeyListener {
 		this.panelModificar = new PanelModificarPersona();
 		
 		
-		this.ventanaPrincipal.getMntmAgregar().addActionListener(a -> changeToAdd(a));
-		this.ventanaPrincipal.getMntmModificar().addActionListener(a -> changeToModify(a));
-		this.ventanaPrincipal.getMntmListar().addActionListener(a -> changeToList(a));
-		this.ventanaPrincipal.getMntmEliminar().addActionListener(a -> changeToDelete(a));
+		this.ventanaPrincipal.getMntmAgregar().addActionListener(a -> mostrarPanelAgregar(a));
+		this.ventanaPrincipal.getMntmModificar().addActionListener(a -> mostrarPanelModificar(a));
+		this.ventanaPrincipal.getMntmListar().addActionListener(a -> mostrarPanelListar(a));
+		this.ventanaPrincipal.getMntmEliminar().addActionListener(a -> mostrarPanelEliminar(a));
 		
 		
 		this.panelAgregar.getBtnAceptar().addActionListener(a -> OnBtnAgregarClick_Agregar(a));
@@ -60,14 +60,14 @@ public class Controlador implements ActionListener, KeyListener {
 	}
 	
 	
-	public void changeToAdd(ActionEvent a) {
+	public void mostrarPanelAgregar(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
 		this.ventanaPrincipal.getContentPane().add(panelAgregar);
 		this.ventanaPrincipal.getContentPane().repaint();
 		this.ventanaPrincipal.getContentPane().revalidate();
 	}
 	
-	public void changeToDelete(ActionEvent a) {
+	public void mostrarPanelEliminar(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
 		this.ventanaPrincipal.getContentPane().add(panelEliminar);
 		this.ventanaPrincipal.getContentPane().repaint();
@@ -77,7 +77,7 @@ public class Controlador implements ActionListener, KeyListener {
 		JlistLoad();
 	}
 	
-	public void changeToModify(ActionEvent a) {
+	public void mostrarPanelModificar(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
 		this.ventanaPrincipal.getContentPane().add(panelModificar);
 		this.ventanaPrincipal.getContentPane().repaint();
@@ -86,7 +86,7 @@ public class Controlador implements ActionListener, KeyListener {
 		JlistLoad();
 	}
 	
-	public void changeToList(ActionEvent a) {
+	public void mostrarPanelListar(ActionEvent a) {
 		this.ventanaPrincipal.getContentPane().removeAll();
 		this.ventanaPrincipal.getContentPane().add(panelListar);
 		this.ventanaPrincipal.getContentPane().repaint();
@@ -104,7 +104,7 @@ public class Controlador implements ActionListener, KeyListener {
 		
 	}
 	
-	public void initialize() {
+	public void inicializar() {
 		this.ventanaPrincipal.setVisible(true);
 	}
 	
@@ -114,6 +114,7 @@ public class Controlador implements ActionListener, KeyListener {
 		String nombre = this.panelAgregar.getTxtNombre().getText();
 		String apellido = this.panelAgregar.getTxtApellido().getText();
 		String dni = this.panelAgregar.getTxtDNI().getText();
+		
 		if(nombre.trim().isEmpty() 	 || 
 		   apellido.trim().isEmpty() ||
 		   dni.trim().isEmpty()) {
@@ -224,7 +225,7 @@ public class Controlador implements ActionListener, KeyListener {
 		char c = e.getKeyChar();
 		if((e.getSource() == panelAgregar.getTxtNombre() || 
 		   e.getSource() == panelAgregar.getTxtApellido()) &&
-		   !Character.isLetter(c))
+		    Character.isDigit(c))
 			e.consume();
 		else if (e.getSource() == panelAgregar.getTxtDNI() &&
 				!Character.isDigit(c))
