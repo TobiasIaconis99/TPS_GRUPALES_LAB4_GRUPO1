@@ -1,199 +1,112 @@
 package presentacion.vista;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
-
-import daolmpl.Conexion;
-import entidades.Persona;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class PanelModificarPersona extends JPanel {
+	
+	private JTextField txtApellido;
+	private JTextField txtNombre;
+	private JTextField txtDNI;
+	public JList listPerson;
+	public JButton btnModificar;
 
-    private JList<Persona> listaPersonas;
-    private JTextField txtNombre;
-    private JTextField txtApellido;
-    private JTextField txtDNI;
-    private JButton btnModificar;
+	public PanelModificarPersona() {
+		setLayout(null);
+		
+		txtApellido = new JTextField();
+		txtApellido.setBounds(38, 273, 116, 22);
+		add(txtApellido);
+		txtApellido.setColumns(10);
+		
+		txtNombre = new JTextField();
+		txtNombre.setBounds(178, 273, 116, 22);
+		add(txtNombre);
+		txtNombre.setColumns(10);
+		
+		txtDNI = new JTextField();
+		txtDNI.setBounds(322, 273, 116, 22);
+		add(txtDNI);
+		txtDNI.setColumns(10);
+		
+		btnModificar = new JButton("Modificar");
+		btnModificar.setBounds(450, 272, 97, 25);
+		add(btnModificar);
+		
+		listPerson = new JList();
+		listPerson.setBounds(38, 13, 509, 228);
+		add(listPerson);
 
-    public PanelModificarPersona() {
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        Font fuente = new Font("Tahoma", Font.PLAIN, 13);
+		
+	}
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 4;
-        gbc.insets = new Insets(10, 10, 5, 10);
-        gbc.anchor = GridBagConstraints.WEST;
-        JLabel lblSeleccion = new JLabel("Seleccione la persona que desea modificar");
-        lblSeleccion.setFont(fuente);
-        add(lblSeleccion, gbc);
 
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        listaPersonas = new JList<>(new DefaultListModel<>());
-        listaPersonas.setFont(fuente);
-        JScrollPane scroll = new JScrollPane(listaPersonas);
-        add(scroll, gbc);
+	public void setTxtNombre(String txtNombre) {
+		this.txtNombre.setText(txtNombre);
+	}
 
-        gbc.gridwidth = 1;
-        gbc.gridy = 2;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(10, 10, 10, 5);
-        gbc.gridx = 0;
 
-        txtNombre = new JTextField(8);
-        txtNombre.setFont(fuente);
-        add(txtNombre, gbc);
+	public void setTxtApellido(String txtApellido) {
+		this.txtApellido.setText(txtApellido);
+	}
 
-        gbc.gridx = 1;
-        txtApellido = new JTextField(8);
-        txtApellido.setFont(fuente);
-        add(txtApellido, gbc);
 
-        gbc.gridx = 2;
-        txtDNI = new JTextField(8);
-        txtDNI.setFont(fuente);
-        add(txtDNI, gbc);
+	public void setTxtDNI(String txtDNI) {
+		this.txtDNI.setText(txtDNI);
+	}
+	
+	public JButton getBtnModificar() {
+		return btnModificar;
+	}
 
-        gbc.gridx = 3;
-        btnModificar = new JButton("Modificar");
-        btnModificar.setFont(fuente);
-        add(btnModificar, gbc);
+	public void setBtnModificar(JButton btnModificar) {
+		this.btnModificar = btnModificar;
+	}
 
-        listaPersonas.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                Persona seleccionada = listaPersonas.getSelectedValue();
-                if (seleccionada != null) {
-                    txtNombre.setText(seleccionada.getNombre());
-                    txtApellido.setText(seleccionada.getApellido());
-                    txtDNI.setText(String.valueOf(seleccionada.getDni()));
-                    revalidate();
-                    repaint();
-                }
-            }
-        });
 
-        btnModificar.addActionListener(e -> modificarPersonaSeleccionada());
+	public JList getListPerson() {
+		return listPerson;
+	}
 
-        setPreferredSize(new Dimension(400, 220));
-    }
 
-    public void cargarPersonasDesdeBD() {
-        DefaultListModel<Persona> modelo = (DefaultListModel<Persona>) listaPersonas.getModel();
-        modelo.clear();
+	public void setListPerson(JList listPerson) {
+		this.listPerson = listPerson;
+	}
+	
+	public void showMen(String message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
 
-        try {
-            conn = Conexion.getConexion().getSQLConexion();
-            String query = "SELECT Dni, nombre, apellido FROM personas";
-            stmt = conn.prepareStatement(query);
-            rs = stmt.executeQuery();
+	public JTextField getTxtApellido() {
+		return txtApellido;
+	}
 
-            while (rs.next()) {
-                int dni = Integer.parseInt(rs.getString("Dni").trim());
-                String nombre = rs.getString("nombre");
-                String apellido = rs.getString("apellido");
-                modelo.addElement(new Persona(dni, nombre, apellido));
-            }
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar personas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "DNI inválido en base de datos. Verificá que sean numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+	public void setTxtApellido(JTextField txtApellido) {
+		this.txtApellido = txtApellido;
+	}
 
-    private void modificarPersonaSeleccionada() {
-        Persona personaSeleccionada = listaPersonas.getSelectedValue();
 
-        if (personaSeleccionada == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccioná una persona para modificar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+	public JTextField getTxtNombre() {
+		return txtNombre;
+	}
 
-        String nuevoNombre = txtNombre.getText().trim();
-        String nuevoApellido = txtApellido.getText().trim();
-        String nuevoDniTexto = txtDNI.getText().trim();
 
-        if (nuevoNombre.isEmpty() || nuevoApellido.isEmpty() || nuevoDniTexto.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, completá todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+	public void setTxtNombre(JTextField txtNombre) {
+		this.txtNombre = txtNombre;
+	}
 
-        int nuevoDni;
-        try {
-            nuevoDni = Integer.parseInt(nuevoDniTexto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El DNI debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
+	public JTextField getTxtDNI() {
+		return txtDNI;
+	}
 
-        try {
-            conn = Conexion.getConexion().getSQLConexion();
-            String query = "UPDATE personas SET nombre = ?, apellido = ?, dni = ? WHERE dni = ?";
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, nuevoNombre);
-            stmt.setString(2, nuevoApellido);
-            stmt.setString(3, String.valueOf(nuevoDni));
-            stmt.setString(4, String.valueOf(personaSeleccionada.getDni()));
 
-            int filas = stmt.executeUpdate();
-            if (filas > 0) {
-                conn.commit();
-                JOptionPane.showMessageDialog(this, "Persona modificada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                cargarPersonasDesdeBD();
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró la persona a modificar.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al modificar persona: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public JList<Persona> getListaPersonas() {
-        return listaPersonas;
-    }
-
-    public JTextField getTxtNombre() {
-        return txtNombre;
-    }
-
-    public JTextField getTxtApellido() {
-        return txtApellido;
-    }
-
-    public JTextField getTxtDNI() {
-        return txtDNI;
-    }
-
-    public JButton getBtnModificar() {
-        return btnModificar;
-    }
+	public void setTxtDNI(JTextField txtDNI) {
+		this.txtDNI = txtDNI;
+	}
 }

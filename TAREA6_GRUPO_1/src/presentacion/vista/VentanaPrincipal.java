@@ -1,78 +1,99 @@
 package presentacion.vista;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class VentanaPrincipal extends JFrame {
 
-    private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JMenuBar menuBar;
+	private JMenu mnPersona;
+	private JMenuItem mntmAgregar;
+	private JMenuItem mntmModificar;
+	private JMenuItem mntmEliminar;
+	private JMenuItem mntmListar;
 
-    private VentanaAgregar ventanaagregar = new VentanaAgregar();
-    private PanelEliminarPersona panelEliminar = new PanelEliminarPersona();
-    private PanelModificarPersona panelModificar = new PanelModificarPersona();
 
-    private JPanel panelCentral;
+	/**
+	 * Create the frame.
+	 */
+	public VentanaPrincipal() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 648, 466);
+		
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		mnPersona = new JMenu("Persona");
+		menuBar.add(mnPersona);
+		
+		mntmAgregar = new JMenuItem("Agregar");
+		mnPersona.add(mntmAgregar);
+		
+		mntmModificar = new JMenuItem("Modificar");
+		mnPersona.add(mntmModificar);
+		
+		mntmEliminar = new JMenuItem("Eliminar");
+		mnPersona.add(mntmEliminar);
+		
+		mntmListar = new JMenuItem("Listar");
+		mnPersona.add(mntmListar);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+	}
 
-    public VentanaPrincipal() {
-        setTitle("Programa");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
 
-        JMenuBar barra = new JMenuBar();
-        JMenu menuPersonas = new JMenu("Personas");
+	public JMenu getMnPersona() {
+		return mnPersona;
+	}
 
-        JMenuItem opcionAgregar = new JMenuItem("Agregar");
-        opcionAgregar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                VentanaAgregar window = new VentanaAgregar();
-                window.frame.setVisible(true);
-            }
-        });
 
-        JMenuItem opcionModificar = new JMenuItem("Modificar");
-        JMenuItem opcionEliminar = new JMenuItem("Eliminar");
-        JMenuItem opcionListar = new JMenuItem("Listar");
+	public void setMnPersona(JMenu mnPersona) {
+		this.mnPersona = mnPersona;
+	}
 
-        menuPersonas.add(opcionAgregar);
-        menuPersonas.add(opcionModificar);
-        menuPersonas.add(opcionEliminar);
-        menuPersonas.add(opcionListar);
-        barra.add(menuPersonas);
-        setJMenuBar(barra);
 
-        panelCentral = new JPanel(new CardLayout());
+	public JMenuItem getMntmAgregar() {
+		return mntmAgregar;
+	}
 
-        JPanel panelInicio = new JPanel();
-        panelCentral.add(panelInicio, "PANEL_INICIO");
-        panelCentral.add(panelEliminar, "PANEL_ELIMINAR");
-        panelCentral.add(panelModificar, "PANEL_MODIFICAR");
 
-        add(panelCentral, BorderLayout.CENTER);
+	public void setMntmAgregar(JMenuItem mntmAgregar) {
+		this.mntmAgregar = mntmAgregar;
+	}
 
-        opcionEliminar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                panelEliminar.cargarPersonasDesdeBD();
-                CardLayout cl = (CardLayout) panelCentral.getLayout();
-                cl.show(panelCentral, "PANEL_ELIMINAR");
-            }
-        });
 
-        opcionModificar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	panelModificar.cargarPersonasDesdeBD();
-                CardLayout cl = (CardLayout) panelCentral.getLayout();
-                cl.show(panelCentral, "PANEL_MODIFICAR");
-            }
-        });
+	public JMenuItem getMntmModificar() {
+		return mntmModificar;
+	}
 
-        CardLayout cl = (CardLayout) panelCentral.getLayout();
-        cl.show(panelCentral, "PANEL_INICIO");
-    }
 
-    public void CambiarVisibilidad(boolean estado) {
-        setVisible(estado);
-    }
-}
+	public void setMntmModificar(JMenuItem mntmModificar) {
+		this.mntmModificar = mntmModificar;
+	}
+
+
+	public JMenuItem getMntmEliminar() {
+		return mntmEliminar;
+	}
+
+
+	public void setMntmEliminar(JMenuItem mntmEliminar) {
+		this.mntmEliminar = mntmEliminar;
+	}
+
+
+	public JMenuItem getMntmListar() {
+		return mntmListar;
+	}
+
+
+	public void setMntmListar(JMenuItem mntmListar) {
+		this.mntmListar = mntmListar;
+	}}
+
