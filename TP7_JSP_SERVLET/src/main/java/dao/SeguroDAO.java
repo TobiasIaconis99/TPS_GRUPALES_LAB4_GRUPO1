@@ -8,7 +8,7 @@ import java.util.List;
 public class SeguroDAO {
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/SegurosGroup", "root", "PabloUces2018");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/segurosgroup?useSSL=false", "root", "admin");
     }
     
     public List<TipoSeguro> obtenerTipos() {
