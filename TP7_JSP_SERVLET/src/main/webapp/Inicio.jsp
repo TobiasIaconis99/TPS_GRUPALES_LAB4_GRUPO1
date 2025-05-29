@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Inicio</title>
 </head>
 <body>
+
+	<a href="Inicio.jsp">Inicio</a> | <a href="AgregarSeguro.jsp">Agregar seguro</a> | <a href="ListarSeguros.jsp">Listar seguros</a>
+    <h2>Soy la pagina de inicio</h2>
+
 
 </body>
 </html>
