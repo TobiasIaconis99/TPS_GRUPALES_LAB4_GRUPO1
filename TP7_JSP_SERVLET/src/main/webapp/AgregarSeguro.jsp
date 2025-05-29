@@ -1,54 +1,66 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page import="modelo.TipoSeguro" %>
-<%@ page import="java.util.List" %>
-
-<!DOCTYPE html>
+<%@page import="negocio.TipoSeguroNegocio"%>
+<%@page import="entidad.TipoSeguro"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@page import="negocio.SeguroNegocio"%>
+<%@page import="negocioImpl.SeguroNegocioImpl"%>
+<%@page import="negocioImpl.TipoSeguroNegocioImpl"%>
+<%@page import="entidad.Seguro"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Agregar Seguro</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
 </head>
 <body>
 
-	<nav>
-		<a href="Inicio.jsp">Inicio</a> | <a href="AgregarSeguro.jsp">Agregar seguro</a> | <a href="ListarSeguros.jsp">Listar seguros</a>
-	</nav>
+<%!String errortext = null; %>
+<%!String success = null; %>
+<a href="Index.jsp">Inicio</a>
+<a href="AgregarSeguro.jsp">Agregar</a>
+<a href="ListarSeguro.jsp">Listar</a>
+<h1>Agregar seguros</h1>
+<form action="AgregarSeguroServlet" method="post">
+<div>
+	IDSeguro
+	<%SeguroNegocio sNegocio = new SeguroNegocioImpl(); %>
+	<input type="hidden" name="id" value="<%=sNegocio.lista().size()+1 %>" />
+	<%=sNegocio.lista().size()+1 %>
+</div>
+<div>
+	Descripcion
+	<input type="text" name="txtDescripcion" />
+</div>
+<div>
+	Tipo de seguro
+	<select name="SeltipoSeguro">
+		<%TipoSeguroNegocio tsNegocio = new TipoSeguroNegocioImpl();
+		for (TipoSeguro tipo : tsNegocio.readAll()) {
+		%>
+		<option><%=tipo.getDescripcion() %></option>			
+		<% } %>
+	</select>
+</div>
+<div>
+	Costo contratacion
+	<input type="number" name="txtCostoContratacion" />
+</div>
+<div>
+	Costo maximo asegurado
+	<input type="number" name="txtCostoMaxAseg" />
+</div>
+<input type="submit" value="Enviar" name="btnSubmit">
+</form>
 
-	<h2>Agregar Seguro</h2>
+<% if(request.getAttribute("inserted") != null){
+	success = "Agregado con exito"; %>
+<p> <%=success %></p>
+<%} %>
 
-	<form action="AgregarSeguro" method="post">
-		<table>
-			<tr>
-				<td>IdSeguro:</td>
-				<td><input type="text" value="<%= request.getAttribute("proximoId") %>" readonly></td>
-			</tr>
-			<tr>
-				<td>Descripción:</td>
-				<td><input type="text" name="descripcion" style="width: 150px;"></td>
-			</tr>
-			<tr>
-				<td>Tipo de Seguro:</td>
-				<td><select name="idTipo" style="width: 156px;">
-						<option value="" disabled selected>Seleccionar...</option>
-						<!-- Opciones dinámicas desde el servlet -->
-				</select></td>
-			</tr>
-			<tr>
-				<td>Costo Contratación:</td>
-				<td><input type="text" name="costoContratacion"
-					style="width: 150px;"></td>
-			</tr>
-			<tr>
-				<td>Costo Máximo Asegurado:</td>
-				<td><input type="text" name="costoMaximo" style="width: 150px;"></td>
-			</tr>
-			<tr>
-				<td colspan="2" style="text-align: right;"><input type="submit"
-					value="Aceptar"></td>
-			</tr>
-		</table>
-	</form>
-
+<% if(request.getAttribute("msgError") != null){
+	errortext = (String)request.getAttribute("msgError"); %>
+<p> <%=errortext %></p>
+<%} %>
 </body>
 </html>
