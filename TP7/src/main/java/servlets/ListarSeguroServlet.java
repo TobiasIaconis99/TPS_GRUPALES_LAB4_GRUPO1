@@ -50,9 +50,9 @@ public class ListarSeguroServlet extends HttpServlet {
 			sgList = segDao.filter(tsDao.lookUpId(request.getParameter("SeltipoSeguro")));
 		}
 		
-		if(request.getParameter("btnRecargar") != null) {
-			sgList = segDao.readAll();
-		}
+		//if(request.getParameter("btnRecargar") != null) {
+		//	sgList = segDao.readAll();
+		//}
 		
 		request.setAttribute("listComplete", sgList);
 		

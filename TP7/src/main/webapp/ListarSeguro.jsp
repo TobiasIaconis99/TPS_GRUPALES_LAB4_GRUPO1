@@ -1,4 +1,6 @@
+<%@page import="dao.SeguroDao"%>
 <%@page import="entidad.Seguro"%>
+<%@page import="daoImpl.SeguroDaoImpl"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="negocio.TipoSeguroNegocio"%>
 <%@page import="entidad.TipoSeguro"%>
@@ -41,25 +43,40 @@
 </form>
 <br>
 <br>
+
+<%
+    SeguroDao segDao = new SeguroDaoImpl();
+    ArrayList<Seguro> sgList = segDao.readAll();
+%>
+
 <table border="1">
-	<tr> <th>ID</th> <th>Descripcion</th> <th>Descripcion Tipo de Seguro</th> <th>Costo Contratacion</th> 
-		<th>Costo Asegurado</th>
-		
-	</tr>
-	<% if(listaSeguros != null){
-		for(Seguro item : listaSeguros){
-	%>		
-		<tr>
-			<th><%= item.getIdSeguro() %></th> <th><%= item.getDescripcion() %></th> <th><%= item.getTipoSeguro().getDescripcion() %></th> <th><%= item.getCostoAsegurado() %></th> 
-			<th><%=item.getCostoAsegurado() %></th>
-		</tr>	
-	<%	}
-	}%>
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Descripción Tipo de Seguro</th>
+        <th>Costo Contratación</th>
+        <th>Costo Asegurado</th>
+    </tr>
+
+    <%
+        if (sgList != null) {
+            for (Seguro item : sgList) {
+    %>
+                <tr>
+                    <td><%= item.getIdSeguro() %></td>
+                    <td><%= item.getDescripcion() %></td>
+                    <td><%= item.getTipoSeguro().getDescripcion() %></td>
+                    <td><%= item.getCostoContratacion() %></td>
+                    <td><%= item.getCostoAsegurado() %></td>
+                </tr>
+    <%
+            }
+        }
+    %>
 </table>
+
+
 <br>
 <br>
-<form action="ListarSeguroServlet" method="post">
-	<input type="submit" value="Recargar lista" name="btnRecargar">
-</form>
 </body>
 </html>
