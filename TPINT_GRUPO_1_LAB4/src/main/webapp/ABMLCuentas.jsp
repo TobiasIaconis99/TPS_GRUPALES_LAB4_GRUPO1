@@ -9,12 +9,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </head>
 <body>
-	<!-- Barra de navegación superior -->
+	<!-- Barra de navegacion superior -->
 	<nav class="navbar navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand text-white">Banco</a>
+	
+			<!-- Contenedor para usuario y botón -->
 			<div class="d-flex align-items-center">
-				<span class="text-white mr-3">Juan Pérez</span>
+				<span class="text-white mr-3">Administrador</span>
 				<form action="Login.jsp">
 					<input type="submit" class="btn btn-danger" name="btnCerrarSesion" value="Cerrar sesión" />
 				</form>

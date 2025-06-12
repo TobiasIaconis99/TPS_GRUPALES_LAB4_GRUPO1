@@ -17,7 +17,7 @@
 
 		<!-- Contenedor para usuario y botón -->
 		<div class="d-flex align-items-center">
-			<span class="text-white mr-3">Juan Pérez</span>
+			<span class="text-white mr-3">Administrador</span>
 			<form action="Login.jsp">
 				<input type="submit" class="btn btn-danger" name="btnCerrarSesion" value="Cerrar sesión" />
 			</form>
