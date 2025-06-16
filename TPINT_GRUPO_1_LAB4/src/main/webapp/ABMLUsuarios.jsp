@@ -10,20 +10,8 @@
 </head>
 <body>
 
-<!-- Barra de navegacion superior -->
-<nav class="navbar navbar-dark bg-dark">
-	<div class="container-fluid">
-		<a class="navbar-brand text-white">Banco</a>
-
-		<!-- Contenedor para usuario y botón -->
-		<div class="d-flex align-items-center">
-			<span class="text-white mr-3">Administrador</span>
-			<form action="Login.jsp">
-				<input type="submit" class="btn btn-danger" name="btnCerrarSesion" value="Cerrar sesión" />
-			</form>
-		</div>
-	</div>
-</nav>
+	<!-- Barra de navegacion superior -->
+	<%@ include file="includes/NavbarAdmin.jsp" %>
 
 <div class="container mt-5">
 	<!-- Primer fila con el nombre de la pagina y el boton agregar -->

@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,22 +10,11 @@
 </head>
 <body>
 
-<!-- Barra de navegacion superior -->
-<nav class="navbar navbar-dark bg-dark">
-	<div class="container-fluid">
-		<a class="navbar-brand text-white">Banco</a>
-
-		<!-- Contenedor para usuario y botón -->
-		<div class="d-flex align-items-center">
-			<span class="text-white mr-3">Administrador</span>
-			<form action="Login.jsp">
-				<input type="submit" class="btn btn-danger" name="btnCerrarSesion" value="Cerrar sesión" />
-			</form>
-		</div>
-	</div>
-</nav>
+	<!-- Barra de navegacion superior -->
+	<%@ include file="includes/NavbarAdmin.jsp" %>
 
 <div class="container mt-5">
+	<!-- Primer fila con el nombre de la pagina y el boton agregar -->
 	<div class="row mb-3">
 		<div class="col-md-6">
 			<h4>Solicitudes de Préstamos</h4>
@@ -55,10 +45,12 @@
 				<td>$4.800</td>
 				<td>Pendiente</td>
 				<td>
-					<button class="btn btn-success btn-sm">Autorizar</button>
-					<button class="btn btn-danger btn-sm">Rechazar</button>
+					<div class="d-flex">
+						<button class="btn btn-sm btn-primary mr-2">Autorizar</button>
+						<button class="btn btn-sm btn-danger">Rechazar</button>
+					</div>
 				</td>
-			</tr>
+				</tr>
 			<tr>
 				<td>Laura Gómez</td>
 				<td>10003</td>
@@ -68,8 +60,8 @@
 				<td>$5.200</td>
 				<td>Pendiente</td>
 				<td>
-					<button class="btn btn-success btn-sm">Autorizar</button>
-					<button class="btn btn-danger btn-sm">Rechazar</button>
+					<button class="btn btn-sm btn-primary">Autorizar</button>
+					<button class="btn btn-sm btn-danger">Rechazar</button>
 				</td>
 			</tr>
 		</tbody>
