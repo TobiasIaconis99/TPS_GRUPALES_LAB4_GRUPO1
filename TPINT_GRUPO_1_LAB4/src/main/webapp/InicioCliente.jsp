@@ -26,7 +26,7 @@
 			<ul class="list-group">
 				<li class="list-group-item active" aria-current="true">
 					<div class="d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="VerMovimientos.jsp">
+						<a class="text-white stretched-link" href="Movimientos.jsp">
 						Ver movimientos de mis cuentas</a>
 						<div class="text-white">
 							<i class="bi bi-chevron-right"></i>
@@ -47,7 +47,7 @@
 						<i class="bi bi-arrow-left-right fs-1"></i>
 					</div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="">Administrar transferencias.</a>
+						<a class="text-white stretched-link" href="Transferencias.jsp">Administrar transferencias.</a>
 						<div class="text-white">
 							<i class="bi bi-chevron-right"></i>
 						</div>
@@ -61,7 +61,7 @@
 						<i class="bi bi-cash fs-1"></i>
 					</div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="">Administrar préstamos.</a>
+						<a class="text-white stretched-link" href="Prestamos.jsp">Administrar préstamos.</a>
 						<div class="text-white">
 							<i class="bi bi-chevron-right"></i>
 						</div>

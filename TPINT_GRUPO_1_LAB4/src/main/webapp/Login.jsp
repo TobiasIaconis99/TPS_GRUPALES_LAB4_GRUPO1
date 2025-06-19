@@ -21,9 +21,9 @@
 
 <body class="d-flex align-items-center justify-content-center" style="min-height: 100vh; margin:0;">
 	<div class="login-form">
-		<form method="post" action="ServletLogin" class="p-4 border rounded bg-light shadow-sm">
-			<h2 class="text-center mb-4">Banco</h2>
-
+		<form method="post" action="ServletLogin" class="p-4 border rounded bg-primary text-white shadow-sm">
+			<h2 class="text-center mb-4 text-white">Banco</h2>
+		
 			<%
 				String errorLogin = (String) request.getAttribute("errorLogin");
 				if (errorLogin != null) {
@@ -32,17 +32,17 @@
 				<%= errorLogin %>
 			</div>
 			<% } %>
-
+		
 			<div class="mb-3">
 				<input type="text" class="form-control" name="txtUsuario" placeholder="Usuario" required autofocus>
 			</div>
-
+		
 			<div class="mb-3">
 				<input type="password" class="form-control" name="txtClave" placeholder="Clave" required>
 			</div>
-
+		
 			<div class="d-grid">
-				<button type="submit" class="btn btn-primary" name="btnIngresar">Ingresar</button>
+				<button type="submit" class="btn btn-light" name="btnIngresar">Ingresar</button>
 			</div>
 		</form>
 	</div>
