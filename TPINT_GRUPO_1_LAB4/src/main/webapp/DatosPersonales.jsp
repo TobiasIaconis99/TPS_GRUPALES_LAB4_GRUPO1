@@ -6,11 +6,11 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Datos personales</title>
-
 	<!-- Bootstrap 5.3 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-	<!-- Bootstrap Bundle JS -->
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -22,9 +22,10 @@
 	<div class="container my-5">
 		<!-- List Group para encabezado -->
 		<div class="list-group mb-4">
-			<button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+			<h4>
 				Datos personales
-			</button>
+			</h4>
+			<hr>
 		</div>
 
 		<!-- Formulario de datos personales con inputs tipo texto -->
@@ -89,7 +90,7 @@
 			<div class="row mb-3">
 				<div class="col-md-6">
 					<label for="email" class="form-label">Correo electrónico</label>
-					<input type="email" class="form-control" id="email" name="email" required value="juan.perez@example.com" readonly>
+					<input type="email" class="form-control" id="email" name="email" required value="juan.perez@gmail.com" readonly>
 				</div>
 				<div class="col-md-6">
 					<label for="usuario" class="form-label">Usuario</label>
@@ -104,4 +105,3 @@
 
 </body>
 </html>
-
