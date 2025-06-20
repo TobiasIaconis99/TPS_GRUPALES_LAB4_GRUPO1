@@ -27,7 +27,7 @@
 		</div>
 
 		<!-- Selección de cuenta -->
-		<form method="get" action="VerMovimientos.jsp" class="mb-4">
+		<form method="get" action="Movimientos.jsp" class="mb-4">
 			<div class="row">
 				<div class="col-md-8">
 					<label for="cuentaSeleccionada" class="form-label">Seleccione una cuenta</label>

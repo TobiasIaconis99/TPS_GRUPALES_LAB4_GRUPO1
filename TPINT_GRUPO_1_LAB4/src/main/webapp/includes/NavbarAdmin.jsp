@@ -8,8 +8,8 @@
 <nav class="navbar navbar-expand bg-primary px-3">
     <div class="container-fluid">
         <a class="navbar-brand text-white" href="InicioAdmin.jsp">
-        	<i class="bi bi-bank me-2 fs-3"></i>
-			Banco
+        	<i class="bi bi-bank me-2 fs-4"></i>
+			BANCO
 		</a>
         <div class="d-flex align-items-center gap-3">
             <a href="#" class="text-white d-flex align-items-center text-decoration-none">

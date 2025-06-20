@@ -9,8 +9,8 @@
     <div class="container-fluid">
     <div>
         <a class="navbar-brand text-white" href="InicioCliente.jsp">
-        	<i class="bi bi-bank me-2 fs-3"></i>
-			Banco
+        	<i class="bi bi-bank me-2 fs-4"></i>
+			BANCO
 		</a>
     </div>
 
