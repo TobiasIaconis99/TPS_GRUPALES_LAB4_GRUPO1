@@ -1,11 +1,13 @@
 package dao;
 
+import java.util.List;
 import entidad.Usuario;
 
 public interface UsuarioDao {
-	public Usuario login(String nombreUsuario, String clave);
-	public String host = "jdbc:mysql://localhost:3306/";
-	public String user = "root";
-	public String pass = "root";
-	public String dbName = "bdbanco";
+	
+    Usuario loguear(String nombreUsuario, String clave);
+    List<Usuario> listar();
+    boolean agregar(Usuario u);
+    boolean modificar(Usuario u);
+    boolean eliminar(int idUsuario);
 }

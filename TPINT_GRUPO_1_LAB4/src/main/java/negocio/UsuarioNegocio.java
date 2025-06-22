@@ -1,7 +1,13 @@
 package negocio;
 
+import java.util.List;
+
 import entidad.Usuario;
 
 public interface UsuarioNegocio {
-    public Usuario login(String nombreUsuario, String clave);
+    public Usuario loguear(String nombreUsuario, String clave);
+    public List<Usuario> listar();
+    public boolean agregar(Usuario u);
+    public boolean modificar(Usuario u);
+    public boolean eliminar(int idUsuario);
 }

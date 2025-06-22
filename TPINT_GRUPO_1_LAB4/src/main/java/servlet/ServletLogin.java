@@ -15,7 +15,7 @@ import entidad.Usuario;
 @WebServlet("/ServletLogin")
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     public ServletLogin() {
         super();
     }
@@ -25,26 +25,25 @@ public class ServletLogin extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		String usuario = request.getParameter("txtUsuario");
-        String clave = request.getParameter("txtClave");
+		String clave = request.getParameter("txtClave");
 
-        // Validar con base de datos
-        UsuarioDao usuDao = new UsuarioDaoImpl(); // Esto lo implementás según tu DAO
-        Usuario usu = usuDao.login(usuario, clave); // Si existe, devuelve el usuario; si no, null
+		UsuarioDao usuDao = new UsuarioDaoImpl();
+		Usuario usu = usuDao.loguear(usuario, clave);
 
-        if (usu != null && usu.isEstado()) {
-            HttpSession session = request.getSession();
-            session.setAttribute("usuarioLogueado", usu);
-            
-            if (usu.getTipoUsuario().equals("admin")) {
-                response.sendRedirect("InicioAdmin.jsp");
-            } else {
-                response.sendRedirect("InicioCliente.jsp");
-            }
-        } else {
-            request.setAttribute("errorLogin", "Usuario o clave incorrectos");
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
-        }
+		if (usu != null && usu.isEstado()) {
+			HttpSession session = request.getSession();
+			session.setAttribute("usuarioLogueado", usu);
+
+			if (usu.getTipoUsuario().equals("admin")) {
+				response.sendRedirect("InicioAdmin.jsp");
+			} else {
+				response.sendRedirect("InicioCliente.jsp");
+			}
+		} else {
+			request.setAttribute("errorLogin", "Usuario o clave incorrectos");
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+		}
 	}
 }

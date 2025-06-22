@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -5,96 +7,129 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Cuentas</title>
-
+	<title>Usuarios</title>
 	<!-- Bootstrap 5.3 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
 	<!-- Bootstrap Icons -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body style="margin: 0; padding: 0;">
 
-	<!-- NAVBAR ADMIN -->
-	<%@ include file="includes/NavbarAdmin.jsp" %>
+	<!-- Navbar de Admin -->
+	<%@ include file="includes/NavbarAdmin.jsp"%>
 
 	<div class="d-flex">
-		<!-- SIDEBAR -->
-		<%@ include file="includes/SidebarAdmin.jsp" %>
+		<!-- Sidebar Admin -->
+		<%@ include file="includes/SidebarAdmin.jsp"%>
 
-		<!-- Contenedor principal -->
+		<!-- Contenido de la pagina -->
 		<div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
-			<h4>Cuentas</h4>
+			<h4>Usuarios</h4>
 			<hr />
 			<br />
-			<!-- Encabezado -->
+			<!-- Encabezado antes de la tabla-->
 			<div class="row mb-3">
 				<div class="col-md-6">
-					<!-- espacio para futuros filtros u otros elementos -->
+					<!-- Espacio para futuros filtros u otros elementos -->
 				</div>
 				<div class="col-md-6 text-end">
-					<button class="btn btn-primary">
-						Nueva usuario
-					</button>
+					<button class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i> Nuevo usuario</button>
 				</div>
 			</div>
 
-			<!-- Tabla de clientes -->
-    <table class="table table-bordered">
-        <thead class="table-light">
-            <tr>
-                <th>Usuario</th>
-                <th>Contraseña</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>janpe</td>
-                <td>.....</td>
-                <td>
-					<button class="btn btn-sm btn-secondary">
-						<i class="bi bi-pencil-square me-1"></i> Editar
-					</button>
-					<button class="btn btn-sm btn-danger">
-						<i class="bi bi-trash me-1"></i> Eliminar
-					</button>
-				</td>
-            </tr>
-            <tr>
-                <td>margo</td>
-                <td>.....</td>
-                <td>
-					<button class="btn btn-sm btn-secondary">
-						<i class="bi bi-pencil-square me-1"></i> Editar
-					</button>
-					<button class="btn btn-sm btn-danger">
-						<i class="bi bi-trash me-1"></i> Eliminar
-					</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-	<!-- Paginas -->
-		<div class="d-flex justify-content-center">
-			<nav>
-				<ul class="pagination">
-					<li class="page-item"><a class="page-link" href="#">Anterior</a></li>
-					<li class="page-item"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">3</a></li>
-					<li class="page-item"><a class="page-link" href="#">Proximo</a></li>
-				</ul>
-			</nav>
-		</div>
-
+			<!-- Tabla de usuarios -->
+			<%
+				// Primero cargamos la lista con los usuarios y nos aseguramos que no sea nulo
+				List<Usuario> listaUsuarios = null;
+				if(request.getAttribute("listaUsuarios") != null){
+					listaUsuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
+				}
+			%>
+			<table class="table table-bordered">
+				<thead class="table-primary">
+					<tr>
+						<th>Usuario</th>
+						<th>Clave</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+						// Luego vamos cargando uno por uno el usuario en la tabla
+						if (listaUsuarios != null)
+						for(Usuario u : listaUsuarios ){
+					%>					
+					<tr>
+						<td><%= u.getNombreUsuario() %></td> <!-- Columna de nombres de usuarios --> 
+						<td><%= u.getClave() %></td> <!-- Columna de claves --> 
+						<td> <!-- Columna de acciones --> 
+							<button 
+							  class="btn btn-sm btn-secondary"
+							  data-bs-toggle="modal"
+							  data-bs-target="#modalEditarUsuario"
+							  onclick="cargarUsuario('<%= u.getIdUsuario() %>', '<%= u.getNombreUsuario() %>', '<%= u.getClave() %>', '<%= u.getTipoUsuario() %>')">
+							  <i class="bi bi-pencil-square me-1"></i>Editar
+							</button>
+							<button class="btn btn-sm btn-danger"><i class="bi bi-trash me-1"></i>Eliminar</button>
+						</td>
+					</tr>
+					<%
+						}
+					%>
+				</tbody>
+			</table>
 		</div>
 	</div>
-
+	
+	<!-- Script: Es necesario para cargar el modal en tiempo real -->
+	<script>
+		function cargarUsuario(id, nombre, clave, tipo) {
+			document.getElementById("edit-idUsuario").value = id;
+			document.getElementById("edit-nombreUsuario").value = nombre;
+			document.getElementById("edit-clave").value = clave;
+			document.getElementById("edit-tipoUsuario").value = tipo;
+		}
+	</script>
+	
+	<!-- Modal para editar un usuario -->
+	<div class="modal fade" id="modalEditarUsuario" tabindex="-1"
+		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="ServletUsuario" method="post">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalEditarUsuarioLabel">Editar usuario</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3">
+							<label for="edit-idUsuario" class="form-label">ID</label>
+							<input type="text" class="form-control" name="idUsuario" id="edit-idUsuario" readonly>
+						</div>
+						<div class="mb-3">
+							<label for="edit-nombreUsuario" class="form-label">Usuario</label>
+							<input type="text" class="form-control" name="nombreUsuario" id="edit-nombreUsuario" required>
+						</div>
+						<div class="mb-3">
+							<label for="edit-clave" class="form-label">Clave</label> <input type="text" class="form-control" name="clave" id="edit-clave" required>
+						</div>
+						<div class="mb-3">
+							<label for="edit-tipoUsuario" class="form-label">Tipo de usuario</label> <select class="form-select" name="tipoUsuario" id="edit-tipoUsuario" required>
+								<option value="admin">Admin</option>
+								<option value="cliente">Cliente</option>
+							</select>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" name="accion" value="modificar" class="btn btn-primary">Guardar</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
