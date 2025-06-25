@@ -39,7 +39,6 @@
 					<button class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i> Nuevo usuario</button>
 				</div>
 			</div>
-
 			<!-- Tabla de usuarios -->
 			<%
 				// Primero cargamos la lista con los usuarios y nos aseguramos que no sea nulo
@@ -67,13 +66,13 @@
 						<td><%= u.getClave() %></td> <!-- Columna de claves --> 
 						<td> <!-- Columna de acciones --> 
 							<button 
-							  class="btn btn-sm btn-secondary"
+							  class="btn btn-sm btn-success"
 							  data-bs-toggle="modal"
 							  data-bs-target="#modalEditarUsuario"
 							  onclick="cargarUsuario('<%= u.getIdUsuario() %>', '<%= u.getNombreUsuario() %>', '<%= u.getClave() %>', '<%= u.getTipoUsuario() %>')">
-							  <i class="bi bi-pencil-square me-1"></i>Editar
+							  <i class="bi bi-pencil-square"></i>
 							</button>
-							<button class="btn btn-sm btn-danger"><i class="bi bi-trash me-1"></i>Eliminar</button>
+							<button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
 						</td>
 					</tr>
 					<%

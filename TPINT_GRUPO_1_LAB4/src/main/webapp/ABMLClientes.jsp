@@ -1,3 +1,8 @@
+<%@page import="java.util.List"%>
+<%@page import="entidad.Cliente"%>
+<%@page import="entidad.Provincia"%>
+<%@page import="entidad.Localidad"%>
+<%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -6,207 +11,300 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Clientes</title>
-
-	<!-- Bootstrap 5.3 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-	<!-- Bootstrap Icons -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-
-	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body style="margin: 0; padding: 0;">
 
-	<!-- NAVBAR ADMIN -->
 	<%@ include file="includes/NavbarAdmin.jsp" %>
 
 	<div class="d-flex">
-		<!-- SIDEBAR -->
 		<%@ include file="includes/SidebarAdmin.jsp" %>
 
-		<!-- Contenedor principal -->
 		<div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
 			<h4>Clientes</h4>
 			<hr />
 			<br />
 			<div class="row mb-3">
 				<div class="col-md-6">
-					<!-- espacio para futuros filtros u otros elementos -->
-				</div>
+					</div>
 				<div class="col-md-6 text-end">
-					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-					  Nuevo cliente
-					</button>
+					<a href="ServletCliente?accion=abrirFormularioAgregar" class="btn btn-primary">
+						<i class="bi bi-plus-circle me-1"></i> Nuevo cliente
+					</a>
 				</div>
 			</div>
-
-			<!-- Tabla de clientes -->
+			<%
+				// Mensaje exito
+                String mensajeExito = (String) session.getAttribute("mensajeExito");
+                if (mensajeExito != null) {
+                    session.removeAttribute("mensajeExito");
+            %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    	<i class="bi bi-check-circle me-1"></i>
+                        <%= mensajeExito %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+            <%
+                }
+                // Mensaje error
+                String mensajeError = (String) session.getAttribute("mensajeError");
+                if (mensajeError != null) {
+                    session.removeAttribute("mensajeError");
+            %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    	<i class="bi bi-x-circle me-1"></i>
+                        <%= mensajeError %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+            <%
+                }
+            %>
+			<%
+				List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
+			%>
 			<table class="table table-bordered">
-				<thead class="table-light">
+				<thead class="table-primary">
 					<tr>
 						<th>DNI</th>
-						<th>Nombre</th>
-						<th>Apellido</th>
+						<th>CUIL</th>
+						<th>Nombre y Apellido</th>
 						<th>Acciones</th>
 					</tr>
 				</thead>
 				<tbody>
+					<%
+						if (listaClientes != null) {
+						for(Cliente c : listaClientes ){
+							// --- INICIO DE LA CORRECCIÓN: Mapeo del sexo para mostrar en el modal ---
+							String sexoDisplay = "";
+                            if (c.getSexo() != null) {
+                                switch (c.getSexo().toUpperCase()) {
+                                    case "M":
+                                        sexoDisplay = "Masculino";
+                                        break;
+                                    case "F":
+                                        sexoDisplay = "Femenino";
+                                        break;
+                                    case "O":
+                                        sexoDisplay = "Otro";
+                                        break;
+                                    default:
+                                        sexoDisplay = "No especificado"; // O lo que corresponda para valores inesperados
+                                        break;
+                                }
+                            }
+							// --- FIN DE LA CORRECCIÓN ---
+					%>	
 					<tr>
-						<td>12345678</td>
-						<td>Juan</td>
-						<td>Pérez</td>
-						<td>
-							<button class="btn btn-sm btn-primary">Ver más</button>
-							<button class="btn btn-sm btn-secondary">Editar</button>
-							<button class="btn btn-sm btn-danger">Eliminar</button>
+						<td><%= c.getDni() %></td>
+						<td><%= c.getCuil() %></td>
+						<td><%= c.getNombre() %> <%= c.getApellido() %></td>
+						<td> 
+							<button class="btn btn-sm btn-primary"
+								data-bs-toggle="modal"
+								data-bs-target="#modalVerCliente"
+								onclick="verClienteDetalles(
+									'<%= c.getDni() %>', 
+									'<%= c.getCuil() %>', 
+									'<%= sexoDisplay %>', <%-- ¡Cambiado aquí para usar sexoDisplay! --%>
+									'<%= c.getNombre() %>', 
+									'<%= c.getApellido() %>', 
+									'<%= c.getNacionalidad() %>', 
+									'<%= c.getFechaNacimiento() %>', 
+									'<%= c.getDireccion() %>', 
+									'<%= c.getLocalidad().getProvincia().getNombreProvincia() %>',
+									'<%= c.getLocalidad().getNombreLocalidad() %>',
+									'<%= c.getTelefono() %>', 
+									'<%= c.getCorreo() %>', 
+									'<%= c.getUsuario().getNombreUsuario() %>', 
+									'<%= c.getUsuario().getClave() %>'
+								)">
+								<i class="bi bi-eye"></i>
+							</button>
+							<a href="ServletCliente?accion=abrirFormularioModificar&dni=<%= c.getDni() %>" class="btn btn-sm btn-success">
+								<i class="bi bi-pencil-square"></i>
+							</a>
+							<button class="btn btn-sm btn-danger"
+								data-bs-toggle="modal"
+								data-bs-target="#modalConfirmacionEliminar"
+								onclick="setDniClienteAEliminar('<%= c.getDni() %>')">
+								<i class="bi bi-trash"></i>
+							</button>
 						</td>
 					</tr>
-					<tr>
-						<td>23456789</td>
-						<td>María</td>
-						<td>Gómez</td>
-						<td>
-							<button class="btn btn-sm btn-primary">Ver más</button>
-							<button class="btn btn-sm btn-secondary">Editar</button>
-							<button class="btn btn-sm btn-danger">Eliminar</button>
-						</td>
-					</tr>
+					<%
+						}
+					}
+					%>
 				</tbody>
 			</table>
-
-			<!-- Paginación -->
-			<div class="d-flex justify-content-center">
-				<nav>
-					<ul class="pagination">
-						<li class="page-item"><a class="page-link" href="#">Anterior</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
-					</ul>
-				</nav>
-			</div>
 		</div>
 	</div>
 	
+	<script>
+	 	// Variable para almacenar el DNI del cliente a eliminar
+		let dniClienteAEliminar = "";
+		// Función para almacenar el DNI del cliente a eliminar
+		function setDniClienteAEliminar(dni) {
+			dniClienteAEliminar = dni;
+		}
+		// Función para confirmar la eliminación del cliente
+		function confirmarEliminarCliente() {
+			// Crea un formulario dinámicamente
+			const form = document.createElement('form');
+			form.method = 'POST'; // Define el método como POST
+			form.action = 'ServletCliente'; // Apunta al servlet
+
+			// Crea un input oculto para la acción
+			const accionInput = document.createElement('input');
+			accionInput.type = 'hidden';
+			accionInput.name = 'accion';
+			accionInput.value = 'eliminar'; // La acción que esperas en doPost
+			form.appendChild(accionInput);
+
+			// Crea un input oculto para el DNI del cliente
+			const dniInput = document.createElement('input');
+			dniInput.type = 'hidden';
+			dniInput.name = 'dni';
+			dniInput.value = dniClienteAEliminar; // El DNI a eliminar
+			form.appendChild(dniInput);
+
+			// Agrega el formulario al body del documento y lo envía
+			document.body.appendChild(form); 
+			form.submit(); // Esto envía la petición POST
+		}
+		// Función para cargar los datos en el modal y ponerlos en modo solo lectura
+		function verClienteDetalles(dni, cuil, sexo, nombre, apellido, nacionalidad, fechaNacimiento, direccion, nombreProvincia, nombreLocalidad, telefono, correo, usuario, clave) {
+            document.getElementById("dni").value = dni;
+            document.getElementById("cuil").value = cuil;
+            document.getElementById("sexo").value = sexo; // Ahora 'sexo' ya viene mapeado desde el JSP
+            document.getElementById("nombre").value = nombre;
+            document.getElementById("apellido").value = apellido;
+            document.getElementById("nacionalidad").value = nacionalidad;
+            document.getElementById("fechaNacimiento").value = fechaNacimiento;
+            document.getElementById("direccion").value = direccion;
+            document.getElementById("provincia").value = nombreProvincia;
+            document.getElementById("localidad").value = nombreLocalidad;
+            document.getElementById("telefono").value = telefono;
+            document.getElementById("email").value = correo;
+            document.getElementById("usuario").value = usuario;
+            document.getElementById("contrasenia").value = clave;
+		}
+	</script>
 	
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg"> <!-- más ancho para mayor comodidad -->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo cliente</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <form id="formNuevoCliente">
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label for="dni" class="form-label">DNI</label>
-              <input type="text" class="form-control" id="dni" name="dni" required>
-            </div>
-            <div class="col-md-4">
-              <label for="cuil" class="form-label">CUIL</label>
-              <input type="text" class="form-control" id="cuil" name="cuil" required>
-            </div>
-            <div class="col-md-4">
-              <label for="sexo" class="form-label">Sexo</label>
-              <select class="form-select" id="sexo" name="sexo" required>
-                <option value="">Seleccione...</option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-                <option value="X">Otro</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombre" name="nombre" required>
-            </div>
-            <div class="col-md-6">
-              <label for="apellido" class="form-label">Apellido</label>
-              <input type="text" class="form-control" id="apellido" name="apellido" required>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="nacionalidad" class="form-label">Nacionalidad</label>
-              <input type="text" class="form-control" id="nacionalidad" name="nacionalidad" required>
-            </div>
-            <div class="col-md-6">
-              <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-              <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="direccion" class="form-label">Dirección</label>
-            <input type="text" class="form-control" id="direccion" name="direccion" required>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label for="provincia" class="form-label">Provincia</label>
-              <select class="form-select" id="provincia" name="provincia" required>
-                <option value="">Seleccione...</option>
-                <option value="Buenos Aires">Buenos Aires</option>
-                <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
-                <option value="Córdoba">Córdoba</option>
-                <option value="Santa Fe">Santa Fe</option>
-                <!-- Agrega más provincias si es necesario -->
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label for="localidad" class="form-label">Localidad</label>
-              <select class="form-select" id="localidad" name="localidad" required>
-                <option value="">Seleccione...</option>
-                <!-- Se puede completar dinámicamente con JS si es necesario -->
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label for="telefono" class="form-label">Teléfono</label>
-              <input type="tel" class="form-control" id="telefono" name="telefono" required>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="col-md-6">
-              <label for="usuario" class="form-label">Usuario</label>
-              <input type="text" class="form-control" id="usuario" name="usuario" required>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="contrasenia" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="contrasenia" name="contrasenia" required>
-            </div>
-            <div class="col-md-6">
-              <label for="repetirContrasenia" class="form-label">Repetir contraseña</label>
-              <input type="password" class="form-control" id="repetirContrasenia" name="repetirContrasenia" required>
-            </div>
-          </div>
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" form="formNuevoCliente" class="btn btn-primary">Guardar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+	<div class="modal fade" id="modalVerCliente" tabindex="-1" aria-labelledby="modalVerClienteLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5" id="modalVerClienteLabel">Ver cliente</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+	      </div>
+	      <div class="modal-body">
+	        <form id="formNuevoCliente" action="" method="POST"> 
+	          <input type="hidden" name="accion" id="form-action-hidden"> 
+	
+	          <div class="row mb-3">
+	            <div class="col-md-4">
+	              <label for="dni" class="form-label">DNI</label>
+	              <input type="text" class="form-control" id="dni" name="dni" required disabled>
+	            </div>
+	            <div class="col-md-4">
+	              <label for="cuil" class="form-label">CUIL</label>
+	              <input type="text" class="form-control" id="cuil" name="cuil" required disabled>
+	            </div>
+	            <div class="col-md-4">
+	              <label for="sexo" class="form-label">Sexo</label>
+	              <input type="text" class="form-control" id="sexo" name="sexo" required disabled>
+	            </div>
+	          </div>
+	
+	          <div class="row mb-3">
+	            <div class="col-md-6">
+	              <label for="nombre" class="form-label">Nombre</label>
+	              <input type="text" class="form-control" id="nombre" name="nombre" required disabled>
+	            </div>
+	            <div class="col-md-6">
+	              <label for="apellido" class="form-label">Apellido</label>
+	              <input type="text" class="form-control" id="apellido" name="apellido" required disabled>
+	            </div>
+	          </div>
+	
+	          <div class="row mb-3">
+	            <div class="col-md-6">
+	              <label for="nacionalidad" class="form-label">Nacionalidad</label>
+	              <input type="text" class="form-control" id="nacionalidad" name="nacionalidad" required disabled>
+	            </div>
+	            <div class="col-md-6">
+	              <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+	              <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required disabled>
+	            </div>
+	          </div>
+	
+	          <div class="mb-3">
+	            <label for="direccion" class="form-label">Dirección</label>
+	            <input type="text" class="form-control" id="direccion" name="direccion" required disabled>
+	          </div>
+	
+	          <div class="row mb-3">
+	            <div class="col-md-4">
+	              <label for="provincia" class="form-label">Provincia</label>
+	              <input type="text" class="form-control" id="provincia" name="provincia" required disabled>
+	            </div>
+	            <div class="col-md-4">
+	              <label for="localidad" class="form-label">Localidad</label>
+	              <input type="text" class="form-control" id="localidad" name="localidad" required disabled>
+	            </div>
+	            <div class="col-md-4">
+	              <label for="telefono" class="form-label">Teléfono</label>
+	              <input type="tel" class="form-control" id="telefono" name="telefono" required disabled>
+	            </div>
+	          </div>
+	          
+	          <div class="mb-3">
+	            <label for="email" class="form-label">Correo electrónico</label>
+	            <input type="email" class="form-control" id="email" name="email" required disabled>
+	          </div>
+	
+	          <div class="row mb-3">
+	          	<div class="col-md-6">
+	              <label for="usuario" class="form-label">Usuario</label>
+	              <input type="text" class="form-control" id="usuario" name="usuario" required disabled>
+	            </div>
+	            <div class="col-md-6">
+	              <label for="contrasenia" class="form-label">Clave</label>
+	              <input type="text" class="form-control" id="contrasenia" name="contrasenia" required disabled>
+	            </div>
+	          </div>
+	
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal fade" id="modalConfirmacionEliminar" tabindex="-1" aria-labelledby="modalConfirmacionEliminarLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="modalConfirmacionEliminarLabel">Eliminar cliente</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        ¿Estás seguro de que deseas eliminar este cliente?
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+	        <button type="button" class="btn btn-danger" onclick="confirmarEliminarCliente()">Eliminar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 </body>
 </html>
