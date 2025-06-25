@@ -123,8 +123,8 @@
 								)">
 								<i class="bi bi-eye"></i>
 							</button>
-							<a href="ServletCliente?accion=abrirFormularioModificar&dni=<%= c.getDni() %>" class="btn btn-sm btn-success">
-								<i class="bi bi-pencil-square"></i>
+							<a href="ServletCliente?accion=formularioModificarCliente&dni=<%= c.getDni() %>" class="btn btn-sm btn-success">
+							    <i class="bi bi-pencil-square"></i>
 							</a>
 							<button class="btn btn-sm btn-danger"
 								data-bs-toggle="modal"

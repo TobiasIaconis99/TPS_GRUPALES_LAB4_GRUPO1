@@ -35,6 +35,7 @@ public class ServletCliente extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String accion = request.getParameter("accion");
+		HttpSession session = request.getSession();
 
 		if (accion != null) {
 			switch (accion) {
@@ -52,6 +53,31 @@ public class ServletCliente extends HttpServlet {
 				RequestDispatcher rdAgregar = request.getRequestDispatcher("AgregarCliente.jsp");
 				rdAgregar.forward(request, response);
 				break;
+			case "formularioModificarCliente": // Esto podria estar en un servlet de Provincias
+				
+				String dniModificar = request.getParameter("dni");
+				if (dniModificar == null || dniModificar.isEmpty()) {
+					session.setAttribute("mensajeError", "DNI del cliente no especificado para modificar.");
+					response.sendRedirect("ServletCliente?accion=listar");
+					return;
+				}
+				
+				Cliente clienteAEditar = clienteNegocio.obtenerPorDni(dniModificar);
+				if (clienteAEditar == null) {
+					session.setAttribute("mensajeError", "Cliente no encontrado para modificar.");
+					response.sendRedirect("ServletCliente?accion=listar");
+					return;
+				}
+				
+				ProvinciaNegocio provinciaNegocioModificar = new ProvinciaNegocioImpl();
+				List<Provincia> provinciasParaModificar = provinciaNegocioModificar.listar();
+				
+				request.setAttribute("clienteAEditar", clienteAEditar);
+				request.setAttribute("listaProvincias", provinciasParaModificar);
+				
+				RequestDispatcher rdModificar = request.getRequestDispatcher("ModificarCliente.jsp");
+				rdModificar.forward(request, response);
+				break;
 				
 			default:
 				response.sendRedirect("ServletCliente?accion=listar");
@@ -66,8 +92,6 @@ public class ServletCliente extends HttpServlet {
 
 		String accion = request.getParameter("accion");
 		HttpSession session = request.getSession();
-
-		System.out.println("ServletCliente -> doPost: Acción recibida: " + accion);
 
 		if (accion != null) {
 			switch (accion) {
@@ -86,18 +110,17 @@ public class ServletCliente extends HttpServlet {
 				break;
 				
 			case "agregar":
-				// --- 1. VALIDACIÓN DE DATOS (Ej: Claves) ---
+				// 1. VALIDACION DE DATOS
 				String clave1 = request.getParameter("claveUsuario");
 				String clave2 = request.getParameter("repetirClaveUsuario");
 				
-				if (!clave1.equals(clave2)) {
+				if (!clave1.equals(clave2)) { // Ya lo hice en el jsp con javascript pero lo dejo por las dudas
 					session.setAttribute("mensajeError", "Las contraseñas no coinciden. No se pudo agregar el cliente.");
-					// Redirigimos de vuelta al formulario de agregar para que corrija
 					response.sendRedirect("ServletCliente?accion=formularioAgregarCliente");
-					return; // Importante para detener la ejecución
+					return;
 				}
 				
-				// --- 2. RECUPERACIÓN DE PARÁMETROS ---
+				// 2. RECUPERACION DE PARAMETROS
 				String dni = request.getParameter("dni");
 				String cuil = request.getParameter("cuil");
 				String sexo = request.getParameter("sexo");
@@ -110,7 +133,7 @@ public class ServletCliente extends HttpServlet {
 				String telefono = request.getParameter("telefono");
 				String nombreUsuario = request.getParameter("nombreUsuario");
 
-				// --- 3. PARSEO Y MANEJO DE ERRORES ---
+				// 3. MANEJO DE ERRORES
 				int idLocalidad = -1;
 				Date fechaNacimiento = null;
 				try {
@@ -124,7 +147,7 @@ public class ServletCliente extends HttpServlet {
 					return;
 				}
 
-				// --- 4. CREACIÓN DE OBJETOS ---
+				// 4. CREACION DE OBJETOS
 				// Objeto Usuario
 				Usuario usuario = new Usuario();
 				usuario.setNombreUsuario(nombreUsuario);
@@ -132,7 +155,7 @@ public class ServletCliente extends HttpServlet {
 				usuario.setTipoUsuario("Cliente");
 				usuario.setEstado(true);
 
-				// Objeto Localidad (solo necesitamos el ID para la relación)
+				// Objeto Localidad (solo necesitamos el ID)
 				Localidad localidad = new Localidad();
 				localidad.setIdLocalidad(idLocalidad);
 
@@ -149,13 +172,13 @@ public class ServletCliente extends HttpServlet {
 				cliente.setCorreo(correo);
 				cliente.setTelefono(telefono);
 				cliente.setEstado(true);
-				cliente.setUsuario(usuario); // Asignamos el objeto Usuario
-				cliente.setLocalidad(localidad); // Asignamos el objeto Localidad
+				cliente.setUsuario(usuario);
+				cliente.setLocalidad(localidad);
 
-				// --- 5. LLAMADA A LA CAPA DE NEGOCIO ---
+				// 5. LLAMADA A CAPA NEGOCIO
 				boolean fueAgregado = clienteNegocio.agregar(cliente);
 				
-				// --- 6. GESTIÓN DE LA RESPUESTA ---
+				// 6. RESPUESTA
 				if (fueAgregado) {
 					session.setAttribute("mensajeExito", "Se agrego el cliente exitosamente.");
 				} else {
@@ -164,7 +187,73 @@ public class ServletCliente extends HttpServlet {
 				break;
 				
 			case "modificar":
-				// Falta la logica para modificar
+				// 1. RECUPERACION DE PARAMETROS
+				String dniModificarCliente = request.getParameter("dni"); 
+				String cuilModificar = request.getParameter("cuil");
+				String sexoModificar = request.getParameter("sexo");
+				String nombreModificar = request.getParameter("nombre");
+				String apellidoModificar = request.getParameter("apellido");
+				String nacionalidadModificar = request.getParameter("nacionalidad");
+				String fechaNacimientoStrModificar = request.getParameter("fechaNacimiento");
+				String direccionModificar = request.getParameter("direccion");
+				String correoModificar = request.getParameter("correo");
+				String telefonoModificar = request.getParameter("telefono");
+				String nombreUsuarioModificar = request.getParameter("nombreUsuario");
+				String claveUsuarioModificar = request.getParameter("claveUsuario");
+
+				// 2. MANEJO DE ERRORES
+				int idLocalidadModificar = -1;
+				Date fechaNacimientoModificar = null;
+				try {
+					idLocalidadModificar = Integer.parseInt(request.getParameter("idLocalidad"));
+					if (fechaNacimientoStrModificar != null && !fechaNacimientoStrModificar.isEmpty()) {
+						fechaNacimientoModificar = Date.valueOf(fechaNacimientoStrModificar);
+					}
+				} catch (Exception e) {
+					session.setAttribute("mensajeError", "Error en los datos del formulario de modificación (Localidad o Fecha). " + e.getMessage());
+					response.sendRedirect("ServletCliente?accion=listar");
+					return;
+				}
+				
+				// 3. OBJETOS MODIFICADOS
+				// Objeto Usuario
+				int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+				Usuario usuarioModificar = new Usuario();
+				usuarioModificar.setIdUsuario(idUsuario);
+				usuarioModificar.setNombreUsuario(nombreUsuarioModificar);
+				usuarioModificar.setClave(claveUsuarioModificar); 
+				usuarioModificar.setTipoUsuario("Cliente");
+				usuarioModificar.setEstado(true);
+
+				// Objeto Localidad (solo necesitamos el ID)
+				Localidad localidadModificar = new Localidad();
+				localidadModificar.setIdLocalidad(idLocalidadModificar);
+
+				// Objeto Cliente
+				Cliente clienteModificado = new Cliente();
+				clienteModificado.setDni(dniModificarCliente);
+				clienteModificado.setCuil(cuilModificar);
+				clienteModificado.setSexo(sexoModificar);
+				clienteModificado.setNombre(nombreModificar);
+				clienteModificado.setApellido(apellidoModificar);
+				clienteModificado.setNacionalidad(nacionalidadModificar);
+				clienteModificado.setFechaNacimiento(fechaNacimientoModificar);
+				clienteModificado.setDireccion(direccionModificar);
+				clienteModificado.setCorreo(correoModificar);
+				clienteModificado.setTelefono(telefonoModificar);
+				clienteModificado.setEstado(true);
+				clienteModificado.setUsuario(usuarioModificar);
+				clienteModificado.setLocalidad(localidadModificar);
+
+				// 4. LLAMADA A LA CAPA DE NEGOCIO PARA MODIFICAR
+				boolean fueModificado = clienteNegocio.modificar(clienteModificado);
+				
+				// 5. RESPUESTA
+				if (fueModificado) {
+					session.setAttribute("mensajeExito", "Se modificó el cliente exitosamente.");
+				} else {
+					session.setAttribute("mensajeError", "No se pudo modificar el cliente. Verifique los datos o si el DNI existe.");
+				}
 				break;
 				
 			default:
