@@ -5,8 +5,6 @@ import java.util.List;
 import dao.ClienteDao;
 import daoImpl.ClienteDaoImpl;
 import entidad.Cliente;
-import entidad.Provincia;
-import entidad.Localidad;
 import negocio.ClienteNegocio;
 
 public class ClienteNegocioImpl implements ClienteNegocio{
@@ -38,14 +36,4 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 	public Cliente obtenerPorDni(String dni) {
 		return clienteDao.obtenerPorDni(dni);
 	}
-	
-    @Override
-    public List<Provincia> listarProvincias() {
-        return clienteDao.listarProvincias();
-    }
-
-    @Override
-    public List<Localidad> listarLocalidadesPorProvincia(int idProvincia) {
-        return clienteDao.listarLocalidadesPorProvincia(idProvincia);
-    }
 }

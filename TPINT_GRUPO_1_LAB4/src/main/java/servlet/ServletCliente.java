@@ -1,8 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
-import java.sql.Date; 
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,23 +17,24 @@ import entidad.Localidad;
 import entidad.Provincia;
 import entidad.Usuario;
 import negocio.ClienteNegocio;
+import negocio.ProvinciaNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.ProvinciaNegocioImpl;
 
 @WebServlet("/ServletCliente")
 public class ServletCliente extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
 	private ClienteNegocio clienteNegocio;
 
 	public ServletCliente() {
 		super();
-		clienteNegocio = new ClienteNegocioImpl();
+		this.clienteNegocio = new ClienteNegocioImpl();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String accion = request.getParameter("accion");
-		HttpSession session = request.getSession();
 
 		if (accion != null) {
 			switch (accion) {
@@ -43,102 +44,14 @@ public class ServletCliente extends HttpServlet {
 				RequestDispatcher rdListar = request.getRequestDispatcher("ABMLClientes.jsp");
 				rdListar.forward(request, response);
 				break;
-
-			case "abrirFormularioAgregar":
-				List<Provincia> provinciasParaAgregar = clienteNegocio.listarProvincias();
-				request.setAttribute("listaProvincias", provinciasParaAgregar);
-				RequestDispatcher rdAgregar = request.getRequestDispatcher("AgregarModificarCliente.jsp");
+				
+			case "formularioAgregarCliente": // Esto podria estar en un servlet de Provincias
+				ProvinciaNegocio provinciaNegocio = new ProvinciaNegocioImpl();  
+				List<Provincia> listaProvincias = provinciaNegocio.listar();
+				request.setAttribute("listaProvincias", listaProvincias);
+				RequestDispatcher rdAgregar = request.getRequestDispatcher("AgregarCliente.jsp");
 				rdAgregar.forward(request, response);
 				break;
-
-			case "abrirFormularioModificar":
-				String dniModificar = request.getParameter("dni");
-				Cliente clienteAEditar = null;
-				List<Provincia> provinciasParaModificar = clienteNegocio.listarProvincias();
-				// Ya no necesitamos 'localidadesPrecargadas' aquí para pasar al JSP.
-				// El JavaScript las cargará dinámicamente.
-				// List<Localidad> localidadesPrecargadas = null; 
-
-				if (dniModificar != null && !dniModificar.isEmpty()) {
-					clienteAEditar = clienteNegocio.obtenerPorDni(dniModificar);
-					System.out.println("ServletCliente -> abirFormularioModificar: Cliente a editar obtenido: " + (clienteAEditar != null ? clienteAEditar.getDni() : "null"));
-                    
-                    // Verificación más robusta de la localidad y provincia del cliente
-					if (clienteAEditar != null && clienteAEditar.getLocalidad() != null
-							&& clienteAEditar.getLocalidad().getProvincia() != null) {
-						// Antes aquí pasabas 'localidadesPrecargadas', pero el JS lo manejará.
-						// Mantengo este bloque para depuración si fuera necesario obtenerlas para otra cosa.
-						// localidadesPrecargadas = clienteNegocio.listarLocalidadesPorProvincia(
-						// 		clienteAEditar.getLocalidad().getProvincia().getIdProvincia());
-						// System.out.println("ServletCliente -> abirFormularioModificar: ID de provincia del cliente: " + clienteAEditar.getLocalidad().getProvincia().getIdProvincia());
-						// System.out.println("ServletCliente -> abirFormularioModificar: Localidades precargadas (cantidad): " + (localidadesPrecargadas != null ? localidadesPrecargadas.size() : "0"));
-					} else {
-						// Si el cliente no tiene localidad o provincia asignada, podría ser un error de datos.
-						System.err.println("ServletCliente -> abirFormularioModificar: Cliente con DNI " + dniModificar + " no tiene localidad o provincia asociada, o es nulo.");
-						session.setAttribute("mensajeError", "El cliente o su dirección no pudieron ser cargados correctamente.");
-						response.sendRedirect("ServletCliente?accion=listar");
-						return;
-					}
-				} else {
-					System.err.println("ServletCliente -> abirFormularioModificar: DNI del cliente no especificado.");
-					session.setAttribute("mensajeError", "DNI del cliente no especificado para modificar.");
-					response.sendRedirect("ServletCliente?accion=listar");
-					return;
-				}
-
-				request.setAttribute("clienteAEditar", clienteAEditar);
-				request.setAttribute("listaProvincias", provinciasParaModificar);
-				// NO necesitas setear 'listaLocalidadesPrecargadas' aquí en el request,
-				// porque el JavaScript las va a pedir via AJAX.
-				// request.setAttribute("listaLocalidadesPrecargadas", localidadesPrecargadas); 
-				RequestDispatcher rdModificar = request.getRequestDispatcher("AgregarModificarCliente.jsp");
-				rdModificar.forward(request, response);
-				break;
-
-			case "listarLocalidades":
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				
-				int idProvincia = -1;
-				try {
-					String idProvinciaParam = request.getParameter("idProvincia");
-                    System.out.println("ServletCliente -> listarLocalidades: ID Provincia recibido en AJAX: " + idProvinciaParam);
-					if (idProvinciaParam != null && !idProvinciaParam.isEmpty()) {
-						idProvincia = Integer.parseInt(idProvinciaParam);
-					} else {
-                        System.err.println("ServletCliente -> listarLocalidades: ID de provincia no proporcionado.");
-						response.setStatus(HttpServletResponse.SC_BAD_REQUEST); 
-						response.getWriter().write("{\"error\":\"ID de provincia no proporcionado\"}");
-						return;
-					}
-				} catch (NumberFormatException e) {
-                    System.err.println("ServletCliente -> listarLocalidades: ID de provincia inválido: " + request.getParameter("idProvincia") + " - Error: " + e.getMessage());
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST); 
-					response.getWriter().write("{\"error\":\"ID de provincia inválido\"}");
-					return;
-				}
-
-				List<Localidad> listaLocalidades = clienteNegocio.listarLocalidadesPorProvincia(idProvincia);
-                System.out.println("ServletCliente -> listarLocalidades: Cantidad de localidades encontradas para provincia " + idProvincia + ": " + (listaLocalidades != null ? listaLocalidades.size() : "0"));
-				
-				StringBuilder jsonBuilder = new StringBuilder("[");
-				if (listaLocalidades != null && !listaLocalidades.isEmpty()) { 
-					for (int i = 0; i < listaLocalidades.size(); i++) {
-						Localidad loc = listaLocalidades.get(i);
-						jsonBuilder.append("{");
-						jsonBuilder.append("\"idLocalidad\":").append(loc.getIdLocalidad()).append(",");
-						jsonBuilder.append("\"nombreLocalidad\":\"").append(loc.getNombreLocalidad()).append("\"");
-						jsonBuilder.append("}");
-						if (i < listaLocalidades.size() - 1) {
-							jsonBuilder.append(",");
-						}
-					}
-				}
-				jsonBuilder.append("]");
-                String finalJson = jsonBuilder.toString();
-                System.out.println("ServletCliente -> listarLocalidades: JSON enviado: " + finalJson);
-				response.getWriter().write(finalJson);
-				return;
 				
 			default:
 				response.sendRedirect("ServletCliente?accion=listar");
@@ -149,14 +62,16 @@ public class ServletCliente extends HttpServlet {
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String accion = request.getParameter("accion");
 		HttpSession session = request.getSession();
 
+		System.out.println("ServletCliente -> doPost: Acción recibida: " + accion);
+
 		if (accion != null) {
 			switch (accion) {
+			
 			case "eliminar":
 				String dniAEliminar = request.getParameter("dni");
 				if (dniAEliminar != null && !dniAEliminar.isEmpty()) {
@@ -169,9 +84,20 @@ public class ServletCliente extends HttpServlet {
 					session.setAttribute("mensajeError", "DNI del cliente no especificado para eliminar.");
 				}
 				break;
-
+				
 			case "agregar":
-			case "modificar":
+				// --- 1. VALIDACIÓN DE DATOS (Ej: Claves) ---
+				String clave1 = request.getParameter("claveUsuario");
+				String clave2 = request.getParameter("repetirClaveUsuario");
+				
+				if (!clave1.equals(clave2)) {
+					session.setAttribute("mensajeError", "Las contraseñas no coinciden. No se pudo agregar el cliente.");
+					// Redirigimos de vuelta al formulario de agregar para que corrija
+					response.sendRedirect("ServletCliente?accion=formularioAgregarCliente");
+					return; // Importante para detener la ejecución
+				}
+				
+				// --- 2. RECUPERACIÓN DE PARÁMETROS ---
 				String dni = request.getParameter("dni");
 				String cuil = request.getParameter("cuil");
 				String sexo = request.getParameter("sexo");
@@ -180,84 +106,69 @@ public class ServletCliente extends HttpServlet {
 				String nacionalidad = request.getParameter("nacionalidad");
 				String fechaNacimientoStr = request.getParameter("fechaNacimiento");
 				String direccion = request.getParameter("direccion");
+				String correo = request.getParameter("correo");
+				String telefono = request.getParameter("telefono");
+				String nombreUsuario = request.getParameter("nombreUsuario");
+
+				// --- 3. PARSEO Y MANEJO DE ERRORES ---
 				int idLocalidad = -1;
+				Date fechaNacimiento = null;
 				try {
 					idLocalidad = Integer.parseInt(request.getParameter("idLocalidad"));
-				} catch (NumberFormatException e) {
-					session.setAttribute("mensajeError", "Error: Localidad no válida. Por favor, seleccione una.");
-					response.sendRedirect("ServletCliente?accion=listar"); 
+					if (fechaNacimientoStr != null && !fechaNacimientoStr.isEmpty()) {
+						fechaNacimiento = Date.valueOf(fechaNacimientoStr);
+					}
+				} catch (Exception e) {
+					session.setAttribute("mensajeError", "Error en los datos del formulario (Localidad o Fecha). " + e.getMessage());
+					response.sendRedirect("ServletCliente?accion=listar");
 					return;
 				}
-				String telefono = request.getParameter("telefono");
-				String correo = request.getParameter("correo");
-				String nombreUsuario = request.getParameter("nombreUsuario");
-				String claveUsuario = request.getParameter("claveUsuario");
 
-				Date fechaNacimiento = null;
-				if (fechaNacimientoStr != null && !fechaNacimientoStr.isEmpty()) {
-					try {
-						fechaNacimiento = Date.valueOf(fechaNacimientoStr);
-					} catch (IllegalArgumentException e) {
-						session.setAttribute("mensajeError",
-								"Error en el formato de fecha de nacimiento. Use}}_{\text{YYYY-MM-DD}}.");
-						response.sendRedirect("ServletCliente?accion=listar");
-						return;
-					}
-				}
+				// --- 4. CREACIÓN DE OBJETOS ---
+				// Objeto Usuario
+				Usuario usuario = new Usuario();
+				usuario.setNombreUsuario(nombreUsuario);
+				usuario.setClave(clave1); // Usamos la clave ya validada
+				usuario.setTipoUsuario("Cliente");
+				usuario.setEstado(true);
 
-				Localidad loc = new Localidad();
-				loc.setIdLocalidad(idLocalidad);
+				// Objeto Localidad (solo necesitamos el ID para la relación)
+				Localidad localidad = new Localidad();
+				localidad.setIdLocalidad(idLocalidad);
 
-				Usuario user = new Usuario();
-				user.setNombreUsuario(nombreUsuario);
-				user.setClave(claveUsuario);
-				user.setTipoUsuario("Cliente");
-				user.setEstado(true);
+				// Objeto Cliente
+				Cliente cliente = new Cliente();
+				cliente.setDni(dni);
+				cliente.setCuil(cuil);
+				cliente.setSexo(sexo);
+				cliente.setNombre(nombre);
+				cliente.setApellido(apellido);
+				cliente.setNacionalidad(nacionalidad);
+				cliente.setFechaNacimiento(fechaNacimiento);
+				cliente.setDireccion(direccion);
+				cliente.setCorreo(correo);
+				cliente.setTelefono(telefono);
+				cliente.setEstado(true);
+				cliente.setUsuario(usuario); // Asignamos el objeto Usuario
+				cliente.setLocalidad(localidad); // Asignamos el objeto Localidad
 
-				Cliente c = new Cliente();
-				c.setDni(dni);
-				c.setCuil(cuil);
-				c.setSexo(sexo);
-				c.setNombre(nombre);
-				c.setApellido(apellido);
-				c.setNacionalidad(nacionalidad);
-				c.setFechaNacimiento(fechaNacimiento);
-				c.setDireccion(direccion);
-				c.setLocalidad(loc);
-				c.setTelefono(telefono);
-				c.setCorreo(correo);
-				c.setUsuario(user);
-				c.setEstado(true);
-
-				boolean operacionExitosa = false;
-				if ("agregar".equals(accion)) {
-					operacionExitosa = clienteNegocio.agregar(c);
-					if (operacionExitosa) {
-						session.setAttribute("mensajeExito", "¡Cliente agregado exitosamente!");
-					} else {
-						session.setAttribute("mensajeError",
-								"Error al agregar el cliente. El DNI o Usuario pueden ya existir.");
-					}
-				} else if ("modificar".equals(accion)) {
-					Cliente clienteExistente = clienteNegocio.obtenerPorDni(dni); 
-					if (clienteExistente != null && clienteExistente.getUsuario() != null) {
-						c.getUsuario().setIdUsuario(clienteExistente.getUsuario().getIdUsuario());
-					} else {
-						session.setAttribute("mensajeError", "Error al modificar: No se pudo recuperar el usuario del cliente existente.");
-						response.sendRedirect("ServletCliente?accion=listar");
-						return;
-					}
-					operacionExitosa = clienteNegocio.modificar(c);
-					if (operacionExitosa) {
-						session.setAttribute("mensajeExito", "¡Cliente modificado exitosamente!");
-					} else {
-						session.setAttribute("mensajeError",
-								"Error al modificar el cliente. Verifique los datos o logs.");
-					}
+				// --- 5. LLAMADA A LA CAPA DE NEGOCIO ---
+				boolean fueAgregado = clienteNegocio.agregar(cliente);
+				
+				// --- 6. GESTIÓN DE LA RESPUESTA ---
+				if (fueAgregado) {
+					session.setAttribute("mensajeExito", "Se agrego el cliente exitosamente.");
+				} else {
+					session.setAttribute("mensajeError", "No se pudo agregar el cliente. El DNI o el nombre de usuario ya pueden existir.");
 				}
 				break;
+				
+			case "modificar":
+				// Falta la logica para modificar
+				break;
+				
 			default:
-				session.setAttribute("mensajeError", "Acción POST no válida.");
+				session.setAttribute("mensajeError", "Acción del post no válida.");
 				break;
 			}
 		}

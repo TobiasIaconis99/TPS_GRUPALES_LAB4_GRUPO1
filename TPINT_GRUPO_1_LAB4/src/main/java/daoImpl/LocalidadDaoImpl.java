@@ -51,7 +51,7 @@ public class LocalidadDaoImpl implements LocalidadDao {
     }
 
     @Override
-    public List<Localidad> obtenerPorProvincia(int idProvincia) {
+    public List<Localidad> listarPorProvincia(int idProvincia) {
         List<Localidad> lista = new ArrayList<>();
         String query = "SELECT l.idLocalidad, l.nombreLocalidad, l.estado, p.idProvincia, p.nombreProvincia, p.estado as estadoProvincia " +
                        "FROM Localidad l " +

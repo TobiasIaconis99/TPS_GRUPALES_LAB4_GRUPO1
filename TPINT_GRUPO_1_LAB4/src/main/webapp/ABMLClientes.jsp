@@ -31,7 +31,7 @@
 				<div class="col-md-6">
 					</div>
 				<div class="col-md-6 text-end">
-					<a href="ServletCliente?accion=abrirFormularioAgregar" class="btn btn-primary">
+					<a href="ServletCliente?accion=formularioAgregarCliente" class="btn btn-primary">
 						<i class="bi bi-plus-circle me-1"></i> Nuevo cliente
 					</a>
 				</div>
@@ -76,28 +76,27 @@
 				</thead>
 				<tbody>
 					<%
-						if (listaClientes != null) {
-						for(Cliente c : listaClientes ){
-							// --- INICIO DE LA CORRECCIÓN: Mapeo del sexo para mostrar en el modal ---
-							String sexoDisplay = "";
-                            if (c.getSexo() != null) {
-                                switch (c.getSexo().toUpperCase()) {
-                                    case "M":
-                                        sexoDisplay = "Masculino";
-                                        break;
-                                    case "F":
-                                        sexoDisplay = "Femenino";
-                                        break;
-                                    case "O":
-                                        sexoDisplay = "Otro";
-                                        break;
-                                    default:
-                                        sexoDisplay = "No especificado"; // O lo que corresponda para valores inesperados
-                                        break;
-                                }
-                            }
-							// --- FIN DE LA CORRECCIÓN ---
-					%>	
+					// En la BD el sexo esta como M, F y O y para el modal quiero que muestre los nombres.
+					if (listaClientes != null) {
+						for (Cliente c : listaClientes) {
+							String sexo = "";
+							if (c.getSexo() != null) {
+								switch (c.getSexo().toUpperCase()) {
+								case "M":
+									sexo = "Masculino";
+									break;
+								case "F":
+									sexo = "Femenino";
+									break;
+								case "O":
+									sexo = "Otro";
+									break;
+								default:
+									sexo = "No especificado";
+									break;
+								}
+							}
+					%>
 					<tr>
 						<td><%= c.getDni() %></td>
 						<td><%= c.getCuil() %></td>
@@ -109,7 +108,7 @@
 								onclick="verClienteDetalles(
 									'<%= c.getDni() %>', 
 									'<%= c.getCuil() %>', 
-									'<%= sexoDisplay %>', <%-- ¡Cambiado aquí para usar sexoDisplay! --%>
+									'<%= sexo %>',
 									'<%= c.getNombre() %>', 
 									'<%= c.getApellido() %>', 
 									'<%= c.getNacionalidad() %>', 
@@ -155,14 +154,14 @@
 		function confirmarEliminarCliente() {
 			// Crea un formulario dinámicamente
 			const form = document.createElement('form');
-			form.method = 'POST'; // Define el método como POST
+			form.method = 'POST'; // Define el método como post
 			form.action = 'ServletCliente'; // Apunta al servlet
 
 			// Crea un input oculto para la acción
 			const accionInput = document.createElement('input');
 			accionInput.type = 'hidden';
 			accionInput.name = 'accion';
-			accionInput.value = 'eliminar'; // La acción que esperas en doPost
+			accionInput.value = 'eliminar'; // La acción que se espera en el doPost
 			form.appendChild(accionInput);
 
 			// Crea un input oculto para el DNI del cliente
@@ -174,13 +173,13 @@
 
 			// Agrega el formulario al body del documento y lo envía
 			document.body.appendChild(form); 
-			form.submit(); // Esto envía la petición POST
+			form.submit(); // Esto envía la petición al post
 		}
 		// Función para cargar los datos en el modal y ponerlos en modo solo lectura
 		function verClienteDetalles(dni, cuil, sexo, nombre, apellido, nacionalidad, fechaNacimiento, direccion, nombreProvincia, nombreLocalidad, telefono, correo, usuario, clave) {
             document.getElementById("dni").value = dni;
             document.getElementById("cuil").value = cuil;
-            document.getElementById("sexo").value = sexo; // Ahora 'sexo' ya viene mapeado desde el JSP
+            document.getElementById("sexo").value = sexo;
             document.getElementById("nombre").value = nombre;
             document.getElementById("apellido").value = apellido;
             document.getElementById("nacionalidad").value = nacionalidad;

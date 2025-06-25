@@ -17,8 +17,8 @@ public class LocalidadNegocioImpl implements LocalidadNegocio {
     }
 
     @Override
-    public List<Localidad> obtenerPorProvincia(int idProvincia) {
-        return daoLocalidad.obtenerPorProvincia(idProvincia);
+    public List<Localidad> listarPorProvincia(int idProvincia) {
+        return daoLocalidad.listarPorProvincia(idProvincia);
     }
 
     @Override
