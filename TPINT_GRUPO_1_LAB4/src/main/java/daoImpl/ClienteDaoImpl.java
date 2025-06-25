@@ -20,6 +20,18 @@ public class ClienteDaoImpl implements ClienteDao {
 	private Connection getConnection() throws SQLException {
 		return GestorConexionBD.getConnection();
 	}
+	
+    // Método para cerrar los recursos de la base de datos de forma segura
+    private void closeResources(Connection conn, PreparedStatement stmt, ResultSet rs) {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            System.err.println("Error al cerrar recursos de BD: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 	@Override
     public List<Cliente> listar() {
@@ -357,5 +369,72 @@ public class ClienteDaoImpl implements ClienteDao {
 		}
 		return exito;
 	}
+
 	
+	@Override
+    public Cliente obtenerPorId(int id) {
+        Cliente cliente = null;
+        String query = "SELECT c.*, " +
+                       "u.idUsuario, u.nombreUsuario, u.clave, u.tipoUsuario, u.estado AS usuarioEstado, " +
+                       "l.idLocalidad, l.nombreLocalidad, l.estado AS localidadEstado, " +
+                       "p.idProvincia, p.nombreProvincia, p.estado AS provinciaEstado " +
+                       "FROM Cliente c " +
+                       "JOIN Usuario u ON c.idUsuario = u.idUsuario " +
+                       "JOIN Localidad l ON c.idLocalidad = l.idLocalidad " +
+                       "JOIN Provincia p ON l.idProvincia = p.idProvincia " +
+                       "WHERE c.id = ? AND c.estado = 1"; // Filtra solo clientes activos y por ID
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id); // Usamos el ID numérico
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                cliente = new Cliente();
+                cliente.setId(rs.getInt("id"));
+                cliente.setDni(rs.getString("dni"));
+                cliente.setCuil(rs.getString("cuil"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setApellido(rs.getString("apellido"));
+                cliente.setSexo(rs.getString("sexo"));
+                cliente.setNacionalidad(rs.getString("nacionalidad"));
+                cliente.setFechaNacimiento(rs.getDate("fechaNacimiento"));
+                cliente.setDireccion(rs.getString("direccion"));
+                cliente.setCorreo(rs.getString("correo"));
+                cliente.setTelefono(rs.getString("telefono"));
+                cliente.setEstado(rs.getBoolean("estado"));
+
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("idUsuario"));
+                u.setNombreUsuario(rs.getString("nombreUsuario"));
+                u.setClave(rs.getString("clave"));
+                u.setTipoUsuario(rs.getString("tipoUsuario"));
+                u.setEstado(rs.getBoolean("usuarioEstado"));
+                cliente.setUsuario(u);
+
+                Provincia p = new Provincia();
+                p.setIdProvincia(rs.getInt("idProvincia"));
+                p.setNombreProvincia(rs.getString("nombreProvincia"));
+                p.setEstado(rs.getBoolean("provinciaEstado"));
+
+                Localidad l = new Localidad();
+                l.setIdLocalidad(rs.getInt("idLocalidad"));
+                l.setNombreLocalidad(rs.getString("nombreLocalidad"));
+                l.setProvincia(p); 
+                l.setEstado(rs.getBoolean("localidadEstado"));
+                cliente.setLocalidad(l);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al obtener cliente por ID: " + e.getMessage());
+        } finally {
+            closeResources(conn, ps, rs);
+        }
+        return cliente;
+    }
 }

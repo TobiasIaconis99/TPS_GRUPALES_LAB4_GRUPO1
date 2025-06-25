@@ -10,4 +10,5 @@ public interface ClienteDao {
     boolean modificar(Cliente c);
     boolean eliminar(String dniAEliminar);
     Cliente obtenerPorDni(String dni);
+    Cliente obtenerPorId(int id);
 }
