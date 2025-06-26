@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
 import dao.UsuarioDao;
 import daoImpl.UsuarioDaoImpl;
 import entidad.Usuario;
-import entidad.Cliente; // Importar Cliente
-import negocio.ClienteNegocio; // Importar ClienteNegocio
-import negocioImpl.ClienteNegocioImpl; // Importar ClienteNegocioImpl
+import entidad.Cliente;
+import negocio.ClienteNegocio;
+import negocioImpl.ClienteNegocioImpl;
 
 @WebServlet("/ServletLogin")
 public class ServletLogin extends HttpServlet {
@@ -24,10 +24,12 @@ public class ServletLogin extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.sendRedirect(request.getContextPath() + "/Login.jsp"); 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 1. Configurar los caracteres
+		request.setCharacterEncoding("UTF-8"); 
 
 		String usuario = request.getParameter("txtUsuario");
 		String clave = request.getParameter("txtClave");
@@ -35,25 +37,32 @@ public class ServletLogin extends HttpServlet {
 		UsuarioDao usuDao = new UsuarioDaoImpl();
 		Usuario usu = usuDao.loguear(usuario, clave);
 
-		if (usu != null && usu.isEstado()) {
+		if (usu != null && usu.isEstado()) { // Verifica que el usuario exista y este activop
 			HttpSession session = request.getSession();
-			session.setAttribute("usuarioLogueado", usu);
+			session.setAttribute("usuarioLogueado", usu); // Guardo el usuario completo
 
-			if (usu.getTipoUsuario().equals("admin")) {
-				response.sendRedirect("InicioAdmin.jsp");
-			} else {
+			if (usu.getTipoUsuario().equals("admin")) { // Si es tipo admin
+				// 2. Redireccion al panel de admin
+				response.sendRedirect(request.getContextPath() + "/InicioAdmin.jsp");
+			} else { // Si no es tipo admin, es cliente
 				// Si el usuario es un cliente, obtenemos sus datos completos
 				ClienteNegocio clienteNegocio = new ClienteNegocioImpl();
-				Cliente clienteLogueado = clienteNegocio.obtenerPorIdUsuario(usu.getIdUsuario()); // Asume que tienes un método para obtener cliente por ID de usuario
+				Cliente clienteLogueado = clienteNegocio.obtenerPorIdUsuario(usu.getIdUsuario()); 
 				
 				if (clienteLogueado != null) {
-					session.setAttribute("clienteLogueado", clienteLogueado); // Guardamos el objeto Cliente en sesión
+					session.setAttribute("clienteLogueado", clienteLogueado); // Guardamos el cliente en la sesion
 				}
-				response.sendRedirect("InicioCliente.jsp");
+				// 3. Redireccion al panel de cliente
+				response.sendRedirect(request.getContextPath() + "/InicioCliente.jsp"); 
 			}
 		} else {
-			request.setAttribute("errorLogin", "Usuario o clave incorrectos");
-			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			// 4. Mensaje de error si el usuario no esta activo
+			String errorMessage = "Usuario o clave incorrectos.";
+			if (usu != null && !usu.isEstado()) {
+			    errorMessage = "Usuario no activo.";
+			}
+			request.setAttribute("errorLogin", errorMessage);
+			request.getRequestDispatcher("/Login.jsp").forward(request, response);
 		}
 	}
 }

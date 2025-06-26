@@ -17,15 +17,15 @@ public class ServletCerrarSesion extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		response.sendRedirect(request.getContextPath() + "/Login.jsp");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		HttpSession session = request.getSession(false); // No crea una nueva si no existe
-		if (session != null) {
-			session.invalidate(); // Cierra sesión
-		}
-		response.sendRedirect("Login.jsp"); // Vuelve al login
+		doGet(request, response);
 	}
 }
