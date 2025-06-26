@@ -12,4 +12,9 @@ public interface ClienteNegocio {
     public boolean eliminar(String dniAEliminar);
     public Cliente obtenerPorDni(String dni);
     public Cliente obtenerPorIdUsuario(int idUsuario);
+    
+    // Para el listado por filtro o busquedas
+    List<Cliente> listarFiltrado(String busqueda, String sexo, int pagina, int limite);
+    int contarFiltrado(String busqueda, String sexo);
+
 }

@@ -12,4 +12,8 @@ public interface ClienteDao {
     Cliente obtenerPorDni(String dni);
     Cliente obtenerPorId(int id);
 	Cliente obtenerPorIdUsuario(int idUsuario);
+	
+	// Para el listado por filtro o busquedas
+	List<Cliente> listarFiltrado(String busqueda, String sexo, int pagina, int limite);
+    int contarFiltrado(String busqueda, String sexo);
 }

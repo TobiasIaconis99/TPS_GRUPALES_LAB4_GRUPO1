@@ -41,10 +41,37 @@ public class ServletCliente extends HttpServlet {
 		if (accion != null) {
 			switch (accion) {
 			case "listar":
-				List<Cliente> listaClientes = clienteNegocio.listar();
-				request.setAttribute("listaClientes", listaClientes);
-				RequestDispatcher rdListar = request.getRequestDispatcher("ABMLClientes.jsp");
-				rdListar.forward(request, response);
+			    String busqueda = request.getParameter("busqueda");
+			    String filtroSexo = request.getParameter("filtroSexo");
+
+			    if (busqueda != null && busqueda.trim().isEmpty()) busqueda = null;
+			    if (filtroSexo != null && filtroSexo.trim().isEmpty()) filtroSexo = null;
+
+			    int pagina = 1;
+			    int cantidadPorPagina = 3;
+
+			    if (request.getParameter("pagina") != null) {
+			        try {
+			            pagina = Integer.parseInt(request.getParameter("pagina"));
+			        } catch (NumberFormatException e) {
+			            pagina = 1;
+			        }
+			    }
+
+			    // Obtener datos filtrados con paginación
+			    List<Cliente> listaClientesFiltrados = clienteNegocio.listarFiltrado(busqueda, filtroSexo, pagina, cantidadPorPagina);
+			    int totalRegistros = clienteNegocio.contarFiltrado(busqueda, filtroSexo);
+			    int totalPaginas = (int) Math.ceil((double) totalRegistros / cantidadPorPagina);
+
+			    // Enviar a la vista
+			    request.setAttribute("listaClientes", listaClientesFiltrados);
+			    request.setAttribute("paginaActual", pagina);
+			    request.setAttribute("totalPaginas", totalPaginas);
+			    request.setAttribute("busqueda", busqueda != null ? busqueda : "");
+			    request.setAttribute("filtroSexo", filtroSexo != null ? filtroSexo : "");
+
+			    RequestDispatcher rd = request.getRequestDispatcher("ABMLClientes.jsp");
+			    rd.forward(request, response);
 				break;
 				
 			case "formularioAgregarCliente": // Esto podria estar en un servlet de Provincias

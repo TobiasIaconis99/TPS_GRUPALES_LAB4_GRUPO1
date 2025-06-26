@@ -41,4 +41,14 @@ public class ClienteNegocioImpl implements ClienteNegocio{
     public Cliente obtenerPorIdUsuario(int idUsuario) {
         return clienteDao.obtenerPorIdUsuario(idUsuario);
     }
+
+	@Override
+	public List<Cliente> listarFiltrado(String busqueda, String sexo, int pagina, int limite) {
+		return clienteDao.listarFiltrado(busqueda, sexo, pagina, limite);
+	}
+
+	@Override
+	public int contarFiltrado(String busqueda, String sexo) {
+		return clienteDao.contarFiltrado(busqueda, sexo);
+	}
 }

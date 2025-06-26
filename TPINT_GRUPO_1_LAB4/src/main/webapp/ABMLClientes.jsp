@@ -27,15 +27,41 @@
 			<h4>Clientes</h4>
 			<hr />
 			<br />
-			<div class="row mb-3">
-				<div class="col-md-6">
-					</div>
-				<div class="col-md-6 text-end">
+			<div class="row mb-3 align-items-end">
+				<!-- Formulario de búsqueda -->
+				<div class="col-md-9">
+					<form method="get" action="ServletCliente" class="row gx-2">
+						<input type="hidden" name="accion" value="listar">
+				
+						<div class="col-md-4">
+							<input type="text" name="busqueda" class="form-control" placeholder="Buscar por DNI, nombre o apellido"
+								value="<%= request.getParameter("busqueda") != null ? request.getParameter("busqueda") : "" %>">
+						</div>
+				
+						<div class="col-md-3">
+							<select name="filtroSexo" class="form-select">
+								<option value="">Todos los sexos</option>
+								<option value="M" <%= "M".equals(request.getParameter("filtroSexo")) ? "selected" : "" %>>Masculino</option>
+								<option value="F" <%= "F".equals(request.getParameter("filtroSexo")) ? "selected" : "" %>>Femenino</option>
+								<option value="O" <%= "O".equals(request.getParameter("filtroSexo")) ? "selected" : "" %>>Otro</option>
+							</select>
+						</div>
+				
+						<div class="col-md-3">
+							<button class="btn btn-primary w-100" type="submit">
+								<i class="bi bi-search"></i> Buscar
+							</button>
+						</div>
+					</form>
+				</div>
+				<!-- Botón de nuevo cliente -->
+				<div class="col-md-3 d-flex justify-content-end">
 					<a href="ServletCliente?accion=formularioAgregarCliente" class="btn btn-primary">
 						<i class="bi bi-plus-circle me-1"></i> Nuevo cliente
 					</a>
 				</div>
 			</div>
+
 			<%
 				// Mensaje exito
                 String mensajeExito = (String) session.getAttribute("mensajeExito");
@@ -65,6 +91,7 @@
 			<%
 				List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
 			%>
+			
 			<table class="table table-bordered">
 				<thead class="table-primary">
 					<tr>
@@ -140,6 +167,32 @@
 					%>
 				</tbody>
 			</table>
+			
+			<!-- Inicio de paginacion -->
+			<%
+				int paginaActual = request.getAttribute("paginaActual") != null ? (int) request.getAttribute("paginaActual") : 1;
+				int totalPaginas = request.getAttribute("totalPaginas") != null ? (int) request.getAttribute("totalPaginas") : 1;
+			%>
+			
+			<nav aria-label="Paginación">
+			  <ul class="pagination justify-content-center">
+			    <li class="page-item <%= (paginaActual == 1) ? "disabled" : "" %>">
+			      <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= paginaActual - 1 %>">Anterior</a>
+			    </li>
+			
+			    <% for (int i = 1; i <= totalPaginas; i++) { %>
+			      <li class="page-item <%= (i == paginaActual) ? "active" : "" %>">
+			        <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= i %>"><%= i %></a>
+			      </li>
+			    <% } %>
+			
+			    <li class="page-item <%= (paginaActual == totalPaginas) ? "disabled" : "" %>">
+			      <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= paginaActual + 1 %>">Siguiente</a>
+			    </li>
+			  </ul>
+			</nav>
+			<!-- Fin de paginacion -->
+			
 		</div>
 	</div>
 	
