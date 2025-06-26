@@ -7,6 +7,7 @@ import entidad.Cuenta;
 import entidad.Cliente; 
 import entidad.TipoCuenta;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -73,7 +74,7 @@ public class CuentaDaoImpl implements CuentaDao {
             statement.setInt(2, cuenta.getTipoCuenta().getIdTipoCuenta());
             statement.setString(3, cuenta.getNumeroCuenta()); // Ya viene generado
             statement.setString(4, cuenta.getCbu()); // Ya viene generado
-            statement.setBigDecimal(5, cuenta.getSaldo()); // Usa setBigDecimal
+            statement.setBigDecimal(5, new BigDecimal("10000"));
             statement.setDate(6, cuenta.getFechaCreacion());
             statement.setBoolean(7, cuenta.isEstado());
          
