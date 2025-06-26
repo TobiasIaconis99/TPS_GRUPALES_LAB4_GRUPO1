@@ -32,6 +32,7 @@ public class ClienteDaoImpl implements ClienteDao {
             e.printStackTrace();
         }
     }
+    
     private static final String SELECT_CLIENTE_BY_ID = "SELECT c.*, u.idUsuario, u.nombreUsuario, u.clave, u.tipoUsuario, u.estado AS usuarioEstado, "
             + "l.idLocalidad, l.nombreLocalidad, l.estado AS localidadEstado, "
             + "p.idProvincia, p.nombreProvincia, p.estado AS provinciaEstado "
@@ -40,7 +41,8 @@ public class ClienteDaoImpl implements ClienteDao {
             + "INNER JOIN Localidad l ON c.idLocalidad = l.idLocalidad "
             + "INNER JOIN Provincia p ON l.idProvincia = p.idProvincia "
             + "WHERE c.idCliente = ?";
-	@Override
+	
+    @Override
     public List<Cliente> listar() {
         List<Cliente> lista = new ArrayList<>();
         String query = "SELECT c.*, " +
@@ -377,7 +379,6 @@ public class ClienteDaoImpl implements ClienteDao {
 		return exito;
 	}
 
-	
 	@Override
     public Cliente obtenerPorId(int id) {
         Cliente cliente = null;
@@ -444,4 +445,77 @@ public class ClienteDaoImpl implements ClienteDao {
         }
         return cliente;
     }
+	
+	
+	public Cliente obtenerPorIdUsuario(int idUsuario) {
+	    Cliente cliente = null;
+	    // Consulta para obtener el cliente y sus datos relacionados (usuario, localidad, provincia)
+	    // donde el idUsuario del cliente coincida con el idUsuario proporcionado.
+	    String query = "SELECT c.*, " +
+	                   "u.idUsuario, u.nombreUsuario, u.clave, u.tipoUsuario, u.estado AS usuarioEstado, " +
+	                   "l.idLocalidad, l.nombreLocalidad, l.estado AS localidadEstado, " +
+	                   "p.idProvincia, p.nombreProvincia, p.estado AS provinciaEstado " +
+	                   "FROM Cliente c " +
+	                   "JOIN Usuario u ON c.idUsuario = u.idUsuario " +
+	                   "JOIN Localidad l ON c.idLocalidad = l.idLocalidad " +
+	                   "JOIN Provincia p ON l.idProvincia = p.idProvincia " +
+	                   "WHERE c.idUsuario = ? AND c.estado = 1";
+
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    try {
+	        conn = getConnection();
+	        ps = conn.prepareStatement(query);
+	        ps.setInt(1, idUsuario); // Establecemos el ID del usuario como pparametro
+	        rs = ps.executeQuery();
+	        
+	        if (rs.next()) {
+	            cliente = new Cliente();
+	            // Mapeo de los datos del cliente
+	            cliente.setId(rs.getInt("id"));
+	            cliente.setDni(rs.getString("dni"));
+	            cliente.setCuil(rs.getString("cuil"));
+	            cliente.setNombre(rs.getString("nombre"));
+	            cliente.setApellido(rs.getString("apellido"));
+	            cliente.setSexo(rs.getString("sexo"));
+	            cliente.setNacionalidad(rs.getString("nacionalidad"));
+	            cliente.setFechaNacimiento(rs.getDate("fechaNacimiento"));
+	            cliente.setDireccion(rs.getString("direccion"));
+	            cliente.setCorreo(rs.getString("correo"));
+	            cliente.setTelefono(rs.getString("telefono"));
+	            cliente.setEstado(rs.getBoolean("estado"));
+
+	            // Mapeo del objeto Usuario
+	            Usuario u = new Usuario();
+	            u.setIdUsuario(rs.getInt("idUsuario"));
+	            u.setNombreUsuario(rs.getString("nombreUsuario"));
+	            u.setClave(rs.getString("clave"));
+	            u.setTipoUsuario(rs.getString("tipoUsuario"));
+	            u.setEstado(rs.getBoolean("usuarioEstado"));
+	            cliente.setUsuario(u);
+
+	            // Mapeo del objeto Provincia
+	            Provincia p = new Provincia();
+	            p.setIdProvincia(rs.getInt("idProvincia"));
+	            p.setNombreProvincia(rs.getString("nombreProvincia"));
+	            p.setEstado(rs.getBoolean("provinciaEstado"));
+
+	            // Mapeo del objeto Localidad
+	            Localidad l = new Localidad();
+	            l.setIdLocalidad(rs.getInt("idLocalidad"));
+	            l.setNombreLocalidad(rs.getString("nombreLocalidad"));
+	            l.setProvincia(p);
+	            l.setEstado(rs.getBoolean("localidadEstado"));
+	            cliente.setLocalidad(l);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.err.println("Error al obtener cliente por ID de usuario: " + e.getMessage());
+	    } finally {
+	        closeResources(conn, ps, rs);
+	    }
+	    return cliente;
+	}
 }

@@ -11,14 +11,17 @@ import javax.servlet.http.HttpSession;
 import dao.UsuarioDao;
 import daoImpl.UsuarioDaoImpl;
 import entidad.Usuario;
+import entidad.Cliente; // Importar Cliente
+import negocio.ClienteNegocio; // Importar ClienteNegocio
+import negocioImpl.ClienteNegocioImpl; // Importar ClienteNegocioImpl
 
 @WebServlet("/ServletLogin")
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public ServletLogin() {
-        super();
-    }
+	public ServletLogin() {
+		super();
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -39,6 +42,13 @@ public class ServletLogin extends HttpServlet {
 			if (usu.getTipoUsuario().equals("admin")) {
 				response.sendRedirect("InicioAdmin.jsp");
 			} else {
+				// Si el usuario es un cliente, obtenemos sus datos completos
+				ClienteNegocio clienteNegocio = new ClienteNegocioImpl();
+				Cliente clienteLogueado = clienteNegocio.obtenerPorIdUsuario(usu.getIdUsuario()); // Asume que tienes un método para obtener cliente por ID de usuario
+				
+				if (clienteLogueado != null) {
+					session.setAttribute("clienteLogueado", clienteLogueado); // Guardamos el objeto Cliente en sesión
+				}
 				response.sendRedirect("InicioCliente.jsp");
 			}
 		} else {

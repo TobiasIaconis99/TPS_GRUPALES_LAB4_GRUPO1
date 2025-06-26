@@ -36,4 +36,8 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 	public Cliente obtenerPorDni(String dni) {
 		return clienteDao.obtenerPorDni(dni);
 	}
+	
+    public Cliente obtenerPorIdUsuario(int idUsuario) {
+        return clienteDao.obtenerPorIdUsuario(idUsuario);
+    }
 }

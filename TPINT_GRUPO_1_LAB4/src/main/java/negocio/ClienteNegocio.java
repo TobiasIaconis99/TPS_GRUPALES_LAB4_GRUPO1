@@ -11,4 +11,5 @@ public interface ClienteNegocio {
     public boolean modificar(Cliente c);
     public boolean eliminar(String dniAEliminar);
     public Cliente obtenerPorDni(String dni);
+    public Cliente obtenerPorIdUsuario(int idUsuario);
 }
