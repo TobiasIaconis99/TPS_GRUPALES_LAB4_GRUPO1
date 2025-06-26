@@ -10,4 +10,6 @@ public interface UsuarioNegocio {
     public boolean agregar(Usuario u);
     public boolean modificar(Usuario u);
     public boolean eliminar(int idUsuario);
+    public List<Usuario> obtenerPorTipo(String tipo);
+
 }

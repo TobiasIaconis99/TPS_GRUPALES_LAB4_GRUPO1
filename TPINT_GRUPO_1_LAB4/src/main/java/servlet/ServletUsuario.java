@@ -17,38 +17,49 @@ import negocioImpl.UsuarioNegocioImpl;
 @WebServlet("/ServletUsuario")
 public class ServletUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-    public ServletUsuario() {
-        super();
-    }
+
+	public ServletUsuario() {
+		super();
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	    String accion = request.getParameter("accion");
-	    UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
 
-	    if (accion != null && accion.equals("listar")) {
-	    	
-	        List<Usuario> lista = usuNegocio.listar();
-	        request.setAttribute("listaUsuarios", lista);
-
-	        RequestDispatcher rd = request.getRequestDispatcher("ABMLUsuarios.jsp");
-	        rd.forward(request, response);
-	        
-	    } else {
-	        response.sendRedirect("ABMLUsuarios.jsp");
-	    }
-	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String accion = request.getParameter("accion");
-	    UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
+		String tipoFiltro = request.getParameter("tipoFiltro");
+
+		UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
+
+		if (accion != null && accion.equals("listar")) {
+
+			List<Usuario> lista;
+
+			if (tipoFiltro != null && !tipoFiltro.isEmpty()) {
+				lista = usuNegocio.obtenerPorTipo(tipoFiltro);
+			} else {
+				lista = usuNegocio.listar();
+			}
+
+			request.setAttribute("listaUsuarios", lista);
+			request.setAttribute("tipoFiltro", tipoFiltro); 
+
+			RequestDispatcher rd = request.getRequestDispatcher("ABMLUsuarios.jsp");
+			rd.forward(request, response);
+
+		} else {
+			response.sendRedirect("ABMLUsuarios.jsp");
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String accion = request.getParameter("accion");
+		UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
 
 		if (accion != null) {
 			switch (accion) {
 
 			case "agregar":
+				// implementar si lo necesitás
 				break;
 
 			case "modificar":
@@ -63,9 +74,7 @@ public class ServletUsuario extends HttpServlet {
 
 			case "eliminar":
 				Usuario eliminado = new Usuario();
-				
 				eliminado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
-				
 				usuNegocio.eliminar(eliminado.getIdUsuario());
 				break;
 
@@ -73,7 +82,7 @@ public class ServletUsuario extends HttpServlet {
 				break;
 			}
 		}
-	    // Redirige al listado actualizado
-	    response.sendRedirect("ServletUsuario?accion=listar");
+
+		response.sendRedirect("ServletUsuario?accion=listar");
 	}
 }

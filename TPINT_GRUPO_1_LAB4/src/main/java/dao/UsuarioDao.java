@@ -10,4 +10,6 @@ public interface UsuarioDao {
     boolean agregar(Usuario u);
     boolean modificar(Usuario u);
     boolean eliminar(int idUsuario);
+    public List<Usuario> obtenerPorTipo(String tipo);
+
 }

@@ -12,34 +12,37 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 	<!-- Bootstrap Icons -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body style="margin: 0; padding: 0;">
 
-	<!-- Navbar de Admin -->
 	<%@ include file="includes/NavbarAdmin.jsp"%>
 
 	<div class="d-flex">
-		<!-- Sidebar Admin -->
 		<%@ include file="includes/SidebarAdmin.jsp"%>
 
-		<!-- Contenido de la pagina -->
 		<div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
 			<h4>Usuarios</h4>
 			<hr />
 			<br />
-			<!-- Encabezado antes de la tabla-->
+
+			<!-- Filtros -->
 			<div class="row mb-3">
 				<div class="col-md-6">
-					<!-- Espacio para futuros filtros u otros elementos -->
+					<form action="ServletUsuario" method="get" class="d-flex">
+						<input type="hidden" name="accion" value="listar" />
+						<select class="form-select me-2" name="tipoFiltro" onchange="this.form.submit()">
+							<option value="">-- Todos los tipos --</option>
+							<option value="admin" <%= "admin".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Admin</option>
+							<option value="cliente" <%= "cliente".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Cliente</option>
+						</select>
+					</form>
 				</div>
-
 			</div>
+
 			<!-- Tabla de usuarios -->
 			<%
-				// Primero cargamos la lista con los usuarios y nos aseguramos que no sea nulo
 				List<Usuario> listaUsuarios = null;
 				if(request.getAttribute("listaUsuarios") != null){
 					listaUsuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
@@ -55,14 +58,13 @@
 				</thead>
 				<tbody>
 					<%
-						// Luego vamos cargando uno por uno el usuario en la tabla
 						if (listaUsuarios != null)
 						for(Usuario u : listaUsuarios ){
 					%>					
 					<tr>
-						<td><%= u.getNombreUsuario() %></td> <!-- Columna de nombres de usuarios --> 
-						<td><%= u.getClave() %></td> <!-- Columna de claves --> 
-						<td> <!-- Columna de acciones --> 
+						<td><%= u.getNombreUsuario() %></td>
+						<td><%= u.getClave() %></td>
+						<td>
 							<button 
 							  class="btn btn-sm btn-success"
 							  data-bs-toggle="modal"
@@ -80,7 +82,6 @@
 		</div>
 	</div>
 	
-	<!-- Script: Es necesario para cargar el modal en tiempo real -->
 	<script>
 		function cargarUsuario(id, nombre, clave, tipo) {
 			document.getElementById("edit-idUsuario").value = id;
@@ -90,7 +91,7 @@
 		}
 	</script>
 	
-	<!-- Modal para editar un usuario -->
+	<!-- Modal Editar Usuario -->
 	<div class="modal fade" id="modalEditarUsuario" tabindex="-1"
 		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -110,10 +111,12 @@
 							<input type="text" class="form-control" name="nombreUsuario" id="edit-nombreUsuario" required>
 						</div>
 						<div class="mb-3">
-							<label for="edit-clave" class="form-label">Clave</label> <input type="text" class="form-control" name="clave" id="edit-clave" required>
+							<label for="edit-clave" class="form-label">Clave</label>
+							<input type="text" class="form-control" name="clave" id="edit-clave" required>
 						</div>
 						<div class="mb-3">
-							<label for="edit-tipoUsuario" class="form-label">Tipo de usuario</label> <select class="form-select" name="tipoUsuario" id="edit-tipoUsuario" required>
+							<label for="edit-tipoUsuario" class="form-label">Tipo de usuario</label>
+							<select class="form-select" name="tipoUsuario" id="edit-tipoUsuario" required>
 								<option value="admin">Admin</option>
 								<option value="cliente">Cliente</option>
 							</select>
