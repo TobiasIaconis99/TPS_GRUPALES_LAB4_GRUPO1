@@ -151,7 +151,7 @@ public class ServletCuenta extends HttpServlet {
 					if (fueAgregado) {
 						session.setAttribute("mensajeExitoCuenta", "Cuenta agregada correctamente."); // Específico
 					} else {
-						session.setAttribute("mensajeErrorCuenta", "No se pudo agregar la cuenta. Verifique los logs."); // Específico
+						session.setAttribute("mensajeErrorCuenta", "No se pudo agregar la cuenta."); // Específico
 					}
 				} catch (NumberFormatException e) {
 					System.err.println("ServletCuenta: NumberFormatException al convertir el ID de Tipo Cuenta: "

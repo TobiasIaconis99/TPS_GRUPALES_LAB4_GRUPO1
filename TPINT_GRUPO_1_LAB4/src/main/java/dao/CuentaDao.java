@@ -7,6 +7,7 @@ public interface CuentaDao {
     boolean agregar(Cuenta cuenta);
     boolean modificar(Cuenta cuenta);
     boolean eliminar(int id);
+    boolean tieneMenos3CuentasAct(int idCliente);
     
     List<Cuenta> listarCuentas();
     List<Cuenta> listarCuentasActivas();
