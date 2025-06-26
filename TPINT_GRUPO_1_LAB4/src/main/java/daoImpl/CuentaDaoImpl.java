@@ -277,8 +277,10 @@ public class CuentaDaoImpl implements CuentaDao {
                 int idTipoCuenta = resultSet.getInt("idTipoCuenta");
                 TipoCuenta tipoCuenta = tipoCuentaDao.obtenerTipoCuentaPorId(idTipoCuenta);
                 cuenta.setTipoCuenta(tipoCuenta);
-
-                lista.add(cuenta);
+                
+                if(cliente != null && cliente.isEstado()) {
+                	lista.add(cuenta);                	
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
