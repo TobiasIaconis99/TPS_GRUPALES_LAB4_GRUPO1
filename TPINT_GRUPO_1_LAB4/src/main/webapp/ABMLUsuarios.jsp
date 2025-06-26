@@ -8,45 +8,43 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Usuarios</title>
-	<!-- Bootstrap 5.3 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-	<!-- Bootstrap Icons -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-
 <body style="margin: 0; padding: 0;">
 
 	<%@ include file="includes/NavbarAdmin.jsp"%>
-
 	<div class="d-flex">
 		<%@ include file="includes/SidebarAdmin.jsp"%>
-
 		<div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
 			<h4>Usuarios</h4>
 			<hr />
 			<br />
 
-			<!-- Filtros -->
 			<div class="row mb-3">
-				<div class="col-md-6">
-					<form action="ServletUsuario" method="get" class="d-flex">
-						<input type="hidden" name="accion" value="listar" />
-						<select class="form-select me-2" name="tipoFiltro" onchange="this.form.submit()">
+				<form action="ServletUsuario" method="get" class="row g-2">
+					<input type="hidden" name="accion" value="listar" />
+
+					<div class="col-md-5">
+						<input type="text" class="form-control" name="nombreFiltro" placeholder="Buscar por nombre de usuario"
+						       value="<%= request.getParameter("nombreFiltro") != null ? request.getParameter("nombreFiltro") : "" %>" />
+					</div>
+					<div class="col-md-4">
+						<select class="form-select" name="tipoFiltro" onchange="this.form.submit()">
 							<option value="">-- Todos los tipos --</option>
 							<option value="admin" <%= "admin".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Admin</option>
 							<option value="cliente" <%= "cliente".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Cliente</option>
 						</select>
-					</form>
-				</div>
+					</div>
+					<div class="col-md-2">
+						<button type="submit" class="btn btn-primary w-100">Buscar</button>
+					</div>
+				</form>
 			</div>
 
-			<!-- Tabla de usuarios -->
 			<%
-				List<Usuario> listaUsuarios = null;
-				if(request.getAttribute("listaUsuarios") != null){
-					listaUsuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
-				}
+				List<Usuario> listaUsuarios = (List<Usuario>) request.getAttribute("listaUsuarios");
 			%>
 			<table class="table table-bordered">
 				<thead class="table-primary">
@@ -60,28 +58,44 @@
 					<%
 						if (listaUsuarios != null)
 						for(Usuario u : listaUsuarios ){
-					%>					
+					%>
 					<tr>
 						<td><%= u.getNombreUsuario() %></td>
 						<td><%= u.getClave() %></td>
 						<td>
-							<button 
-							  class="btn btn-sm btn-success"
-							  data-bs-toggle="modal"
-							  data-bs-target="#modalEditarUsuario"
-							  onclick="cargarUsuario('<%= u.getIdUsuario() %>', '<%= u.getNombreUsuario() %>', '<%= u.getClave() %>', '<%= u.getTipoUsuario() %>')">
-							  <i class="bi bi-pencil-square"></i>
+							<button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
+								onclick="cargarUsuario('<%= u.getIdUsuario() %>', '<%= u.getNombreUsuario() %>', '<%= u.getClave() %>', '<%= u.getTipoUsuario() %>')">
+								<i class="bi bi-pencil-square"></i>
 							</button>
 						</td>
 					</tr>
-					<%
-						}
-					%>
+					<% } %>
 				</tbody>
 			</table>
+
+			<%
+				int paginaActual = request.getAttribute("paginaActual") != null ? (int) request.getAttribute("paginaActual") : 1;
+				int totalPaginas = request.getAttribute("totalPaginas") != null ? (int) request.getAttribute("totalPaginas") : 1;
+			%>
+
+			<nav>
+				<ul class="pagination mt-4">
+					<li class="page-item <%= paginaActual == 1 ? "disabled" : "" %>">
+						<a class="page-link" href="ServletUsuario?accion=listar&pagina=<%= paginaActual - 1 %>
+						<% if (request.getParameter("tipoFiltro") != null) out.print("&tipoFiltro=" + request.getParameter("tipoFiltro")); %>
+						<% if (request.getParameter("nombreFiltro") != null) out.print("&nombreFiltro=" + request.getParameter("nombreFiltro")); %>">Anterior</a>
+					</li>
+					<li class="page-item disabled"><span class="page-link">Página <%= paginaActual %> de <%= totalPaginas %></span></li>
+					<li class="page-item <%= paginaActual == totalPaginas ? "disabled" : "" %>">
+						<a class="page-link" href="ServletUsuario?accion=listar&pagina=<%= paginaActual + 1 %>
+						<% if (request.getParameter("tipoFiltro") != null) out.print("&tipoFiltro=" + request.getParameter("tipoFiltro")); %>
+						<% if (request.getParameter("nombreFiltro") != null) out.print("&nombreFiltro=" + request.getParameter("nombreFiltro")); %>">Siguiente</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	</div>
-	
+
 	<script>
 		function cargarUsuario(id, nombre, clave, tipo) {
 			document.getElementById("edit-idUsuario").value = id;
@@ -90,10 +104,8 @@
 			document.getElementById("edit-tipoUsuario").value = tipo;
 		}
 	</script>
-	
-	<!-- Modal Editar Usuario -->
-	<div class="modal fade" id="modalEditarUsuario" tabindex="-1"
-		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
+
+	<div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="ServletUsuario" method="post">

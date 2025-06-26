@@ -40,5 +40,15 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	    UsuarioDao dao = new UsuarioDaoImpl();
 	    return dao.obtenerPorTipo(tipo);
 	}
+	@Override
+	public List<Usuario> buscarConFiltros(String nombre, String tipo, int offset, int cantidad) {
+	    return new UsuarioDaoImpl().buscarConFiltros(nombre, tipo, offset, cantidad);
+	}
+
+	@Override
+	public int contarConFiltros(String nombre, String tipo) {
+	    return new UsuarioDaoImpl().contarConFiltros(nombre, tipo);
+	}
+
 
 }

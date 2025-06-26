@@ -157,6 +157,62 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
         return lista;
     }
+    @Override
+    public List<Usuario> buscarConFiltros(String nombre, String tipo, int offset, int cantidad) {
+        List<Usuario> lista = new ArrayList<>();
+        String query = "SELECT * FROM Usuario WHERE estado = 1";
+        if (nombre != null && !nombre.isEmpty()) query += " AND nombreUsuario LIKE ?";
+        if (tipo != null && !tipo.isEmpty()) query += " AND tipoUsuario = ?";
+        query += " ORDER BY idUsuario LIMIT ? OFFSET ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            int param = 1;
+            if (nombre != null && !nombre.isEmpty()) ps.setString(param++, "%" + nombre + "%");
+            if (tipo != null && !tipo.isEmpty()) ps.setString(param++, tipo);
+            ps.setInt(param++, cantidad);
+            ps.setInt(param, offset);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("idUsuario"));
+                u.setNombreUsuario(rs.getString("nombreUsuario"));
+                u.setClave(rs.getString("clave"));
+                u.setTipoUsuario(rs.getString("tipoUsuario"));
+                u.setEstado(rs.getBoolean("estado"));
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    @Override
+    public int contarConFiltros(String nombre, String tipo) {
+        int total = 0;
+        String query = "SELECT COUNT(*) FROM Usuario WHERE estado = 1";
+        if (nombre != null && !nombre.isEmpty()) query += " AND nombreUsuario LIKE ?";
+        if (tipo != null && !tipo.isEmpty()) query += " AND tipoUsuario = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            int param = 1;
+            if (nombre != null && !nombre.isEmpty()) ps.setString(param++, "%" + nombre + "%");
+            if (tipo != null && !tipo.isEmpty()) ps.setString(param++, tipo);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) total = rs.getInt(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
 
 
 }

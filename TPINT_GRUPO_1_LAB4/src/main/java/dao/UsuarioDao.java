@@ -11,5 +11,8 @@ public interface UsuarioDao {
     boolean modificar(Usuario u);
     boolean eliminar(int idUsuario);
     public List<Usuario> obtenerPorTipo(String tipo);
+    public List<Usuario> buscarConFiltros(String nombre, String tipo, int offset, int cantidad);
+    public int contarConFiltros(String nombre, String tipo);
+
 
 }

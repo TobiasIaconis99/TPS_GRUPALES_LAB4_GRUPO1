@@ -16,73 +16,65 @@ import negocioImpl.UsuarioNegocioImpl;
 
 @WebServlet("/ServletUsuario")
 public class ServletUsuario extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ServletUsuario() {
-		super();
-	}
+    public ServletUsuario() {
+        super();
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String accion = request.getParameter("accion");
+        String tipoFiltro = request.getParameter("tipoFiltro");
+        String nombreFiltro = request.getParameter("nombreFiltro");
+        String paginaStr = request.getParameter("pagina");
 
-		String accion = request.getParameter("accion");
-		String tipoFiltro = request.getParameter("tipoFiltro");
+        int pagina = (paginaStr != null && !paginaStr.isEmpty()) ? Integer.parseInt(paginaStr) : 1;
+        int registrosPorPagina = 10;
+        int offset = (pagina - 1) * registrosPorPagina;
 
-		UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
+        UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
 
-		if (accion != null && accion.equals("listar")) {
+        if ("listar".equals(accion)) {
+            List<Usuario> listaUsuarios = usuNegocio.buscarConFiltros(nombreFiltro, tipoFiltro, offset, registrosPorPagina);
+            int totalRegistros = usuNegocio.contarConFiltros(nombreFiltro, tipoFiltro);
+            int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
 
-			List<Usuario> lista;
+            request.setAttribute("listaUsuarios", listaUsuarios);
+            request.setAttribute("paginaActual", pagina);
+            request.setAttribute("totalPaginas", totalPaginas);
 
-			if (tipoFiltro != null && !tipoFiltro.isEmpty()) {
-				lista = usuNegocio.obtenerPorTipo(tipoFiltro);
-			} else {
-				lista = usuNegocio.listar();
-			}
+            RequestDispatcher rd = request.getRequestDispatcher("ABMLUsuarios.jsp");
+            rd.forward(request, response);
+        } else {
+            response.sendRedirect("ABMLUsuarios.jsp");
+        }
+    }
 
-			request.setAttribute("listaUsuarios", lista);
-			request.setAttribute("tipoFiltro", tipoFiltro); 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String accion = request.getParameter("accion");
+        UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
 
-			RequestDispatcher rd = request.getRequestDispatcher("ABMLUsuarios.jsp");
-			rd.forward(request, response);
-
-		} else {
-			response.sendRedirect("ABMLUsuarios.jsp");
-		}
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String accion = request.getParameter("accion");
-		UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
-
-		if (accion != null) {
-			switch (accion) {
-
-			case "agregar":
-				// implementar si lo necesitás
-				break;
-
-			case "modificar":
-				Usuario modificado = new Usuario();
-				modificado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
-				modificado.setNombreUsuario(request.getParameter("nombreUsuario"));
-				modificado.setClave(request.getParameter("clave"));
-				modificado.setTipoUsuario(request.getParameter("tipoUsuario"));
-
-				usuNegocio.modificar(modificado);
-				break;
-
-			case "eliminar":
-				Usuario eliminado = new Usuario();
-				eliminado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
-				usuNegocio.eliminar(eliminado.getIdUsuario());
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		response.sendRedirect("ServletUsuario?accion=listar");
-	}
+        if (accion != null) {
+            switch (accion) {
+                case "agregar":
+                    break;
+                case "modificar":
+                    Usuario modificado = new Usuario();
+                    modificado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
+                    modificado.setNombreUsuario(request.getParameter("nombreUsuario"));
+                    modificado.setClave(request.getParameter("clave"));
+                    modificado.setTipoUsuario(request.getParameter("tipoUsuario"));
+                    usuNegocio.modificar(modificado);
+                    break;
+                case "eliminar":
+                    Usuario eliminado = new Usuario();
+                    eliminado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
+                    usuNegocio.eliminar(eliminado.getIdUsuario());
+                    break;
+                default:
+                    break;
+            }
+        }
+        response.sendRedirect("ServletUsuario?accion=listar");
+    }
 }
