@@ -130,4 +130,33 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
         return eliminado;
     }
+    @Override
+    public List<Usuario> obtenerPorTipo(String tipo) {
+        List<Usuario> lista = new ArrayList<>();
+        String query = "SELECT * FROM Usuario WHERE tipoUsuario = ? AND estado = 1";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pst = conn.prepareStatement(query)) {
+
+            pst.setString(1, tipo);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("idUsuario"));
+                    u.setNombreUsuario(rs.getString("nombreUsuario"));
+                    u.setClave(rs.getString("clave"));
+                    u.setTipoUsuario(rs.getString("tipoUsuario"));
+                    u.setEstado(rs.getBoolean("estado"));
+                    lista.add(u);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+
 }

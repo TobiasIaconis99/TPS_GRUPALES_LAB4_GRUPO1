@@ -35,4 +35,10 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	public boolean eliminar(int idUsuario) {
 		return false;
 	}
+	@Override
+	public List<Usuario> obtenerPorTipo(String tipo) {
+	    UsuarioDao dao = new UsuarioDaoImpl();
+	    return dao.obtenerPorTipo(tipo);
+	}
+
 }
