@@ -33,6 +33,6 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 
 	@Override
 	public boolean eliminar(int idUsuario) {
-		return false;
+		return dao.eliminar(idUsuario);
 	}
 }

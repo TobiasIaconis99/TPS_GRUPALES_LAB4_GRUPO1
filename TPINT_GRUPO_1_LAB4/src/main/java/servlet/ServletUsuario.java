@@ -61,9 +61,9 @@ public class ServletUsuario extends HttpServlet {
 				usuNegocio.modificar(modificado);
 				break;
 
-			case "eliminar":
+			case "Eliminar":
 				Usuario eliminado = new Usuario();
-				
+				int id = Integer.parseInt(request.getParameter("idUsuario"));
 				eliminado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
 				
 				usuNegocio.eliminar(eliminado.getIdUsuario());
