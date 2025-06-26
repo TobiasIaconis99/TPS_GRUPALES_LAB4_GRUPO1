@@ -62,7 +62,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
             // --- Generar Numero de Cuenta y CBU antes de la inserción ---
             String nuevoNumeroCuenta = generarSiguienteNumeroCuenta(conexion); 
-            String nuevoCBU = generarSiguienteCBU(conexion); 
+            String nuevoCBU = "";
 
             cuenta.setNumeroCuenta(nuevoNumeroCuenta);
             cuenta.setCbu(nuevoCBU);
@@ -357,11 +357,11 @@ public class CuentaDaoImpl implements CuentaDao {
         return String.format("%010d", siguienteNumero); // <-- Y este valor es el que se devuelve
     }
 
-    private String generarSiguienteCBU(Connection conn) throws SQLException {
+    private void generarSiguienteCBU(Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         String ultimoCBU = null;
-        BigInteger siguienteCBU = 10000000000000000000L; // <-- ESTA variable 'siguienteCBU' nace aquí, es local a este método
+//        BigInteger siguienteCBU = 10000000000000000000L; // <-- ESTA variable 'siguienteCBU' nace aquí, es local a este método
 
         try {
             ps = conn.prepareStatement(SELECT_LAST_CBU);
@@ -369,16 +369,16 @@ public class CuentaDaoImpl implements CuentaDao {
             if (rs.next() && rs.getString(1) != null) {
                 ultimoCBU = rs.getString(1);
                 try {
-                    siguienteCBU = Long.parseLong(ultimoCBU) + 1;
+//                    siguienteCBU = Long.parseLong(ultimoCBU) + 1;
                 } catch (NumberFormatException e) {
                     System.err.println("Error al parsear ultimoCBU a long: " + ultimoCBU + ". Generando desde valor inicial.");
-                    siguienteCBU = 10000000000000000000L; // Fallback
+//                    siguienteCBU = 10000000000000000000L; // Fallback
                 }
             }
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
         }
-        return String.format("%022d", siguienteCBU); // <-- Y este valor es el que se devuelve
+//        return String.format("%022d", siguienteCBU); // <-- Y este valor es el que se devuelve
     }
 }
