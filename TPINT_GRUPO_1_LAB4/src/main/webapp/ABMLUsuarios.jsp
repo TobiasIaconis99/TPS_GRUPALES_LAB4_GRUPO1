@@ -70,7 +70,6 @@
 							  onclick="cargarUsuario('<%= u.getIdUsuario() %>', '<%= u.getNombreUsuario() %>', '<%= u.getClave() %>', '<%= u.getTipoUsuario() %>')">
 							  <i class="bi bi-pencil-square"></i>
 							</button>
-							<button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
 						</td>
 					</tr>
 					<%

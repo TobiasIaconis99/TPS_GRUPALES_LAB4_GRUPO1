@@ -206,7 +206,6 @@
 			
 			  </ul>
 			</nav>
-
 			<!-- Fin de paginacion -->
 			
 		</div>

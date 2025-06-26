@@ -360,25 +360,39 @@ public class CuentaDaoImpl implements CuentaDao {
     private String generarSiguienteCBU(Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String ultimoCBU = null;
-        BigInteger siguienteCBU = 10000000000000000000L; // <-- ESTA variable 'siguienteCBU' nace aquí, es local a este método
+        String ultimoCBUString = null; // Para almacenar el CBU como String desde la BD
+        BigInteger siguienteCBU;
+
+        // El valor inicial del CBU como BigInteger, creado desde un String
+        BigInteger valorInicialCBU = new BigInteger("10000000000000000000");
 
         try {
             ps = conn.prepareStatement(SELECT_LAST_CBU);
             rs = ps.executeQuery();
+
             if (rs.next() && rs.getString(1) != null) {
-                ultimoCBU = rs.getString(1);
+                ultimoCBUString = rs.getString(1);
                 try {
-                    siguienteCBU = Long.parseLong(ultimoCBU) + 1;
+                    // Intenta convertir el último CBU a BigInteger y sumarle 1
+                    BigInteger cbuActual = new BigInteger(ultimoCBUString);
+                    siguienteCBU = cbuActual.add(BigInteger.ONE); // Sumar 1 usando BigInteger
                 } catch (NumberFormatException e) {
-                    System.err.println("Error al parsear ultimoCBU a long: " + ultimoCBU + ". Generando desde valor inicial.");
-                    siguienteCBU = 10000000000000000000L; // Fallback
+                    System.err.println("Error al parsear ultimoCBU a BigInteger: " + ultimoCBUString + ". Generando desde valor inicial.");
+                    siguienteCBU = valorInicialCBU; // Fallback al valor inicial si hay un error de formato
                 }
+            } else {
+                // Si no hay CBUs previos en la BD, se empieza desde el valor inicial
+                siguienteCBU = valorInicialCBU;
             }
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
         }
-        return String.format("%022d", siguienteCBU); // <-- Y este valor es el que se devuelve
+        
+        // Formatear el BigInteger a un String con 22 dígitos, rellenando con ceros a la izquierda
+        // Nota: Asegúrate de que tu CBU nunca excederá los 22 dígitos.
+        // Si BigInteger.toString() devuelve menos de 22 dígitos, los %022d los rellenará.
+        // Si devuelve más, los truncará si el CBU es demasiado grande para 22 dígitos.
+        return String.format("%022d", siguienteCBU); 
     }
 }

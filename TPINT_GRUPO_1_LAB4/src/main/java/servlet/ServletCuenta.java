@@ -25,8 +25,8 @@ import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.TipoCuentaNegocioImpl; // Importar TipoCuentaNegocioImpl
 
 /**
- * Servlet implementation class ServletCuenta
- */
+ * Servlet implementation class ServletCuenta
+ */
 @WebServlet("/ServletCuenta")
 public class ServletCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,8 +43,10 @@ public class ServletCuenta extends HttpServlet {
 			throws ServletException, IOException {
 		String accion = request.getParameter("accion");
 		if (accion == null || accion.equals("listar")) {
+			// Los mensajes se manejan a través de la sesión en doPost
+			// Aquí solo se obtienen los datos para la tabla
 			List<Cuenta> listaCuentas = cuentaNegocio.listarCuentas();
-			List<Cliente> listaClientes = clienteNegocio.listar();
+			List<Cliente> listaClientes = clienteNegocio.listar(); // Necesario para el modal de agregar
 			request.setAttribute("listaCuentas", listaCuentas);
 			request.setAttribute("listaClientes", listaClientes);
 			RequestDispatcher rd = request.getRequestDispatcher("ABMLCuentas.jsp");
@@ -64,12 +66,15 @@ public class ServletCuenta extends HttpServlet {
 				if (cuentaAEliminar != null && !cuentaAEliminar.isEmpty()) {
 										
 					if (cuentaNegocio.eliminar(Integer.parseInt(cuentaAEliminar))) {
-						session.setAttribute("mensajeExito", "Se eliminó la cuenta exitosamente.");
+						// Usar un nombre de atributo de sesión específico para cuentas
+						session.setAttribute("mensajeExitoCuenta", "Se eliminó la cuenta exitosamente.");
 					} else {
-						session.setAttribute("mensajeError", "No se pudo eliminar la cuenta.");
+						// Usar un nombre de atributo de sesión específico para cuentas
+						session.setAttribute("mensajeErrorCuenta", "No se pudo eliminar la cuenta.");
 					}
 				} else {
-					session.setAttribute("mensajeError", "id de cuenta no especificado para eliminar.");
+					// Usar un nombre de atributo de sesión específico para cuentas
+					session.setAttribute("mensajeErrorCuenta", "ID de cuenta no especificado para eliminar.");
 				}
 				break;
 			case "agregar":
@@ -79,20 +84,18 @@ public class ServletCuenta extends HttpServlet {
 					System.out.println("ServletCuenta: ID Tipo Cuenta recibido = " + idTipoCuentaStr); // Debug
 
 					if (idTipoCuentaStr == null || idTipoCuentaStr.isEmpty()) {
-						session.setAttribute("mensajeError", "El tipo de cuenta es requerido.");
+						session.setAttribute("mensajeErrorCuenta", "El tipo de cuenta es requerido."); // Específico
 						response.sendRedirect("ServletCuenta?accion=listar");
 						return;
 					}
 
 					int idTipoCuenta = Integer.parseInt(idTipoCuentaStr);
-					TipoCuenta tipoCuenta = tipoCuentaNegocio.obtenerTipoCuentaPorId(idTipoCuenta); // Obtener el objeto
-																									// TipoCuenta
-																									// completo
+					TipoCuenta tipoCuenta = tipoCuentaNegocio.obtenerTipoCuentaPorId(idTipoCuenta); 
 
 					if (tipoCuenta == null) {
 						System.out.println(
 								"ServletCuenta: ERROR - Tipo de cuenta NO encontrado para ID: " + idTipoCuenta); // Debug
-						session.setAttribute("mensajeError", "Tipo de cuenta no encontrado o inválido.");
+						session.setAttribute("mensajeErrorCuenta", "Tipo de cuenta no encontrado o inválido."); // Específico
 						response.sendRedirect("ServletCuenta?accion=listar");
 						return;
 					} else {
@@ -105,7 +108,7 @@ public class ServletCuenta extends HttpServlet {
 					System.out.println("ServletCuenta: DNI Cliente recibido = " + dniClienteStr); // Debug
 
 					if (dniClienteStr == null || dniClienteStr.isEmpty()) {
-						session.setAttribute("mensajeError", "El DNI del cliente es requerido.");
+						session.setAttribute("mensajeErrorCuenta", "El DNI del cliente es requerido."); // Específico
 						response.sendRedirect("ServletCuenta?accion=listar");
 						return;
 					}
@@ -113,7 +116,7 @@ public class ServletCuenta extends HttpServlet {
 					Cliente cliente = clienteNegocio.obtenerPorDni(dniClienteStr);
 					if (cliente == null) {
 						System.out.println("ServletCuenta: ERROR - Cliente NO encontrado para DNI: " + dniClienteStr); // Debug
-						session.setAttribute("mensajeError", "Cliente no encontrado.");
+						session.setAttribute("mensajeErrorCuenta", "Cliente no encontrado."); // Específico
 						response.sendRedirect("ServletCuenta?accion=listar");
 						return;
 					} else {
@@ -130,12 +133,10 @@ public class ServletCuenta extends HttpServlet {
 					cuenta.setEstado(true);
 
 					// --- GENERAR NUMERO DE CUENTA Y CBU ---
-					// Puedes usar un método más sofisticado para esto,
-					// por ahora usaremos UUIDs aleatorios para prueba.
-					// Ojo: Esto no garantiza unicidad si no lo verificas contra la DB,
-					// pero para depurar el INSERT es suficiente.
-					String numeroCuentaGenerado = generateUniqueAccountNumber(); // Implementar este método
-					String cbuGenerado = generateUniqueCBU(); // Implementar este método
+					// En tu implementación real, aquí se llamaría a CuentaDaoImpl.generarSiguienteCBU()
+					// Asegúrate que los métodos generateUniqueAccountNumber y generateUniqueCBU sean robustos para producción
+					String numeroCuentaGenerado = generateUniqueAccountNumber(); 
+					String cbuGenerado = generateUniqueCBU(); 
 
 					cuenta.setNumeroCuenta(numeroCuentaGenerado);
 					cuenta.setCbu(cbuGenerado);
@@ -148,30 +149,28 @@ public class ServletCuenta extends HttpServlet {
 					System.out.println("ServletCuenta: Resultado de cuentaNegocio.agregar = " + fueAgregado); // Debug
 
 					if (fueAgregado) {
-						session.setAttribute("mensajeExito", "Cuenta agregada correctamente.");
+						session.setAttribute("mensajeExitoCuenta", "Cuenta agregada correctamente."); // Específico
 					} else {
-						session.setAttribute("mensajeError", "No se pudo agregar la cuenta. Verifique los logs.");
+						session.setAttribute("mensajeErrorCuenta", "No se pudo agregar la cuenta. Verifique los logs."); // Específico
 					}
 				} catch (NumberFormatException e) {
 					System.err.println("ServletCuenta: NumberFormatException al convertir el ID de Tipo Cuenta: "
 							+ e.getMessage()); // Debug
 					e.printStackTrace(); // Imprimir el stack trace completo
-					session.setAttribute("mensajeError",
-							"Error en el formato del tipo de cuenta. Seleccione un tipo válido.");
+					session.setAttribute("mensajeErrorCuenta",
+							"Error en el formato del tipo de cuenta. Seleccione un tipo válido."); // Específico
 				} catch (Exception e) {
 					System.err.println("ServletCuenta: ERROR general al agregar cuenta: " + e.getMessage()); // Debug
 					e.printStackTrace(); // Imprimir el stack trace completo para ver la causa raíz
-					session.setAttribute("mensajeError", "Error al agregar cuenta: " + e.getMessage());
+					session.setAttribute("mensajeErrorCuenta", "Error al agregar cuenta: " + e.getMessage()); // Específico
 				}
 				
 				break;
 			}
 		}
 		
-		response.sendRedirect("ServletCuenta?accion=listar");
+		response.sendRedirect("ServletCuenta?accion=listar"); // Siempre redirige a listar para recargar la tabla y mostrar el mensaje
 	}
-
-	
 
 	// Métodos auxiliares para generar números de cuenta y CBU (pueden ser más
 	// sofisticados)

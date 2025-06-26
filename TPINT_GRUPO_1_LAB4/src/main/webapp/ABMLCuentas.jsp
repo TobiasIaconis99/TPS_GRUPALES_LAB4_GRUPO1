@@ -38,6 +38,33 @@
 					<i class="bi bi-plus-circle me-1"></i> Nueva cuenta
 				</button>
 			</div>
+			
+			<%
+                // Mensaje exito para Cuentas
+                String mensajeExitoCuenta = (String) session.getAttribute("mensajeExitoCuenta");
+                if (mensajeExitoCuenta != null) {
+                    session.removeAttribute("mensajeExitoCuenta");
+            %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    	<i class="bi bi-check-circle me-1"></i>
+                        <%= mensajeExitoCuenta %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+            <%
+                }
+                // Mensaje error para Cuentas
+                String mensajeErrorCuenta = (String) session.getAttribute("mensajeErrorCuenta");
+                if (mensajeErrorCuenta != null) {
+                    session.removeAttribute("mensajeErrorCuenta");
+            %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    	<i class="bi bi-x-circle me-1"></i>
+                        <%= mensajeErrorCuenta %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+            <%
+                }
+            %>
 
 			<!-- Tabla -->
 			<table class="table table-bordered">
@@ -69,9 +96,9 @@
 						<td>$<%=c.getSaldo()%></td>
 						<td>
 							<!-- Editar / Eliminar si se desea -->
-
-
-
+							<button class="btn btn-sm btn-success">
+								<i class="bi bi-pencil-square"></i>
+							</button>
 							<button class="btn btn-sm btn-danger" data-bs-toggle="modal"
 								data-bs-target="#modalConfirmacionEliminarCuenta"
 								onclick="setCuentaAEliminar('<%=c.getIdCuenta()%>')">
@@ -121,6 +148,7 @@
 			form.submit(); // Esto envía la petición al post
 		}
 	</script>
+	
 	<!-- Modal Agregar Cuenta -->
 	<div class="modal fade" id="modalAgregarCuenta" tabindex="-1"
 		aria-labelledby="modalLabel" aria-hidden="true">
@@ -169,6 +197,7 @@
 		</div>
 	</div>
 
+	<!-- Modal Eliminar Cuenta -->
 	<div class="modal fade" id="modalConfirmacionEliminarCuenta"
 		tabindex="-1" aria-labelledby="modalConfirmacionEliminarLabel"
 		aria-hidden="true">
