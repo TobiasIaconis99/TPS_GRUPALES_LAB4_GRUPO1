@@ -48,7 +48,7 @@ public class ServletCliente extends HttpServlet {
 			    if (filtroSexo != null && filtroSexo.trim().isEmpty()) filtroSexo = null;
 
 			    int pagina = 1;
-			    int cantidadPorPagina = 3;
+			    int cantidadPorPagina = 10;
 
 			    if (request.getParameter("pagina") != null) {
 			        try {
