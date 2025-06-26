@@ -1,3 +1,5 @@
+<%@page import="dao.ClienteDao"%>
+<%@page import="daoImpl.ClienteDaoImpl"%>
 <%@page import="daoImpl.CuentaDaoImpl"%>
 <%@page import="negocioImpl.TipoCuentaNegocioImpl"%>
 <%@page import="dao.CuentaDao"%>
@@ -84,7 +86,8 @@
 					<select class="form-select" name="dniCliente" required>
 						<option value="">Seleccionar...</option>
 						<%
-						List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
+						ClienteDao cliente =  new ClienteDaoImpl();
+						List<Cliente> listaClientes = cliente.listar();
 						if (listaClientes != null) {
 							for (Cliente cl : listaClientes) {
 						%>
@@ -98,10 +101,8 @@
 				<div class="mb-3">
 					<label for="tipoCuenta" class="form-label">Tipo de cuenta</label>
 					<select class="form-select" name="tipoCuenta" required>
-						<option value="">Seleccionar...</option>
-						<option value="Caja de ahorro">Caja de ahorro</option>
-						<option value="Cuenta corriente">Cuenta corriente</option>
-					</select>
+    <option value="">Seleccionar...</option>
+    <option value="1">Caja de ahorro</option> <option value="2">Cuenta corriente</option> </select>
 				</div>
 			</div>
 			<div class="modal-footer">

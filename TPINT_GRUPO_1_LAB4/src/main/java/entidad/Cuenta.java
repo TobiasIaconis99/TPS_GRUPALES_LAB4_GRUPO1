@@ -91,4 +91,9 @@ public class Cuenta {
 	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
+
+	public void setSaldo(double d) {
+		// TODO Auto-generated method stub
+		
+	}
 }

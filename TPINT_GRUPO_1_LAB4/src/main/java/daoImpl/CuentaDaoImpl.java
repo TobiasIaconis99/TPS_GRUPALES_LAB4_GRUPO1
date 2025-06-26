@@ -5,7 +5,9 @@ import dao.ClienteDao;
 import dao.TipoCuentaDao; 
 import entidad.Cuenta;
 import entidad.Cliente; 
-import entidad.TipoCuenta; 
+import entidad.TipoCuenta;
+
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,29 +48,52 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String LIST_ACTIVE_CUENTAS = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE estado = 1";
     private static final String CHECK_NUMERO_CUENTA_EXISTS = "SELECT COUNT(*) FROM Cuenta WHERE numeroCuenta = ?";
     private static final String CHECK_CBU_EXISTS = "SELECT COUNT(*) FROM Cuenta WHERE cbu = ?";
+    private static final String SELECT_LAST_NUMERO_CUENTA = "SELECT MAX(numeroCuenta) FROM Cuenta";
+    private static final String SELECT_LAST_CBU = "SELECT MAX(cbu) FROM Cuenta";
 
+   
     @Override
     public boolean agregar(Cuenta cuenta) {
         PreparedStatement statement = null;
         Connection conexion = null;
+        boolean isSuccess = false;
         try {
-            conexion = getConnection(); // Usar tu método getConnection()
+            conexion = getConnection();
+
+            // --- Generar Numero de Cuenta y CBU antes de la inserción ---
+            String nuevoNumeroCuenta = generarSiguienteNumeroCuenta(conexion); 
+            String nuevoCBU = generarSiguienteCBU(conexion); 
+
+            cuenta.setNumeroCuenta(nuevoNumeroCuenta);
+            cuenta.setCbu(nuevoCBU);
+            // -----------------------------------------------------------
+
             statement = conexion.prepareStatement(INSERT_CUENTA);
-            statement.setInt(1, cuenta.getCliente().getId()); 
+            statement.setInt(1, cuenta.getCliente().getId());
             statement.setInt(2, cuenta.getTipoCuenta().getIdTipoCuenta());
-            statement.setString(3, cuenta.getNumeroCuenta());
-            statement.setString(4, cuenta.getCbu());
-            statement.setBigDecimal(5, cuenta.getSaldo());
+            statement.setString(3, cuenta.getNumeroCuenta()); // Ya viene generado
+            statement.setString(4, cuenta.getCbu()); // Ya viene generado
+            statement.setBigDecimal(5, cuenta.getSaldo()); // Usa setBigDecimal
             statement.setDate(6, cuenta.getFechaCreacion());
             statement.setBoolean(7, cuenta.isEstado());
-            return statement.executeUpdate() > 0;
+         
+
+            System.out.println("CuentaDaoImpl: Preparando INSERT. Cliente ID: " + cuenta.getCliente().getId() + 
+                               ", Tipo ID: " + cuenta.getTipoCuenta().getIdTipoCuenta() + 
+                               ", Nro Cuenta: " + cuenta.getNumeroCuenta() + 
+                               ", CBU: " + cuenta.getCbu()); // Debug
+
+            int filasAfectadas = statement.executeUpdate();
+            isSuccess = (filasAfectadas > 0);
+            System.out.println("CuentaDaoImpl: Filas afectadas = " + filasAfectadas + ", Resultado: " + isSuccess); // Debug
+
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Error al agregar Cuenta: " + e.getMessage());
-            return false;
+            System.err.println("Error al agregar cuenta: " + e.getMessage());
         } finally {
-            closeResources(conexion, statement, null); // Usar el método closeResources
+            closeResources(conexion, statement, null);
         }
+        return isSuccess;
     }
 
     @Override
@@ -306,5 +331,54 @@ public class CuentaDaoImpl implements CuentaDao {
             closeResources(conexion, statement, resultSet); // Usar el método closeResources
         }
         return false;
+    }
+    private String generarSiguienteNumeroCuenta(Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String ultimoNumero = null;
+        long siguienteNumero = 1; // <-- ESTA variable 'siguienteNumero' nace aquí, es local a este método
+
+        try {
+            ps = conn.prepareStatement(SELECT_LAST_NUMERO_CUENTA);
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getString(1) != null) {
+                ultimoNumero = rs.getString(1);
+                try {
+                    siguienteNumero = Long.parseLong(ultimoNumero) + 1; 
+                } catch (NumberFormatException e) {
+                    System.err.println("Error al parsear ultimoNumeroCuenta a long: " + ultimoNumero + ". Generando desde 1.");
+                    siguienteNumero = 1; // Fallback
+                }
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return String.format("%010d", siguienteNumero); // <-- Y este valor es el que se devuelve
+    }
+
+    private String generarSiguienteCBU(Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String ultimoCBU = null;
+        BigInteger siguienteCBU = 10000000000000000000L; // <-- ESTA variable 'siguienteCBU' nace aquí, es local a este método
+
+        try {
+            ps = conn.prepareStatement(SELECT_LAST_CBU);
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getString(1) != null) {
+                ultimoCBU = rs.getString(1);
+                try {
+                    siguienteCBU = Long.parseLong(ultimoCBU) + 1;
+                } catch (NumberFormatException e) {
+                    System.err.println("Error al parsear ultimoCBU a long: " + ultimoCBU + ". Generando desde valor inicial.");
+                    siguienteCBU = 10000000000000000000L; // Fallback
+                }
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return String.format("%022d", siguienteCBU); // <-- Y este valor es el que se devuelve
     }
 }
