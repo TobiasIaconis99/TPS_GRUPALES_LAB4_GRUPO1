@@ -37,6 +37,7 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 		return clienteDao.obtenerPorDni(dni);
 	}
 	
+	@Override
     public Cliente obtenerPorIdUsuario(int idUsuario) {
         return clienteDao.obtenerPorIdUsuario(idUsuario);
     }

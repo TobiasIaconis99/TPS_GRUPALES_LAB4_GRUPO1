@@ -32,16 +32,7 @@ public class ClienteDaoImpl implements ClienteDao {
             e.printStackTrace();
         }
     }
-    
-    private static final String SELECT_CLIENTE_BY_ID = "SELECT c.*, u.idUsuario, u.nombreUsuario, u.clave, u.tipoUsuario, u.estado AS usuarioEstado, "
-            + "l.idLocalidad, l.nombreLocalidad, l.estado AS localidadEstado, "
-            + "p.idProvincia, p.nombreProvincia, p.estado AS provinciaEstado "
-            + "FROM Cliente c "
-            + "INNER JOIN Usuario u ON c.idUsuario = u.idUsuario "
-            + "INNER JOIN Localidad l ON c.idLocalidad = l.idLocalidad "
-            + "INNER JOIN Provincia p ON l.idProvincia = p.idProvincia "
-            + "WHERE c.idCliente = ?";
-	
+
     @Override
     public List<Cliente> listar() {
         List<Cliente> lista = new ArrayList<>();
@@ -446,7 +437,7 @@ public class ClienteDaoImpl implements ClienteDao {
         return cliente;
     }
 	
-	
+	@Override
 	public Cliente obtenerPorIdUsuario(int idUsuario) {
 	    Cliente cliente = null;
 	    // Consulta para obtener el cliente y sus datos relacionados (usuario, localidad, provincia)
