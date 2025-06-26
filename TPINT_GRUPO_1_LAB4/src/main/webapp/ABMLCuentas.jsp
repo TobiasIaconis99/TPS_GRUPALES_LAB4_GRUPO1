@@ -60,6 +60,15 @@
 					<td>$<%= c.getSaldo() %></td>
 					<td>
 						<!-- Editar / Eliminar si se desea -->
+						
+						
+							
+							<button class="btn btn-sm btn-danger"
+								data-bs-toggle="modal"
+								data-bs-target="modalConfirmacionEliminarCuenta"
+								onclick="setCuentaAEliminar('<%= c.getIdCuenta()%>')">
+								<i class="bi bi-trash"></i>
+							</button>
 					</td>
 				</tr>
 				<% }} %>
@@ -68,6 +77,40 @@
 	</div>
 </div>
 
+<script>
+	 	// Variable para almacenar el id de la cuenta a eliminar
+		let idCuentaAEliminar = "";
+		// Función para almacenar el ID de la cuenta a eliminar
+		function setCuentaAEliminar(id) {
+			idCuentaAEliminar = id;
+		}
+		// Función para confirmar la eliminación del cliente
+		function confirmarEliminarCuenta() {
+			// Crea un formulario dinámicamente
+			const form = document.createElement('form');
+			form.method = 'POST'; // Define el método como post
+			form.action = 'ServletCuenta'; // Apunta al servlet
+
+			// Crea un input oculto para la acción
+			const accionInput = document.createElement('input');
+			accionInput.type = 'hidden';
+			accionInput.name = 'accion';
+			accionInput.value = 'eliminar'; // La acción que se espera en el doPost
+			form.appendChild(accionInput);
+
+			// Crea un input oculto para el DNI del cliente
+			const idCuentaInput = document.createElement('input');
+			dniInput.type = 'hidden';
+			dniInput.name = 'idCuenta';
+			dniInput.value = idCuentaAEliminar; // El DNI a eliminar
+			form.appendChild(idCuentaInput);
+
+			// Agrega el formulario al body del documento y lo envía
+			document.body.appendChild(form); 
+			form.submit(); // Esto envía la petición al post
+		}
+		
+	</script>
 <!-- Modal Agregar Cuenta -->
 <div class="modal fade" id="modalAgregarCuenta" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -112,5 +155,22 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modalConfirmacionEliminarCuenta" tabindex="-1" aria-labelledby="modalConfirmacionEliminarLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="modalConfirmacionEliminarLabel">Eliminar Cuenta</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        ¿Estás seguro de que deseas eliminar esta cuenta?
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+	        <button type="button" class="btn btn-danger" onclick="confirmarEliminarCuenta()">Eliminar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 </body>
 </html>

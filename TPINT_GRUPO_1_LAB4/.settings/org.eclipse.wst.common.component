@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-        
+            
+    
     <wb-module deploy-name="TPINT_GRUPO_1_LAB4">
-                
+                        
+        
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-                
+                        
+        
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                
         <dependent-module archiveName="mysql-connector-j-8.0.31.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/Pablo/Desktop/TRABAJOS FACU/TPS_GRUPALES_LAB4_GRUPO1/TPINT_GRUPO_1_LAB4/mysql-connector-j-8.0.31.jar">
+                        
+            <dependency-type>uses</dependency-type>
+                    
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-j-8.0.31.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/Users/Nicolás/Desktop/Nico Facu/Labo4/Tp-2/TPS_GRUPALES_LAB4_GRUPO1/TPINT_GRUPO_1_LAB4/mysql-connector-j-8.0.31.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-                
+                        
+        
         <property name="context-root" value="TPINT_GRUPO_1_LAB4"/>
-                
+                        
+        
         <property name="java-output-path" value="/TPINT_GRUPO_1_LAB4/build/classes"/>
-            
-    </wb-module>
+                    
     
+    </wb-module>
+        
+
 </project-modules>

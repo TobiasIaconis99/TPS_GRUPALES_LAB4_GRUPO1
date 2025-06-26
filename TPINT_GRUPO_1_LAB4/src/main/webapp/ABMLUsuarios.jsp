@@ -35,9 +35,7 @@
 				<div class="col-md-6">
 					<!-- Espacio para futuros filtros u otros elementos -->
 				</div>
-				<div class="col-md-6 text-end">
-					<button class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i> Nuevo usuario</button>
-				</div>
+
 			</div>
 			<!-- Tabla de usuarios -->
 			<%
