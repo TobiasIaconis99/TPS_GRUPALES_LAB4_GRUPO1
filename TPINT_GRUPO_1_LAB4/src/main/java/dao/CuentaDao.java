@@ -13,6 +13,7 @@ public interface CuentaDao {
     
     boolean existeNumeroCuenta(String numeroCuenta);
     boolean existeCbu(String cbu);
+    boolean tieneMenos3CuentasAct(int idCliente);
     
     Cuenta obtenerCuentaPorId(int id);
     Cuenta obtenerCuentaPorNumero(String numeroCuenta);

@@ -50,6 +50,8 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String CHECK_CBU_EXISTS = "SELECT COUNT(*) FROM Cuenta WHERE cbu = ?";
     private static final String SELECT_LAST_NUMERO_CUENTA = "SELECT MAX(numeroCuenta) FROM Cuenta";
     private static final String SELECT_LAST_CBU = "SELECT MAX(cbu) FROM Cuenta";
+    private static final String LIST_COUNT_CUENTAS_BY_IDCLIENTE = "SELECT COUNT(*) FROM Cuenta WHERE estado = 1 and idCliente = ?";
+    
 
    
     @Override
@@ -311,6 +313,30 @@ public class CuentaDaoImpl implements CuentaDao {
             closeResources(conexion, statement, resultSet); // Usar el método closeResources
         }
         return false;
+    }
+    @Override
+    public boolean tieneMenos3CuentasAct(int idCliente) {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Connection conexion = null;
+        try {
+            conexion = getConnection(); // Usar tu método getConnection()
+            statement = conexion.prepareStatement(LIST_COUNT_CUENTAS_BY_IDCLIENTE);
+            statement.setString(1, String.valueOf(idCliente));
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+            	
+            	if(resultSet.getInt(1) >= 3) {
+            		return false;           		
+            	}
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al verificar la cantidad de cuentas: " + e.getMessage());
+        } finally {
+            closeResources(conexion, statement, resultSet); // Usar el método closeResources
+        }
+        return true;
     }
 
     @Override
