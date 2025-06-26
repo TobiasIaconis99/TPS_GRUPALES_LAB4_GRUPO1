@@ -113,12 +113,12 @@
 				
 				  <div class="col-md-4">
 				    <label class="form-label">Clave</label>
-				    <input type="text" id="claveUsuario" name="claveUsuario" class="form-control" required>
+				    <input type="password" id="claveUsuario" name="claveUsuario" class="form-control" required>
 				  </div>
 				
 				  <div class="col-md-4">
 				    <label class="form-label">Repetir clave</label>
-				    <input type="text" id="repetirClaveUsuario" name="repetirClaveUsuario" class="form-control" required oninput="compararClaves()">
+				    <input type="password" id="repetirClaveUsuario" name="repetirClaveUsuario" class="form-control" required oninput="compararClaves()">
 				    <div id="mensajeClave" class="form-text text-danger d-none">
 				      Las contraseñas no coinciden.
 				    </div>

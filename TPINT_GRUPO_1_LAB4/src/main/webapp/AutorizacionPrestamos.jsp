@@ -62,33 +62,14 @@
 						<td>$50.000</td>
 						<td>12</td>
 						<td>$4.800</td>
-						<td><span class="badge text-bg-warning">Pendiente</span></td>
+						<td>Pendiente</td>
 						<td>
 							<div class="d-flex">
 								<button class="btn btn-sm btn-success me-2">
-									<i class="bi bi-check-circle me-1"></i> Autorizar
+									<i class="bi bi-check-circle"></i>
 								</button>
 								<button class="btn btn-sm btn-danger">
-									<i class="bi bi-x-circle me-1"></i> Rechazar
-								</button>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Laura Gómez</td>
-						<td>10003</td>
-						<td>2025-06-10</td>
-						<td>$30.000</td>
-						<td>6</td>
-						<td>$5.200</td>
-						<td><span class="badge text-bg-warning">Pendiente</span></td>
-						<td>
-							<div class="d-flex">
-								<button class="btn btn-sm btn-success me-2">
-									<i class="bi bi-check-circle me-1"></i> Autorizar
-								</button>
-								<button class="btn btn-sm btn-danger">
-									<i class="bi bi-x-circle me-1"></i> Rechazar
+									<i class="bi bi-x-circle"></i>
 								</button>
 							</div>
 						</td>

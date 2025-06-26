@@ -187,7 +187,7 @@
 						<input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario" value="<%= nombreUsuarioCliente %>" required>
 					</div>
 					<div class="col-md-6">
-						<label for="claveUsuario" class="form-label">Contraseña</label>
+						<label for="claveUsuario" class="form-label">Clave</label>
 						<input type="password" class="form-control" id="claveUsuario" name="claveUsuario" value="<%= claveUsuarioCliente %>" required>
 					</div>
 				</div>
