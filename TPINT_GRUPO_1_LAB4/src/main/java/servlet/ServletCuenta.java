@@ -218,7 +218,9 @@ public class ServletCuenta extends HttpServlet {
 						response.sendRedirect("ServletCuenta?accion=listar");
 						return;
 					}
-
+					
+					String saldoStr = request.getParameter("saldo");
+					BigDecimal saldo = new BigDecimal(saldoStr);
 					// --- modificar y configurar la Cuenta ---
 					int idCuenta = Integer.parseInt(idCuentaStr);
 					Cuenta cuenta = new Cuenta();
@@ -227,7 +229,7 @@ public class ServletCuenta extends HttpServlet {
 					cuenta.setCliente(cliente);
 					cuenta.setTipoCuenta(tipoCuenta);
 					cuenta.setFechaCreacion(java.sql.Date.valueOf(LocalDate.now()));
-					cuenta.setSaldo(new BigDecimal("0.00")); // Usar BigDecimal para saldo
+					cuenta.setSaldo(saldo); // Usar BigDecimal para saldo
 					cuenta.setEstado(true);
 
 	

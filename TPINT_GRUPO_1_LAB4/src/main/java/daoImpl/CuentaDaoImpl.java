@@ -45,7 +45,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	private static final String INSERT_CUENTA = "INSERT INTO Cuenta (idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	private static final String SELECT_CUENTA_BY_ID = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE idCuenta = ?";
 	private static final String SELECT_CUENTA_BY_NUMERO = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE numeroCuenta = ?";
-	private static final String UPDATE_CUENTA = "UPDATE Cuenta SET idCliente = ?, idTipoCuenta = ? WHERE idCuenta = ?";
+	private static final String UPDATE_CUENTA = "UPDATE Cuenta SET idCliente = ?, idTipoCuenta = ?, saldo = ? WHERE idCuenta = ?";
 	private static final String DELETE_CUENTA = "UPDATE Cuenta SET estado = 0 WHERE idCuenta = ?"; // Baja lógica
 	private static final String LIST_ALL_CUENTAS = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta";
 	private static final String LIST_ACTIVE_CUENTAS = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE estado = 1";
@@ -176,10 +176,11 @@ public class CuentaDaoImpl implements CuentaDao {
 		try {
 			conexion = getConnection(); // Tu método para obtener conexión
 			statement = conexion.prepareStatement(UPDATE_CUENTA);
-
+			
 			statement.setInt(1, cuenta.getCliente().getId());
 			statement.setInt(2, cuenta.getTipoCuenta().getIdTipoCuenta());
-			statement.setInt(3, cuenta.getIdCuenta()); // WHERE idCuenta = ?
+			statement.setBigDecimal(3, cuenta.getSaldo());       
+			statement.setInt(4, cuenta.getIdCuenta());           
 
 			return statement.executeUpdate() > 0;
 		} catch (SQLException e) {

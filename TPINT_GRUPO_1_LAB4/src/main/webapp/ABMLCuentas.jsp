@@ -249,6 +249,10 @@
 							<option value="2">Cuenta corriente</option>
 						</select>
 					</div>
+					<div class="mb-3">
+						<label for="lblSaldo" class="form-label">Saldo</label>
+						<input type="number" value="0" name="saldo" id="inputSaldo">
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-success">Modificar</button>
