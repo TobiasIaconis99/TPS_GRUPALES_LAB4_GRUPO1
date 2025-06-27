@@ -219,7 +219,7 @@ public class ServletCuenta extends HttpServlet {
 						return;
 					}
 
-					// --- Crear y configurar la Cuenta ---
+					// --- modificar y configurar la Cuenta ---
 					int idCuenta = Integer.parseInt(idCuentaStr);
 					Cuenta cuenta = new Cuenta();
 					cuenta.setIdCuenta(idCuenta);
@@ -230,26 +230,14 @@ public class ServletCuenta extends HttpServlet {
 					cuenta.setSaldo(new BigDecimal("0.00")); // Usar BigDecimal para saldo
 					cuenta.setEstado(true);
 
-					// --- GENERAR NUMERO DE CUENTA Y CBU ---
-					// En tu implementación real, aquí se llamaría a CuentaDaoImpl.generarSiguienteCBU()
-					// Asegúrate que los métodos generateUniqueAccountNumber y generateUniqueCBU sean robustos para producción
-					String numeroCuentaGenerado = generateUniqueAccountNumber(); 
-					String cbuGenerado = generateUniqueCBU(); 
+	
+					boolean fueModificado = cuentaNegocio.modificar(cuenta);
+					System.out.println("ServletCuenta: Resultado de cuentaNegocio.agregar = " + fueModificado); // Debug
 
-					cuenta.setNumeroCuenta(numeroCuentaGenerado);
-					cuenta.setCbu(cbuGenerado);
-
-					System.out.println("ServletCuenta: Cuenta a agregar - DNI: " + cliente.getDni() + ", Tipo ID: "
-							+ tipoCuenta.getIdTipoCuenta() + ", Nro Cuenta: " + numeroCuentaGenerado + ", CBU: "
-							+ cbuGenerado); // Debug
-
-					boolean fueAgregado = cuentaNegocio.modificar(cuenta);
-					System.out.println("ServletCuenta: Resultado de cuentaNegocio.agregar = " + fueAgregado); // Debug
-
-					if (fueAgregado) {
-						session.setAttribute("mensajeExitoCuenta", "Cuenta agregada correctamente."); // Específico
+					if (fueModificado) {
+						session.setAttribute("mensajeExitoCuenta", "Cuenta modificada correctamente."); // Específico
 					} else {
-						session.setAttribute("mensajeErrorCuenta", "No se pudo agregar la cuenta. Verifique los logs."); // Específico
+						session.setAttribute("mensajeErrorCuenta", "No se pudo modificar la cuenta. Verifique los logs."); // Específico
 					}
 				} catch (NumberFormatException e) {
 					System.err.println("ServletCuenta: NumberFormatException al convertir el ID de Tipo Cuenta: "

@@ -217,7 +217,7 @@
 		<div class="modal-dialog">
 			<form class="modal-content" method="post" action="ServletCuenta">
 				<div class="modal-header">
-					<h5 class="modal-title" id="modalLabel">Editar cuenta</h5>
+					<h5 class="modal-title" id="modalLabel">Modificar cuenta</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body">
@@ -251,7 +251,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-success">Agregar</button>
+					<button type="submit" class="btn btn-success">Modificar</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancelar</button>
 					<input type="hidden" name="idCuenta" id="hiddenIdCuenta" />
