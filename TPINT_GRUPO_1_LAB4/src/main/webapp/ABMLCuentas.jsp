@@ -38,33 +38,37 @@
 					<i class="bi bi-plus-circle me-1"></i> Nueva cuenta
 				</button>
 			</div>
-			
+
 			<%
-                // Mensaje exito para Cuentas
-                String mensajeExitoCuenta = (String) session.getAttribute("mensajeExitoCuenta");
-                if (mensajeExitoCuenta != null) {
-                    session.removeAttribute("mensajeExitoCuenta");
-            %>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    	<i class="bi bi-check-circle me-1"></i>
-                        <%= mensajeExitoCuenta %>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-            <%
-                }
-                // Mensaje error para Cuentas
-                String mensajeErrorCuenta = (String) session.getAttribute("mensajeErrorCuenta");
-                if (mensajeErrorCuenta != null) {
-                    session.removeAttribute("mensajeErrorCuenta");
-            %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    	<i class="bi bi-x-circle me-1"></i>
-                        <%= mensajeErrorCuenta %>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-            <%
-                }
-            %>
+			// Mensaje exito para Cuentas
+			String mensajeExitoCuenta = (String) session.getAttribute("mensajeExitoCuenta");
+			if (mensajeExitoCuenta != null) {
+				session.removeAttribute("mensajeExitoCuenta");
+			%>
+			<div class="alert alert-success alert-dismissible fade show"
+				role="alert">
+				<i class="bi bi-check-circle me-1"></i>
+				<%=mensajeExitoCuenta%>
+				<button type="button" class="btn-close" data-bs-dismiss="alert"
+					aria-label="Close"></button>
+			</div>
+			<%
+			}
+			// Mensaje error para Cuentas
+			String mensajeErrorCuenta = (String) session.getAttribute("mensajeErrorCuenta");
+			if (mensajeErrorCuenta != null) {
+			session.removeAttribute("mensajeErrorCuenta");
+			%>
+			<div class="alert alert-danger alert-dismissible fade show"
+				role="alert">
+				<i class="bi bi-x-circle me-1"></i>
+				<%=mensajeErrorCuenta%>
+				<button type="button" class="btn-close" data-bs-dismiss="alert"
+					aria-label="Close"></button>
+			</div>
+			<%
+			}
+			%>
 
 			<!-- Tabla -->
 			<table class="table table-bordered">
@@ -96,7 +100,11 @@
 						<td>$<%=c.getSaldo()%></td>
 						<td>
 							<!-- Editar / Eliminar si se desea -->
-							<button class="btn btn-sm btn-success">
+
+							<button class="btn btn-sm btn-success"
+								data-bs-target="#modalEditarCuenta"
+								onclick="setCuentaAModificar('<%=c.getIdCuenta()%>')"
+								data-bs-toggle="modal">
 								<i class="bi bi-pencil-square"></i>
 							</button>
 							<button class="btn btn-sm btn-danger" data-bs-toggle="modal"
@@ -104,6 +112,7 @@
 								onclick="setCuentaAEliminar('<%=c.getIdCuenta()%>')">
 								<i class="bi bi-trash"></i>
 							</button>
+
 						</td>
 					</tr>
 					<%
@@ -147,8 +156,13 @@
 			document.body.appendChild(form);
 			form.submit(); // Esto envía la petición al post
 		}
+
+		function setCuentaAModificar(idCuenta) {
+			document.getElementById('hiddenIdCuenta').value = idCuenta;
+			console.log(idCuenta)
+		}
 	</script>
-	
+
 	<!-- Modal Agregar Cuenta -->
 	<div class="modal fade" id="modalAgregarCuenta" tabindex="-1"
 		aria-labelledby="modalLabel" aria-hidden="true">
@@ -192,6 +206,55 @@
 					<button type="submit" class="btn btn-success">Agregar</button>
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancelar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Modal Editar Cuenta -->
+	<div class="modal fade" id="modalEditarCuenta" tabindex="-1"
+		aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<form class="modal-content" method="post" action="ServletCuenta">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalLabel">Editar cuenta</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" name="accion" value="editar" />
+
+					<div class="mb-3">
+						<label for="dniCliente" class="form-label">Cliente</label> <select
+							class="form-select" name="dniCliente" required>
+							<option value="">Seleccionar...</option>
+							<%
+							ClienteDao clienteEditar = new ClienteDaoImpl();
+							List<Cliente> listaClientesEditar = cliente.listar();
+							if (listaClientes != null) {
+								for (Cliente cl : listaClientesEditar) {
+							%>
+							<option value="<%=cl.getDni()%>"><%=cl.getNombre()%>
+								<%=cl.getApellido()%></option>
+							<%
+							}
+							}
+							%>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="tipoCuenta" class="form-label">Tipo de cuenta</label>
+						<select class="form-select" name="tipoCuenta" required>
+							<option value="">Seleccionar...</option>
+							<option value="1">Caja de ahorro</option>
+							<option value="2">Cuenta corriente</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Agregar</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancelar</button>
+					<input type="hidden" name="idCuenta" id="hiddenIdCuenta" />
 				</div>
 			</form>
 		</div>
