@@ -191,8 +191,8 @@ public class ServletCuenta extends HttpServlet {
 								"ServletCuenta: Tipo de cuenta encontrado: " + tipoCuenta.getNombreTipoCuenta()); // Debug
 					}
 
-					// --- Obtener Cliente ---
-					String dniClienteStr = request.getParameter("dniCliente");
+//					// --- Obtener Cliente ---
+					String dniClienteStr = request.getParameter("dniClienteHidden");
 					System.out.println("ServletCuenta: DNI Cliente recibido = " + dniClienteStr); // Debug
 
 					if (dniClienteStr == null || dniClienteStr.isEmpty()) {
@@ -200,7 +200,7 @@ public class ServletCuenta extends HttpServlet {
 						response.sendRedirect("ServletCuenta?accion=listar");
 						return;
 					}
-
+						
 					Cliente cliente = clienteNegocio.obtenerPorDni(dniClienteStr);
 					if (cliente == null) {
 						System.out.println("ServletCuenta: ERROR - Cliente NO encontrado para DNI: " + dniClienteStr); // Debug
@@ -229,7 +229,7 @@ public class ServletCuenta extends HttpServlet {
 					cuenta.setCliente(cliente);
 					cuenta.setTipoCuenta(tipoCuenta);
 					cuenta.setFechaCreacion(java.sql.Date.valueOf(LocalDate.now()));
-					cuenta.setSaldo(saldo); // Usar BigDecimal para saldo
+					cuenta.setSaldo(saldo); 
 					cuenta.setEstado(true);
 
 	

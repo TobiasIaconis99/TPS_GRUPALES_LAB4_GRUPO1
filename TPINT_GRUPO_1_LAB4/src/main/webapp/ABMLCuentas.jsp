@@ -103,7 +103,7 @@
 
 							<button class="btn btn-sm btn-success"
 								data-bs-target="#modalEditarCuenta"
-								onclick="setCuentaAModificar('<%=c.getIdCuenta()%>')"
+								onclick="setCuentaAModificar('<%=c.getIdCuenta()%>', '<%=c.getCliente().getDni()%>')"
 								data-bs-toggle="modal">
 								<i class="bi bi-pencil-square"></i>
 							</button>
@@ -157,9 +157,9 @@
 			form.submit(); // Esto envía la petición al post
 		}
 
-		function setCuentaAModificar(idCuenta) {
+		function setCuentaAModificar(idCuenta, dni) {
 			document.getElementById('hiddenIdCuenta').value = idCuenta;
-			console.log(idCuenta)
+			document.getElementById('dniClienteHidden').value = dni;
 		}
 	</script>
 
@@ -224,24 +224,6 @@
 					<input type="hidden" name="accion" value="editar" />
 
 					<div class="mb-3">
-						<label for="dniCliente" class="form-label">Cliente</label> <select
-							class="form-select" name="dniCliente" required>
-							<option value="">Seleccionar...</option>
-							<%
-							ClienteDao clienteEditar = new ClienteDaoImpl();
-							List<Cliente> listaClientesEditar = cliente.listar();
-							if (listaClientes != null) {
-								for (Cliente cl : listaClientesEditar) {
-							%>
-							<option value="<%=cl.getDni()%>"><%=cl.getNombre()%>
-								<%=cl.getApellido()%></option>
-							<%
-							}
-							}
-							%>
-						</select>
-					</div>
-					<div class="mb-3">
 						<label for="tipoCuenta" class="form-label">Tipo de cuenta</label>
 						<select class="form-select" name="tipoCuenta" required>
 							<option value="">Seleccionar...</option>
@@ -259,6 +241,7 @@
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Cancelar</button>
 					<input type="hidden" name="idCuenta" id="hiddenIdCuenta" />
+					<input type="hidden" name="dniClienteHidden" id="dniClienteHidden" />
 				</div>
 			</form>
 		</div>
