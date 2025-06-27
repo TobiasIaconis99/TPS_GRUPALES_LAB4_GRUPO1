@@ -103,7 +103,7 @@
 
 							<button class="btn btn-sm btn-success"
 								data-bs-target="#modalEditarCuenta"
-								onclick="setCuentaAModificar('<%=c.getIdCuenta()%>', '<%=c.getCliente().getDni()%>')"
+								onclick="setCuentaAModificar('<%=c.getIdCuenta()%>', '<%=c.getCliente().getDni()%>', '<%=c.getSaldo()%>', '<%=c.getTipoCuenta()%>')"
 								data-bs-toggle="modal">
 								<i class="bi bi-pencil-square"></i>
 							</button>
@@ -157,9 +157,13 @@
 			form.submit(); // Esto envía la petición al post
 		}
 
-		function setCuentaAModificar(idCuenta, dni) {
+		function setCuentaAModificar(idCuenta, dni, saldo, tipoCuenta) {
 			document.getElementById('hiddenIdCuenta').value = idCuenta;
 			document.getElementById('dniClienteHidden').value = dni;
+			document.getElementById('ddlTipoCuenta').value = tipoCuenta;
+			document.getElementById('inputSaldo').value = saldo;
+			console.log("tipo cuenta;" + tipoCuenta);
+			
 		}
 	</script>
 
@@ -195,7 +199,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="tipoCuenta" class="form-label">Tipo de cuenta</label>
-						<select class="form-select" name="tipoCuenta" required>
+						<select class="form-select" id="ddlTipoCuenta" name="tipoCuenta" required>
 							<option value="">Seleccionar...</option>
 							<option value="1">Caja de ahorro</option>
 							<option value="2">Cuenta corriente</option>
