@@ -237,7 +237,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="lblSaldo" class="form-label">Saldo</label>
-						<input type="number" value="0" name="saldo" id="inputSaldo">
+						<input type="number" value="0" name="saldo" id="inputSaldo" class="form-select">
 					</div>
 				</div>
 				<div class="modal-footer">
