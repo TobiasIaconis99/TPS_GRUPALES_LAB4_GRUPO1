@@ -114,6 +114,45 @@
 				%>
 			</tbody>
 		</table>
+		<!-- Inicio de paginacion -->
+			<%
+			    // Recuperamos filtros y búsqueda
+			    String busqueda = request.getParameter("busqueda") != null ? request.getParameter("busqueda") : "";
+			    String filtroSexo = request.getParameter("filtroSexo") != null ? request.getParameter("filtroSexo") : "";
+			
+			    int paginaActual = request.getAttribute("paginaActual") != null ? (int) request.getAttribute("paginaActual") : 1;
+			    int totalPaginas = request.getAttribute("totalPaginas") != null ? (int) request.getAttribute("totalPaginas") : 1;
+			%>
+			
+			<nav aria-label="Paginación">
+			  <ul class="pagination justify-content-center">
+			
+			    <!-- Botón Anterior -->
+			    <li class="page-item <%= (paginaActual == 1) ? "disabled" : "" %>">
+			      <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= paginaActual - 1 %>&busqueda=<%= busqueda %>&filtroSexo=<%= filtroSexo %>">
+			        Anterior
+			      </a>
+			    </li>
+			
+			    <!-- Números de página -->
+			    <% for (int i = 1; i <= totalPaginas; i++) { %>
+			      <li class="page-item <%= (i == paginaActual) ? "active" : "" %>">
+			        <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= i %>&busqueda=<%= busqueda %>&filtroSexo=<%= filtroSexo %>">
+			          <%= i %>
+			        </a>
+			      </li>
+			    <% } %>
+			
+			    <!-- Botón Siguiente -->
+			    <li class="page-item <%= (paginaActual == totalPaginas) ? "disabled" : "" %>">
+			      <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= paginaActual + 1 %>&busqueda=<%= busqueda %>&filtroSexo=<%= filtroSexo %>">
+			        Siguiente
+			      </a>
+			    </li>
+			
+			  </ul>
+			</nav>
+			<!-- Fin de paginacion -->
 	</div>
 </div>
 
