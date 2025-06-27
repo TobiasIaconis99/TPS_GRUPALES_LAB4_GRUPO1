@@ -21,26 +21,39 @@
 		<h4>Cuentas</h4>
 		<hr />
 
-		<!-- Filtro por tipo de cuenta -->
-		<form method="get" action="ServletCuenta" class="row mb-3">
-		    <input type="hidden" name="accion" value="listar" />
-		    <div class="col-auto">
-		        <select class="form-select" name="filtroTipoCuenta" onchange="this.form.submit()">
-		            <option value="">Todos los tipos</option>
-		            <option value="1" <%= "1".equals(request.getParameter("filtroTipoCuenta")) ? "selected" : "" %>>Caja de ahorro</option>
-		            <option value="2" <%= "2".equals(request.getParameter("filtroTipoCuenta")) ? "selected" : "" %>>Cuenta corriente</option>
-		        </select>
+		<div class="row mb-3 align-items-end">
+		    <div class="col-md-9">
+		        <form method="get" action="<%= request.getContextPath() %>/ServletCuenta" class="row gx-2">
+		            <input type="hidden" name="accion" value="listar" />
+		            
+		            <div class="col-md-5">
+		                <input type="text" name="busquedaCliente" class="form-control" 
+		                       placeholder="Buscar por DNI, nombre o apellido del cliente"
+		                       value="<%= request.getParameter("busquedaCliente") != null ? request.getParameter("busquedaCliente") : "" %>" />
+		            </div>
+		            
+		            <div class="col-md-4">
+		                <select class="form-select" name="filtroTipoCuenta">
+		                    <option value="">Todos los tipos</option>
+		                    <option value="1" <%= "1".equals(request.getParameter("filtroTipoCuenta")) ? "selected" : "" %>>Caja de ahorro</option>
+		                    <option value="2" <%= "2".equals(request.getParameter("filtroTipoCuenta")) ? "selected" : "" %>>Cuenta corriente</option>
+		                </select>
+		            </div>
+		            
+		            <div class="col-md-3">
+		                <button class="btn btn-primary w-100" type="submit">
+		                    <i class="bi bi-search me-1"></i> Buscar
+		                </button>
+		            </div>
+		        </form>
 		    </div>
-		</form>
-
-		<!-- Botón Nueva cuenta -->
-		<div class="text-end mb-3">
-			<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCuenta">
-				<i class="bi bi-plus-circle me-1"></i> Nueva cuenta
-			</button>
+		    <div class="col-md-3 d-flex justify-content-end">
+		        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCuenta">
+		            <i class="bi bi-plus-circle me-1"></i> Nueva cuenta
+		        </button>
+		    </div>
 		</div>
 
-		<!-- Mensajes -->
 		<%
 		    String mensajeExitoCuenta = (String) session.getAttribute("mensajeExitoCuenta");
 		    if (mensajeExitoCuenta != null) {
@@ -66,7 +79,6 @@
 		    }
 		%>
 
-		<!-- Tabla -->
 		<table class="table table-bordered">
 			<thead class="table-light">
 				<tr>
@@ -82,12 +94,7 @@
 			<tbody>
 				<%
 				List<Cuenta> listaCuentas = (List<Cuenta>) request.getAttribute("listaCuentas");
-				if (listaCuentas == null) {
-					// Fallback por si se accede directo sin pasar por ServletCuenta
-					daoImpl.CuentaDaoImpl dao = new daoImpl.CuentaDaoImpl();
-					listaCuentas = dao.listarCuentasActivas();
-				}
-				if (listaCuentas != null) {
+				if (listaCuentas != null && !listaCuentas.isEmpty()) { 
 					for (Cuenta c : listaCuentas) {
 				%>
 				<tr>
@@ -110,15 +117,20 @@
 				</tr>
 				<%
 					}
+				} else { 
+				%>
+				<tr>
+					<td colspan="7" class="text-center">No se encontraron cuentas que coincidan con los criterios.</td>
+				</tr>
+				<%
 				}
 				%>
 			</tbody>
 		</table>
-		<!-- Inicio de paginacion -->
-			<%
-			    // Recuperamos filtros y búsqueda
-			    String busqueda = request.getParameter("busqueda") != null ? request.getParameter("busqueda") : "";
-			    String filtroSexo = request.getParameter("filtroSexo") != null ? request.getParameter("filtroSexo") : "";
+		<%
+			    // Recuperamos filtros y búsqueda para mantenerlos en la URL
+			    String busquedaCliente = request.getParameter("busquedaCliente") != null ? request.getParameter("busquedaCliente") : "";
+			    String filtroTipoCuenta = request.getParameter("filtroTipoCuenta") != null ? request.getParameter("filtroTipoCuenta") : "";
 			
 			    int paginaActual = request.getAttribute("paginaActual") != null ? (int) request.getAttribute("paginaActual") : 1;
 			    int totalPaginas = request.getAttribute("totalPaginas") != null ? (int) request.getAttribute("totalPaginas") : 1;
@@ -127,36 +139,31 @@
 			<nav aria-label="Paginación">
 			  <ul class="pagination justify-content-center">
 			
-			    <!-- Botón Anterior -->
 			    <li class="page-item <%= (paginaActual == 1) ? "disabled" : "" %>">
-			      <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= paginaActual - 1 %>&busqueda=<%= busqueda %>&filtroSexo=<%= filtroSexo %>">
+			      <a class="page-link" href="<%= request.getContextPath() %>/ServletCuenta?accion=listar&pagina=<%= paginaActual - 1 %>&busquedaCliente=<%= busquedaCliente %>&filtroTipoCuenta=<%= filtroTipoCuenta %>">
 			        Anterior
 			      </a>
 			    </li>
 			
-			    <!-- Números de página -->
 			    <% for (int i = 1; i <= totalPaginas; i++) { %>
 			      <li class="page-item <%= (i == paginaActual) ? "active" : "" %>">
-			        <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= i %>&busqueda=<%= busqueda %>&filtroSexo=<%= filtroSexo %>">
+			        <a class="page-link" href="<%= request.getContextPath() %>/ServletCuenta?accion=listar&pagina=<%= i %>&busquedaCliente=<%= busquedaCliente %>&filtroTipoCuenta=<%= filtroTipoCuenta %>">
 			          <%= i %>
 			        </a>
 			      </li>
 			    <% } %>
 			
-			    <!-- Botón Siguiente -->
 			    <li class="page-item <%= (paginaActual == totalPaginas) ? "disabled" : "" %>">
-			      <a class="page-link" href="ServletCliente?accion=listar&pagina=<%= paginaActual + 1 %>&busqueda=<%= busqueda %>&filtroSexo=<%= filtroSexo %>">
+			      <a class="page-link" href="<%= request.getContextPath() %>/ServletCuenta?accion=listar&pagina=<%= paginaActual + 1 %>&busquedaCliente=<%= busquedaCliente %>&filtroTipoCuenta=<%= filtroTipoCuenta %>">
 			        Siguiente
 			      </a>
 			    </li>
 			
 			  </ul>
 			</nav>
-			<!-- Fin de paginacion -->
-	</div>
+			</div>
 </div>
 
-<!-- Scripts -->
 <script>
 	let idCuentaAEliminar = "";
 	function setCuentaAEliminar(id) {
@@ -165,7 +172,7 @@
 	function confirmarEliminarCuenta() {
 		const form = document.createElement('form');
 		form.method = 'POST';
-		form.action = 'ServletCuenta';
+		form.action = '<%= request.getContextPath() %>/ServletCuenta'; 
 
 		const accionInput = document.createElement('input');
 		accionInput.type = 'hidden';
@@ -184,11 +191,10 @@
 	}
 </script>
 
-<!-- Modal Agregar Cuenta -->
 <div class="modal fade" id="modalAgregarCuenta" tabindex="-1"
 	aria-labelledby="modalLabel" aria-hidden="true">
 	<div class="modal-dialog">
-		<form class="modal-content" method="post" action="ServletCuenta">
+		<form class="modal-content" method="post" action="<%= request.getContextPath() %>/ServletCuenta">
 			<div class="modal-header">
 				<h5 class="modal-title" id="modalLabel">Agregar nueva cuenta</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -229,7 +235,6 @@
 	</div>
 </div>
 
-<!-- Modal Confirmar Eliminar -->
 <div class="modal fade" id="modalConfirmacionEliminarCuenta" tabindex="-1"
 	aria-labelledby="modalConfirmacionEliminarLabel" aria-hidden="true">
 	<div class="modal-dialog">
