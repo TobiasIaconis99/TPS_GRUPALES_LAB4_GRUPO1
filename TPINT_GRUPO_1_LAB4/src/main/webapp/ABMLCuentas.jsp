@@ -105,10 +105,14 @@
 					<td><%=c.getCbu()%></td>
 					<td>$<%=c.getSaldo()%></td>
 					<td>
-						<button class="btn btn-sm btn-success">
-							<i class="bi bi-pencil-square"></i>
-						</button>
-						<button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+							<button class="btn btn-sm btn-success"
+								data-bs-target="#modalEditarCuenta"
+								onclick="setCuentaAModificar('<%=c.getIdCuenta()%>', '<%=c.getCliente().getDni()%>', '<%=c.getSaldo()%>', '<%=c.getTipoCuenta()%>')"
+								data-bs-toggle="modal">
+								<i class="bi bi-pencil-square"></i>
+							</button>
+
+							<button class="btn btn-sm btn-danger" data-bs-toggle="modal"
 							data-bs-target="#modalConfirmacionEliminarCuenta"
 							onclick="setCuentaAEliminar('<%=c.getIdCuenta()%>')">
 							<i class="bi bi-trash"></i>
@@ -189,7 +193,15 @@
 		document.body.appendChild(form);
 		form.submit();
 	}
+	function setCuentaAModificar(idCuenta, dni, saldo, tipoCuenta) {
+        document.getElementById('hiddenIdCuenta').value = idCuenta;
+        document.getElementById('dniClienteHidden').value = dni;
+        document.getElementById('ddlTipoCuenta').value = tipoCuenta;
+        document.getElementById('inputSaldo').value = saldo;
+        console.log("tipo cuenta;" + tipoCuenta);
+    }
 </script>
+
 
 <div class="modal fade" id="modalAgregarCuenta" tabindex="-1"
 	aria-labelledby="modalLabel" aria-hidden="true">
@@ -252,6 +264,41 @@
 		</div>
 	</div>
 </div>
+<!-- Modal Editar Cuenta -->
+    <div class="modal fade" id="modalEditarCuenta" tabindex="-1"
+        aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" action="ServletCuenta">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Modificar cuenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="editar" />
+
+                    <div class="mb-3">
+                        <label for="tipoCuenta" class="form-label">Tipo de cuenta</label>
+                        <select class="form-select" name="tipoCuenta" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="1">Caja de ahorro</option>
+                            <option value="2">Cuenta corriente</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lblSaldo" class="form-label">Saldo</label>
+                        <input type="number" value="0" name="saldo" id="inputSaldo" class="form-select">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Modificar</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <input type="hidden" name="idCuenta" id="hiddenIdCuenta" />
+                    <input type="hidden" name="dniClienteHidden" id="dniClienteHidden" />
+                </div>
+            </form>
+        </div>
+    </div>
 
 </body>
 </html>
