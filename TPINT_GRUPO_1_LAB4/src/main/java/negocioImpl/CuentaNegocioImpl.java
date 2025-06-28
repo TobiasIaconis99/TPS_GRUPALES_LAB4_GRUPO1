@@ -88,4 +88,9 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         // el negocio solo la usa para tomar una decisión.
         return cuentaDao.contarCuentasActivasPorCliente(idCliente) < 3;
     }
+
+    @Override
+    public List<Cuenta> listarCuentasPorCliente(int idCliente) {
+        return cuentaDao.listarCuentasPorCliente(idCliente);
+    }
 }

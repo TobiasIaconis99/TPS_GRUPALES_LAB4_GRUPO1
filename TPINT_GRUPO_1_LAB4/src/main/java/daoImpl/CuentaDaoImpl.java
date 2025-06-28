@@ -41,12 +41,16 @@ public class CuentaDaoImpl implements CuentaDao {
 
     // Constantes SQL
     private static final String INSERT_CUENTA = "INSERT INTO Cuenta (idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_CUENTA_BY_ID = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE idCuenta = ?";
-    private static final String SELECT_CUENTA_BY_NUMERO = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE numeroCuenta = ?";
     private static final String UPDATE_CUENTA = "UPDATE Cuenta SET idCliente = ?, idTipoCuenta = ?, numeroCuenta = ?, cbu = ?, saldo = ?, fechaCreacion = ?, estado = ? WHERE idCuenta = ?";
     private static final String DELETE_CUENTA = "UPDATE Cuenta SET estado = 0 WHERE idCuenta = ?"; // Baja lógica
+   
+    private static final String SELECT_CUENTA_BY_ID = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE idCuenta = ?";
+    private static final String SELECT_CUENTA_BY_NUMERO = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE numeroCuenta = ?";
+    
     private static final String LIST_ALL_CUENTAS = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta";
     private static final String LIST_ACTIVE_CUENTAS = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE estado = 1";
+    private static final String LIST_CUENTAS_BY_CLIENTE_ID = "SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE idCliente = ? AND estado = 1"; 
+    
     private static final String CHECK_NUMERO_CUENTA_EXISTS = "SELECT COUNT(*) FROM Cuenta WHERE numeroCuenta = ?";
     private static final String CHECK_CBU_EXISTS = "SELECT COUNT(*) FROM Cuenta WHERE cbu = ?";
     private static final String SELECT_LAST_NUMERO_CUENTA = "SELECT MAX(numeroCuenta) FROM Cuenta";
@@ -414,5 +418,47 @@ public class CuentaDaoImpl implements CuentaDao {
             closeResources(conn, ps, rs); // Cerrar recursos aquí también
         }
         return String.format("%022d", siguienteCBU); // Formato para 22 dígitos
+    }
+
+    @Override
+    public List<Cuenta> listarCuentasPorCliente(int idCliente) {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Connection conexion = null;
+        List<Cuenta> lista = new ArrayList<>();
+        try {
+            conexion = getConnection();
+            statement = conexion.prepareStatement(LIST_CUENTAS_BY_CLIENTE_ID);
+            statement.setInt(1, idCliente); // Pasar el ID del cliente al PreparedStatement
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Cuenta cuenta = new Cuenta();
+                cuenta.setIdCuenta(resultSet.getInt("idCuenta"));
+                cuenta.setNumeroCuenta(resultSet.getString("numeroCuenta"));
+                cuenta.setCbu(resultSet.getString("cbu"));
+                cuenta.setSaldo(resultSet.getBigDecimal("saldo"));
+                cuenta.setFechaCreacion(resultSet.getDate("fechaCreacion"));
+                cuenta.setEstado(resultSet.getBoolean("estado"));
+
+                // El cliente ya lo tenemos, lo pasamos directamente o lo buscamos
+                // Aquí, el cliente ya está asociado al ID, así que lo obtenemos.
+                // Podrías pasar el objeto cliente directamente si lo tuvieras,
+                // pero obtenerlo por ID aquí asegura que el objeto Cliente sea completo.
+                Cliente cliente = clienteDao.obtenerPorId(resultSet.getInt("idCliente")); 
+                cuenta.setCliente(cliente);
+
+                int idTipoCuenta = resultSet.getInt("idTipoCuenta");
+                TipoCuenta tipoCuenta = tipoCuentaDao.obtenerTipoCuentaPorId(idTipoCuenta);
+                cuenta.setTipoCuenta(tipoCuenta);
+
+                lista.add(cuenta);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en capa DAO al listar Cuentas por Cliente ID: " + e.getMessage());
+        } finally {
+            closeResources(conexion, statement, resultSet);
+        }
+        return lista;
     }
 }

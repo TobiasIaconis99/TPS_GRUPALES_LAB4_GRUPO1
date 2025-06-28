@@ -1,3 +1,8 @@
+<%@page import="negocioImpl.CuentaNegocioImpl"%>
+<%@page import="negocio.CuentaNegocio"%>
+<%@page import="java.util.List"%>
+<%@page import="entidad.Cliente"%>
+<%@page import="entidad.Cuenta"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -6,11 +11,8 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Inicio</title>
-	<!-- Bootstrap 5.3 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-	<!-- Bootstrap Icons -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -21,25 +23,40 @@
 	<!-- Contenido principal -->
 	<div class="container my-5">
 
-		<!-- Cuentas del cliente -->
+		<%
+		    // 1. Recuperar el cliente de la sesion
+		    Cliente clienteLogueado = (Cliente) session.getAttribute("clienteLogueado");
+		    List<Cuenta> listaCuentasDelCliente = null;
+
+		    if (clienteLogueado != null) {
+		        // 2. Instanciar el CuentaNegocio y obtener las cuentas del cliente
+		        CuentaNegocio cuentaNegocio = new CuentaNegocioImpl();
+		        listaCuentasDelCliente = cuentaNegocio.listarCuentasPorCliente(clienteLogueado.getId());
+		    }
+		%>
 		<div class="list-group mb-4">
-			<ul class="list-group">
-				<li class="list-group-item active" aria-current="true">
-					<div class="d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="Movimientos.jsp">
-						Ver movimientos de mis cuentas</a>
-						<div class="text-white">
-							<i class="bi bi-chevron-right"></i>
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item">Caja de ahorro 123</li>
-				<li class="list-group-item">Cuenta corriente 456</li>
-			</ul>
+		  <a href="#" class="list-group-item list-group-item-action active">Mis cuentas</a>
+		
+		  <% if (listaCuentasDelCliente != null && !listaCuentasDelCliente.isEmpty()) { %>
+		      <% for (Cuenta c : listaCuentasDelCliente) { %>
+		          <a href="#" class="list-group-item list-group-item-action">
+		              <small class="text-muted"><%= c.getTipoCuenta().getNombreTipoCuenta() %></small><br>
+		              <span>
+		                <strong><%= c.getNumeroCuenta() %></strong>
+		                <span class="float-end fw-bold text-primary fs-4">$<%= c.getSaldo() %></span>
+		              </span>
+		              <br>
+		              <small class="text-muted">CBU: <%= c.getCbu() %></small>
+		          </a>
+		      <% } %>
+		  <% } else { %>
+		      <a href="#" class="list-group-item list-group-item-action">No se encontraron cuentas para este cliente.</a>
+		  <% } %>
 		</div>
 
 		<!-- Tarjetas de transferencias, prestamos y datos personales -->
 		<div class="row g-4">
+		
 			<!-- Tarjeta de transferencias -->
 			<div class="col-md-4">
 				<div class="card bg-primary text-white h-100">
@@ -54,6 +71,7 @@
 					</div>
 				</div>
 			</div>
+			
 			<!-- Tarjeta de prestamos -->
 			<div class="col-md-4">
 				<div class="card bg-primary text-white h-100">
@@ -68,6 +86,7 @@
 					</div>
 				</div>
 			</div>
+			
 			<!-- Tarjeta de datos personales -->
 			<div class="col-md-4">
 				<div class="card bg-primary text-white h-100 text-center">
@@ -82,6 +101,7 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 </body>

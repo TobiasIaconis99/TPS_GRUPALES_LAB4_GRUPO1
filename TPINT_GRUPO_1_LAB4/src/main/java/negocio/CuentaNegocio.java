@@ -8,11 +8,11 @@ public interface CuentaNegocio {
     boolean modificar(Cuenta cuenta);
     boolean eliminar(int id);
     
-    // NUEVO MÉTODO PARA EL NEGOCIO:
-    boolean tieneMenos3CuentasAct(int idCliente); // Agregamos este método aquí
+    boolean tieneMenos3CuentasAct(int idCliente);
     
     List<Cuenta> listarCuentas();
     List<Cuenta> listarCuentasActivas();
+    List<Cuenta> listarCuentasPorCliente(int idCliente);
     
     boolean existeNumeroCuenta(String numeroCuenta);
     boolean existeCbu(String cbu);
