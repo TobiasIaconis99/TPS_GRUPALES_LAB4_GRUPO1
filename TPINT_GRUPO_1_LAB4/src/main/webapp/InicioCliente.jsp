@@ -39,7 +39,7 @@
 		
 		  <% if (listaCuentasDelCliente != null && !listaCuentasDelCliente.isEmpty()) { %>
 		      <% for (Cuenta c : listaCuentasDelCliente) { %>
-		          <a href="#" class="list-group-item list-group-item-action">
+		           <a href="<%= request.getContextPath() %>/ServletMovimiento?accion=listar&idCuenta=<%= c.getIdCuenta() %>" class="list-group-item list-group-item-action">
 		              <small class="text-muted"><%= c.getTipoCuenta().getNombreTipoCuenta() %></small><br>
 		              <span>
 		                <strong><%= c.getNumeroCuenta() %></strong>
