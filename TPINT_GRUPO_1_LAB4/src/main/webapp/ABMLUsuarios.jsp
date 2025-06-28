@@ -15,8 +15,11 @@
 <body style="margin: 0; padding: 0;">
 
 	<%@ include file="includes/NavbarAdmin.jsp"%>
+	
 	<div class="d-flex">
+	
 		<%@ include file="includes/SidebarAdmin.jsp"%>
+		
 		<div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
 			<h4>Usuarios</h4>
 			<hr />
@@ -38,7 +41,7 @@
 						</select>
 					</div>
 					<div class="col-md-3">
-						<button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
+						<button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-1"></i> Buscar</button>
 					</div>
 				</form>
 				</div>

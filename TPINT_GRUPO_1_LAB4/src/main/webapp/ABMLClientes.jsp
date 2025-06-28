@@ -21,6 +21,7 @@
 	<%@ include file="includes/NavbarAdmin.jsp" %>
 
 	<div class="d-flex">
+	
 		<%@ include file="includes/SidebarAdmin.jsp" %>
 
 		<div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
@@ -28,7 +29,6 @@
 			<hr />
 			<br />
 			<div class="row mb-3 align-items-end">
-				<!-- Formulario de búsqueda -->
 				<div class="col-md-9">
 					<form method="get" action="ServletCliente" class="row gx-2">
 						<input type="hidden" name="accion" value="listar">
@@ -49,7 +49,7 @@
 				
 						<div class="col-md-3">
 							<button class="btn btn-primary w-100" type="submit">
-								<i class="bi bi-search"></i> Buscar
+								<i class="bi bi-search me-1"></i> Buscar
 							</button>
 						</div>
 					</form>
