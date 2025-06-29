@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,20 +27,37 @@ public class ServletUsuario extends HttpServlet {
         String nombreFiltro = request.getParameter("nombreFiltro");
         String paginaStr = request.getParameter("pagina");
 
-        int pagina = (paginaStr != null && !paginaStr.isEmpty()) ? Integer.parseInt(paginaStr) : 1;
+        int pagina = 1;
         int registrosPorPagina = 10;
+
+        try {
+            if (paginaStr != null && !paginaStr.isEmpty()) {
+                pagina = Integer.parseInt(paginaStr);
+                if (pagina <= 0) pagina = 1;
+            }
+        } catch (NumberFormatException e) {
+            pagina = 1;
+        }
+
         int offset = (pagina - 1) * registrosPorPagina;
 
         UsuarioNegocio usuNegocio = new UsuarioNegocioImpl();
 
-        if ("listar".equals(accion)) {
-            List<Usuario> listaUsuarios = usuNegocio.buscarConFiltros(nombreFiltro, tipoFiltro, offset, registrosPorPagina);
-            int totalRegistros = usuNegocio.contarConFiltros(nombreFiltro, tipoFiltro);
-            int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
+        if ("listar".equalsIgnoreCase(accion)) {
+            try {
+                List<Usuario> listaUsuarios = usuNegocio.buscarConFiltros(nombreFiltro, tipoFiltro, offset, registrosPorPagina);
+                int totalRegistros = usuNegocio.contarConFiltros(nombreFiltro, tipoFiltro);
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
 
-            request.setAttribute("listaUsuarios", listaUsuarios);
-            request.setAttribute("paginaActual", pagina);
-            request.setAttribute("totalPaginas", totalPaginas);
+                request.setAttribute("listaUsuarios", listaUsuarios);
+                request.setAttribute("paginaActual", pagina);
+                request.setAttribute("totalPaginas", totalPaginas);
+                request.setAttribute("nombreFiltro", nombreFiltro);
+                request.setAttribute("tipoFiltro", tipoFiltro);
+
+            } catch (Exception e) {
+                request.setAttribute("error", "Error al listar usuarios: " + e.getMessage());
+            }
 
             RequestDispatcher rd = request.getRequestDispatcher("ABMLUsuarios.jsp");
             rd.forward(request, response);
@@ -56,25 +72,48 @@ public class ServletUsuario extends HttpServlet {
 
         if (accion != null) {
             switch (accion) {
-                case "agregar":
-                    break;
                 case "modificar":
-                    Usuario modificado = new Usuario();
-                    modificado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
-                    modificado.setNombreUsuario(request.getParameter("nombreUsuario"));
-                    modificado.setClave(request.getParameter("clave"));
-                    modificado.setTipoUsuario(request.getParameter("tipoUsuario"));
-                    usuNegocio.modificar(modificado);
+                    try {
+                        String idStr = request.getParameter("idUsuario");
+                        String nombre = request.getParameter("nombreUsuario");
+                        String clave = request.getParameter("clave");
+                        String tipo = request.getParameter("tipoUsuario");
+
+                        // Validacion campos completos
+                        if (idStr == null || nombre == null || clave == null || tipo == null ||
+                            idStr.isEmpty() || nombre.isEmpty() || clave.isEmpty() || tipo.isEmpty()) {
+                            throw new IllegalArgumentException("Todos los campos son obligatorios.");
+                        }
+                        
+                        // Validacion campos completos
+                        int id = Integer.parseInt(idStr);
+                        if (id <= 0) throw new IllegalArgumentException("ID de usuario inválido.");
+
+                        if (nombre.length() > 50 || clave.length() > 50 || tipo.length() > 20) {
+                            throw new IllegalArgumentException("Los campos exceden la longitud permitida.");
+                        }
+
+                        Usuario modificado = new Usuario();
+                        modificado.setIdUsuario(id);
+                        modificado.setNombreUsuario(nombre);
+                        modificado.setClave(clave);
+                        modificado.setTipoUsuario(tipo);
+
+                        boolean exito = usuNegocio.modificar(modificado);
+                        if (!exito) {
+                            request.setAttribute("error", "No se pudo modificar el usuario.");
+                        }
+
+                    } catch (Exception e) {
+                        request.setAttribute("error", "Error al modificar usuario: " + e.getMessage());
+                    }
                     break;
-                case "eliminar":
-                    Usuario eliminado = new Usuario();
-                    eliminado.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario")));
-                    usuNegocio.eliminar(eliminado.getIdUsuario());
-                    break;
+
                 default:
                     break;
             }
         }
+
         response.sendRedirect("ServletUsuario?accion=listar");
     }
 }

@@ -34,14 +34,14 @@
 						       value="<%= request.getParameter("nombreFiltro") != null ? request.getParameter("nombreFiltro") : "" %>" />
 					</div>
 					<div class="col-md-3">
-						<select class="form-select" name="tipoFiltro"> <%-- Eliminado onchange="this.form.submit()" para que el botón de búsqueda sea el principal --%>
+						<select class="form-select" name="tipoFiltro">
 							<option value="">Todos los tipos</option>
 							<option value="admin" <%= "admin".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Admin</option>
 							<option value="cliente" <%= "cliente".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Cliente</option>
 						</select>
 					</div>
 					<div class="col-md-3">
-						<button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-1"></i> Buscar</button>
+						<button type="submit" class="btn btn-primary w-100" data-bs-toggle="tooltip" data-bs-placement="top" title="Buscar el usuario"><i class="bi bi-search me-1"></i> Buscar</button>
 					</div>
 				</form>
 				</div>
@@ -55,7 +55,7 @@
 					<tr>
 						<th>Usuario</th>
 						<th>Clave</th>
-						<th>Tipo</th> <%-- Agregamos la columna de tipo de usuario --%>
+						<th>Tipo</th>
 						<th>Acciones</th>
 					</tr>
 				</thead>
@@ -66,21 +66,13 @@
 					%>
 					<tr>
 						<td><%= u.getNombreUsuario() %></td>
-						<td><%= u.getClave() %></td> <%-- ¡RECUERDA: Claves en texto plano son una VULNERABILIDAD! --%>
+						<td><%= u.getClave() %></td>
 						<td><%= u.getTipoUsuario() %></td>
 						<td>
 							<button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
 								onclick="cargarUsuario('<%= u.getIdUsuario() %>', '<%= u.getNombreUsuario() %>', '<%= u.getClave() %>', '<%= u.getTipoUsuario() %>')">
 								<i class="bi bi-pencil-square"></i>
 							</button>
-							<%--
-							<button class="btn btn-sm btn-danger"
-								data-bs-toggle="modal"
-								data-bs-target="#modalConfirmacionEliminarUsuario"
-								onclick="setIdUsuarioAEliminar('<%= u.getIdUsuario() %>')">
-								<i class="bi bi-trash"></i>
-							</button>
-							--%>
 						</td>
 					</tr>
 					<% }
@@ -130,15 +122,20 @@
 	</div>
 
 	<script>
-		function cargarUsuario(id, nombre, clave, tipo) {
-			document.getElementById("edit-idUsuario").value = id;
-			document.getElementById("edit-nombreUsuario").value = nombre;
-			// ¡ADVERTENCIA DE SEGURIDAD: NO MOSTRAR CLAVE EN CLARO!
-			// Idealmente, el campo de clave debería estar vacío o permitir "cambiar clave".
-			// Aquí solo se muestra para mantener la funcionalidad actual, pero se recomienda modificar.
-			document.getElementById("edit-clave").value = clave; 
-			document.getElementById("edit-tipoUsuario").value = tipo;
-		}
+	function cargarUsuario(id, nombre, clave, tipo) {
+	    document.getElementById("edit-idUsuario").value = id;
+	    document.getElementById("edit-nombreUsuario").value = nombre;
+	    document.getElementById("edit-clave").value = clave;
+	    document.getElementById("edit-idUsuario").value = id;
+	    document.getElementById("label-idUsuario").textContent = id;
+
+	    // Seteamos el valor oculto
+	    document.getElementById("edit-tipoUsuario").value = tipo;
+
+	    // Mostramos el texto en el label visual
+	    document.getElementById("label-tipoUsuario").textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+	}
+
 
 		// Si añades eliminación de usuarios, necesitarías funciones similares a las de Cliente
 		/*
@@ -175,33 +172,33 @@
 				<form action="<%= request.getContextPath() %>/ServletUsuario" method="post">
 					<input type="hidden" name="accion" value="modificar"> <%-- Acción explícita para modificar --%>
 					<div class="modal-header">
+						<i class="bi bi-pencil-square fs-5 me-1"></i>
 						<h5 class="modal-title" id="modalEditarUsuarioLabel">Editar usuario</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
 					</div>
 					<div class="modal-body">
-						<div class="mb-3">
-							<label for="edit-idUsuario" class="form-label">ID</label>
-							<input type="text" class="form-control" name="idUsuario" id="edit-idUsuario" readonly>
+						<div class="mb-3 d-none">
+						    <label class="form-label">ID</label>
+						    <input type="hidden" name="idUsuario" id="edit-idUsuario">
+						    <span class="form-control bg-light border" id="label-idUsuario"></span>
 						</div>
 						<div class="mb-3">
 							<label for="edit-nombreUsuario" class="form-label">Usuario</label>
-							<input type="text" class="form-control" name="nombreUsuario" id="edit-nombreUsuario" required>
+							<input type="text" class="form-control bg-light border" name="nombreUsuario" id="edit-nombreUsuario" required>
 						</div>
 						<div class="mb-3">
 							<label for="edit-clave" class="form-label">Clave</label>
-							<input type="text" class="form-control" name="clave" id="edit-clave" required>
-							</div>
+							<input type="text" class="form-control bg-light border" name="clave" id="edit-clave" required>
+						</div>
 						<div class="mb-3">
-							<label for="edit-tipoUsuario" class="form-label">Tipo de usuario</label>
-							<select class="form-select" name="tipoUsuario" id="edit-tipoUsuario" required>
-								<option value="admin">Admin</option>
-								<option value="cliente">Cliente</option>
-							</select>
+						    <label for="edit-tipoUsuario" class="form-label">Tipo de usuario</label>
+						    <input type="hidden" name="tipoUsuario" id="edit-tipoUsuario">
+						    <span class="form-control bg-light border" id="label-tipoUsuario"></span>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary">Guardar</button>
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar los cambios">Guardar</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
 					</div>
 				</form>
 			</div>

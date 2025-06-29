@@ -104,7 +104,7 @@
 					<img src="<%= request.getContextPath() %>/img/logoBanco.png"
 				     alt="Logo Banco"
 				     class="w-100 h-100 position-absolute top-0 start-0"
-				     style="object-fit: cover; filter: brightness(0.6);">
+				     style="object-fit: cover; filter: brightness(0.5);">
 					<!-- Contenido centrado sobre la imagen -->
 					<div class="position-absolute top-50 start-50 translate-middle text-center">
 						<h5 class="fw-bold fs-5 mb-0">Conocé más sobre nosotros</h5>
