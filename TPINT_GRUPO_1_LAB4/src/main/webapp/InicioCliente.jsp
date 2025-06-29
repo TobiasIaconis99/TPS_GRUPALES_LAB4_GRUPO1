@@ -54,55 +54,66 @@
 		  <% } %>
 		</div>
 
-		<!-- Tarjetas de transferencias, prestamos y datos personales -->
-		<div class="row g-4">
+		<style>
+			.square-card {
+				aspect-ratio: 1 / 1; /* Relación 1:1 para que sean cuadradas */
+				width: 100%;
+			}
+		</style>
 		
-			<!-- Tarjeta de transferencias -->
-			<div class="col-md-4">
-				<div class="card bg-primary text-white h-100">
-					<div class="card-body d-flex justify-content-center align-items-center" style="height: 120px;">
-						<i class="bi bi-arrow-left-right fs-1"></i>
-					</div>
-					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="Transferencias.jsp">Administrar transferencias.</a>
-						<div class="text-white">
-							<i class="bi bi-chevron-right"></i>
-						</div>
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 mt-5 text-center">
+		
+			<!-- Transferencias -->
+			<div class="col">
+				<div class="card square-card border-0 shadow bg-primary text-white position-relative">
+					<a href="Transferencias.jsp" class="stretched-link"></a>
+					<div class="card-body d-flex flex-column justify-content-center align-items-center">
+						<i class="bi bi-arrow-left-right fs-1 mb-3"></i>
+						<h5 class="fw-bold fs-5 mb-0">Transferencias</h5>
 					</div>
 				</div>
 			</div>
-			
-			<!-- Tarjeta de prestamos -->
-			<div class="col-md-4">
-				<div class="card bg-primary text-white h-100">
-					<div class="card-body d-flex justify-content-center align-items-center" style="height: 120px;">
-						<i class="bi bi-cash fs-1"></i>
-					</div>
-					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="Prestamos.jsp">Administrar préstamos.</a>
-						<div class="text-white">
-							<i class="bi bi-chevron-right"></i>
-						</div>
+		
+			<!-- Préstamos -->
+			<div class="col">
+				<div class="card square-card border-0 shadow bg-primary text-white position-relative">
+					<a href="Prestamos.jsp" class="stretched-link"></a>
+					<div class="card-body d-flex flex-column justify-content-center align-items-center">
+						<i class="bi bi-cash fs-1 mb-3"></i>
+						<h5 class="fw-bold fs-5 mb-0">Préstamos</h5>
 					</div>
 				</div>
 			</div>
-			
-			<!-- Tarjeta de datos personales -->
-			<div class="col-md-4">
-				<div class="card bg-primary text-white h-100 text-center">
-					<div class="card-body d-flex justify-content-center align-items-center" style="height: 120px;">
-						<i class="bi bi-person-fill fs-1"></i>
-					</div>
-					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="text-white stretched-link" href="DatosPersonales.jsp">Ver mis datos personales.</a>
-						<div class="text-white">
-							<i class="bi bi-chevron-right"></i>
-						</div>
+		
+			<!-- Datos personales -->
+			<div class="col">
+				<div class="card square-card border-0 shadow bg-primary text-white position-relative">
+					<a href="DatosPersonales.jsp" class="stretched-link"></a>
+					<div class="card-body d-flex flex-column justify-content-center align-items-center">
+						<i class="bi bi-person-fill fs-1 mb-3"></i>
+						<h5 class="fw-bold fs-5 mb-0">Datos personales</h5>
 					</div>
 				</div>
 			</div>
-			
+		
+			<!-- Tarjeta con imagen de fondo, icono y texto centrado -->
+			<div class="col">
+				<div class="card square-card border-0 shadow bg-light text-white position-relative overflow-hidden">
+					
+					<!-- Imagen de fondo -->
+					<img src="<%= request.getContextPath() %>/img/logoBanco.png"
+				     alt="Logo Banco"
+				     class="w-100 h-100 position-absolute top-0 start-0"
+				     style="object-fit: cover; filter: brightness(0.6);">
+					<!-- Contenido centrado sobre la imagen -->
+					<div class="position-absolute top-50 start-50 translate-middle text-center">
+						<h5 class="fw-bold fs-5 mb-0">Conocé más sobre nosotros</h5>
+					</div>
+				</div>
+			</div>
 		</div>
+
+
 	</div>
 </body>
 </html>

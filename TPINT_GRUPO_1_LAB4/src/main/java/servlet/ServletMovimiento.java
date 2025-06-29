@@ -57,9 +57,8 @@ public class ServletMovimiento extends HttpServlet {
                 }
                 request.setAttribute("cuentaSeleccionada", cuentaSeleccionada);
 
-                // --- Lógica de Paginación ---
                 int paginaActual = 1;
-                int registrosPorPagina = 10; // Puedes ajustar este valor, ej. 5, 10, 20
+                int registrosPorPagina = 10;
 
                 try {
                     String paginaParam = request.getParameter("pagina");
@@ -84,8 +83,7 @@ public class ServletMovimiento extends HttpServlet {
                 }
 
                 // Obtener la lista de movimientos paginada
-                List<Movimiento> movimientos = movimientoNegocio.obtenerMovimientosPorCuentaPaginado(
-                                                            idCuenta, paginaActual, registrosPorPagina); 
+                List<Movimiento> movimientos = movimientoNegocio.obtenerMovimientosPorCuentaPaginado(idCuenta, paginaActual, registrosPorPagina); 
 
                 request.setAttribute("listaMovimientos", movimientos); 
                 request.setAttribute("paginaActual", paginaActual);
@@ -112,9 +110,6 @@ public class ServletMovimiento extends HttpServlet {
         }
     }
     
-    // El método doPost se mantiene vacío, como en tu código original.
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // No hay acciones POST definidas en este servlet según tu solicitud.
-        // Si en el futuro necesitas registrar movimientos o hacer otras operaciones, las agregarías aquí.
     }
 }

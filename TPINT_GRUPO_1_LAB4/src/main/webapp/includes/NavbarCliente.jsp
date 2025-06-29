@@ -6,33 +6,17 @@
 
 <nav class="navbar navbar-expand-lg bg-primary px-3">
     <div class="container-fluid">
-        <div>
+        <div class="d-flex align-items-center gap-4">
             <a class="navbar-brand text-white" href="InicioCliente.jsp">
                 <i class="bi bi-bank me-2 fs-4"></i>
                 BANCO
             </a>
-        </div>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav gap-4">
-            <li class="nav-item">
-                    <a class="nav-link text-white d-flex flex-column align-items-center" href="Movimientos.jsp">
-                        <i class="bi bi-card-checklist fs-5"></i>
-                    </a>
+            <ul class="navbar-nav flex-row gap-4">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="Transferencias.jsp">Transferencias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white d-flex flex-column align-items-center" href="Transferencias.jsp">
-                        <i class="bi bi-arrow-left-right fs-5"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white d-flex flex-column align-items-center" href="Prestamos.jsp">
-                        <i class="bi bi-cash fs-5"></i>
-                    </a>
+                    <a class="nav-link text-white" href="Prestamos.jsp">Préstamos</a>
                 </li>
             </ul>
         </div>
@@ -48,3 +32,4 @@
         </div>
     </div>
 </nav>
+
