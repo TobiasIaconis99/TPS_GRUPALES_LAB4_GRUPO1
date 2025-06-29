@@ -1,7 +1,9 @@
 package negocio; // Asegúrate de que el paquete sea correcto
 
 import java.util.List;
+
 import entidad.Movimiento;
+
 
 public interface MovimientoNegocio {
 	
@@ -28,7 +30,7 @@ public interface MovimientoNegocio {
 
     /**
      * Obtiene una lista de movimientos por tipo de movimiento.
-     * @paramidTipoMovimiento El ID del tipo de movimiento.
+     * @param idTipoMovimiento El ID del tipo de movimiento.
      * @return Una lista de movimientos del tipo especificado.
      */
     List<Movimiento> obtenerPorTipoMovimiento(int idTipoMovimiento);
@@ -38,4 +40,20 @@ public interface MovimientoNegocio {
      * @return Una lista de todos los movimientos.
      */
     List<Movimiento> obtenerTodosLosMovimientos();
+
+    /**
+     * Obtiene una lista paginada de movimientos para una cuenta específica.
+     * @param idCuenta El ID de la cuenta.
+     * @param paginaActual La página actual (base 1).
+     * @param registrosPorPagina El número de registros por página.
+     * @return Una lista de movimientos paginados.
+     */
+    List<Movimiento> obtenerMovimientosPorCuentaPaginado(int idCuenta, int paginaActual, int registrosPorPagina);
+
+    /**
+     * Cuenta el total de movimientos para una cuenta específica (para calcular el total de páginas).
+     * @param idCuenta El ID de la cuenta.
+     * @return El número total de movimientos.
+     */
+    int contarMovimientosPorCuenta(int idCuenta);
 }

@@ -38,4 +38,20 @@ public interface MovimientoDao {
      * @return Una lista de todos los movimientos.
      */
     List<Movimiento> obtenerTodosLosMovimientos();
+    
+    /**
+     * Obtiene una lista paginada de movimientos para una cuenta específica.
+     * @param idCuenta El ID de la cuenta.
+     * @param paginaActual La página actual (base 1).
+     * @param registrosPorPagina El número de registros por página.
+     * @return Una lista de movimientos paginados.
+     */
+    List<Movimiento> obtenerMovimientosPorCuentaPaginado(int idCuenta, int paginaActual, int registrosPorPagina);
+
+    /**
+     * Cuenta el total de movimientos para una cuenta específica (para calcular el total de páginas).
+     * @param idCuenta El ID de la cuenta.
+     * @return El número total de movimientos.
+     */
+    int contarMovimientosPorCuenta(int idCuenta);
 }

@@ -15,7 +15,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
 	<!-- Navbar cliente -->
 	<%@ include file="includes/NavbarCliente.jsp" %>
 
@@ -47,21 +46,31 @@
 		%>
 		
 		<div class="list-group mb-4">
-			<h4>
-				Movimientos de cuenta
-				<% 
-					Cuenta cuentaSeleccionada = (Cuenta) request.getAttribute("cuentaSeleccionada");
-					if (cuentaSeleccionada != null) {
-				%>
-					<small class="text-muted"> - <%= cuentaSeleccionada.getNumeroCuenta() %> (<%= cuentaSeleccionada.getTipoCuenta().getNombreTipoCuenta() %>)</small>
-				<% } %>
-			</h4>
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">
+					Movimientos de cuenta
+					<% 
+						Cuenta cuentaSeleccionada = (Cuenta) request.getAttribute("cuentaSeleccionada");
+						if (cuentaSeleccionada != null) {
+					%>
+						<small class="text-secondary">
+							- <%= cuentaSeleccionada.getNumeroCuenta() %> (<%= cuentaSeleccionada.getTipoCuenta().getNombreTipoCuenta() %>)
+						</small>
+					<% } %>
+				</h4>
+				<a href="InicioCliente.jsp" class="btn btn-primary">
+					<i class="bi bi-arrow-left-circle me-1"></i> Volver
+				</a>
+			</div>
 			<hr>
 		</div>
 
 		<%
-			// Obtener la lista de movimientos desde el Servlet
+			// Obtener la lista de movimientos y datos de paginación desde el Servlet
 			List<Movimiento> listaMovimientos = (List<Movimiento>) request.getAttribute("listaMovimientos");
+			int paginaActual = (Integer) request.getAttribute("paginaActual");
+			int totalPaginas = (Integer) request.getAttribute("totalPaginas");
+			int idCuentaActual = (Integer) request.getAttribute("idCuentaActual"); // Necesario para los enlaces de paginación
 		%>
 
 		<% if (listaMovimientos != null && !listaMovimientos.isEmpty()) { %>
@@ -77,14 +86,15 @@
 					</thead>
 					<tbody>
 						<% 
-						    java.text.SimpleDateFormat sdfTabla = new java.text.SimpleDateFormat("dd/mm/yyyy");
+						    // Formato de fecha para la tabla
+						    java.text.SimpleDateFormat sdfTabla = new java.text.SimpleDateFormat("dd/MM/yyyy"); 
 						    for (Movimiento mov : listaMovimientos) { 
 						%>
 							<tr>
 								<td><%= sdfTabla.format(mov.getFecha()) %></td>
 								<td><%= mov.getDetalle() %></td>
 								<td class="<%= mov.getImporte().compareTo(BigDecimal.ZERO) >= 0 ? "text-success" : "text-danger" %>">
-									<%= mov.getImporte().compareTo(BigDecimal.ZERO) >= 0 ? "+" : "" %>
+									<%= mov.getImporte().compareTo(BigDecimal.ZERO) >= 0 ? "+" : "-" %>
 									$<%= String.format("%.2f", mov.getImporte().abs()) %>
 								</td>
 								<td><%= mov.getTipoMovimiento().getNombre() %></td> 
@@ -93,10 +103,40 @@
 					</tbody>
 				</table>
 			</div>
+			
+			<!-- Paginación -->
+			<nav aria-label="Paginación de movimientos">
+			  <ul class="pagination justify-content-center">
+			
+			    <!-- Botón Anterior -->
+			    <li class="page-item <%= (paginaActual == 1) ? "disabled" : "" %>">
+			      <a class="page-link" href="<%= request.getContextPath() %>/ServletMovimiento?accion=listar&idCuenta=<%= idCuentaActual %>&pagina=<%= paginaActual - 1 %>">
+			        Anterior
+			      </a>
+			    </li>
+			
+			    <!-- Números de página -->
+			    <% for (int i = 1; i <= totalPaginas; i++) { %>
+			      <li class="page-item <%= (i == paginaActual) ? "active" : "" %>">
+			        <a class="page-link" href="<%= request.getContextPath() %>/ServletMovimiento?accion=listar&idCuenta=<%= idCuentaActual %>&pagina=<%= i %>">
+			          <%= i %>
+			        </a>
+			      </li>
+			    <% } %>
+			
+			    <!-- Botón Siguiente -->
+			    <li class="page-item <%= (paginaActual == totalPaginas) ? "disabled" : "" %>">
+			      <a class="page-link" href="<%= request.getContextPath() %>/ServletMovimiento?accion=listar&idCuenta=<%= idCuentaActual %>&pagina=<%= paginaActual + 1 %>">
+			        Siguiente
+			      </a>
+			    </li>
+			  </ul>
+			</nav>
+
 		<% } else if (request.getParameter("idCuenta") != null) { %>
-			<div class="alert alert-info">No se encontraron movimientos para la cuenta seleccionada.</div>
+			<div class="alert alert-primary">No se encontraron movimientos para la cuenta seleccionada.</div>
 		<% } else { %>
-            <div class="alert alert-info">Seleccione una cuenta desde el inicio para ver sus movimientos.</div>
+            <div class="alert alert-primary">Seleccione una cuenta desde el inicio para ver sus movimientos.</div>
         <% } %>
 
 	</div>

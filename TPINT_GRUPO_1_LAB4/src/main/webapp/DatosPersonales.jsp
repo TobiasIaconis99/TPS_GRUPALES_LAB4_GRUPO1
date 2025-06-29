@@ -20,11 +20,17 @@
 
 	<div class="container my-5">
 		<div class="list-group mb-4">
-			<h4>
-				Datos personales
-			</h4>
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">
+					Datos personales
+				</h4>
+				<a href="InicioCliente.jsp" class="btn btn-primary">
+					<i class="bi bi-arrow-left-circle me-1"></i> Volver
+				</a>
+			</div>
 			<hr>
 		</div>
+
 
 		<%
 			// Recuperar el objeto Cliente de la sesión

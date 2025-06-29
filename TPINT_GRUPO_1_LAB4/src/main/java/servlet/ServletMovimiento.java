@@ -40,13 +40,12 @@ public class ServletMovimiento extends HttpServlet {
             String idCuentaStr = request.getParameter("idCuenta");
             
             if (idCuentaStr == null || idCuentaStr.isEmpty()) {
-                session.setAttribute("mensajeError", "No se indico una cuenta para ver sus movimientos.");
+                session.setAttribute("mensajeError", "No se indicó una cuenta para ver sus movimientos.");
                 response.sendRedirect(request.getContextPath() + "/InicioCliente.jsp");
                 return;
             }
 
             try {
-            	
                 int idCuenta = Integer.parseInt(idCuentaStr);
                 
                 // Obtener la cuenta seleccionada para mostrar sus detalles
@@ -58,15 +57,46 @@ public class ServletMovimiento extends HttpServlet {
                 }
                 request.setAttribute("cuentaSeleccionada", cuentaSeleccionada);
 
-                // Obtener los movimientos de la cuenta seleccionada
-                List<Movimiento> movimientos = movimientoNegocio.obtenerPorCuenta(idCuenta); 
-                request.setAttribute("listaMovimientos", movimientos); 
+                // --- Lógica de Paginación ---
+                int paginaActual = 1;
+                int registrosPorPagina = 10; // Puedes ajustar este valor, ej. 5, 10, 20
 
-                RequestDispatcher rd = request.getRequestDispatcher("Movimientos.jsp");
+                try {
+                    String paginaParam = request.getParameter("pagina");
+                    if (paginaParam != null && !paginaParam.isEmpty()) {
+                        paginaActual = Integer.parseInt(paginaParam);
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println("Parámetro de página inválido, usando página 1. Error: " + e.getMessage());
+                }
+
+                // Obtener el total de movimientos para la cuenta y calcular total de páginas
+                int totalMovimientos = movimientoNegocio.contarMovimientosPorCuenta(idCuenta);
+                int totalPaginas = (int) Math.ceil((double) totalMovimientos / registrosPorPagina);
+                
+                // Asegurar que la página actual esté dentro de un rango válido
+                if (totalPaginas == 0) { // Si no hay registros, solo hay 1 página (la primera)
+                    paginaActual = 1;
+                } else if (paginaActual > totalPaginas) {
+                    paginaActual = totalPaginas; // Si se pide una página mayor que el total, va a la última
+                } else if (paginaActual < 1) {
+                    paginaActual = 1; // Si se pide una página menor que 1, va a la primera
+                }
+
+                // Obtener la lista de movimientos paginada
+                List<Movimiento> movimientos = movimientoNegocio.obtenerMovimientosPorCuentaPaginado(
+                                                            idCuenta, paginaActual, registrosPorPagina); 
+
+                request.setAttribute("listaMovimientos", movimientos); 
+                request.setAttribute("paginaActual", paginaActual);
+                request.setAttribute("totalPaginas", totalPaginas);
+                request.setAttribute("idCuentaActual", idCuenta); // Para usar en los enlaces de paginación
+
+                RequestDispatcher rd = request.getRequestDispatcher("Movimientos.jsp"); 
                 rd.forward(request, response);
 
             } catch (NumberFormatException e) {
-                session.setAttribute("mensajeError", "ID de cuenta invalida.");
+                session.setAttribute("mensajeError", "ID de cuenta inválida.");
                 response.sendRedirect(request.getContextPath() + "/InicioCliente.jsp");
                 System.err.println("Error en Servlet: " + e.getMessage());
             } catch (Exception e) {
@@ -77,11 +107,14 @@ public class ServletMovimiento extends HttpServlet {
             }
         } 
         else {
-            session.setAttribute("mensajeError", "Accion no valida o faltan parametros");
+            session.setAttribute("mensajeError", "Acción no válida o faltan parámetros.");
             response.sendRedirect(request.getContextPath() + "/InicioCliente.jsp");
         }
     }
+    
+    // El método doPost se mantiene vacío, como en tu código original.
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        // No hay acciones POST definidas en este servlet según tu solicitud.
+        // Si en el futuro necesitas registrar movimientos o hacer otras operaciones, las agregarías aquí.
     }
 }

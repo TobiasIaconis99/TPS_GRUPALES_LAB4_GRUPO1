@@ -69,22 +69,39 @@ public class MovimientoNegocioImpl implements MovimientoNegocio {
         return movimientoDao.obtenerTodosLosMovimientos();
     }
 
-	
     @Override
 	public Movimiento obtenerPorId(int id) {
     	return movimientoDao.obtenerPorId(id);
 	}
 
-	
     @Override
 	public List<Movimiento> obtenerPorCuenta(int idCuenta) {
     	return movimientoDao.obtenerPorCuenta(idCuenta);
 	}
 
-	
     @Override
 	public List<Movimiento> obtenerPorTipoMovimiento(int idTipoMovimiento) {
     	return movimientoDao.obtenerPorTipoMovimiento(idTipoMovimiento);
 	}
 
+	
+
+	@Override
+	public List<Movimiento> obtenerMovimientosPorCuentaPaginado(int idCuenta, int paginaActual, int registrosPorPagina) {
+		if (idCuenta <= 0 || paginaActual <= 0 || registrosPorPagina <= 0) {
+			System.err.println("ERROR (Negocio): Parámetros de paginación inválidos.");
+			return List.of();
+		}
+		int offset = (paginaActual - 1) * registrosPorPagina;
+		return movimientoDao.obtenerMovimientosPorCuentaPaginado(idCuenta, offset, registrosPorPagina);
+	}
+
+	@Override
+	public int contarMovimientosPorCuenta(int idCuenta) {
+		if (idCuenta <= 0) {
+			System.err.println("ERROR (Negocio): ID de cuenta inválido para contar movimientos.");
+			return 0;
+		}
+		return movimientoDao.contarMovimientosPorCuenta(idCuenta);
+	}
 }

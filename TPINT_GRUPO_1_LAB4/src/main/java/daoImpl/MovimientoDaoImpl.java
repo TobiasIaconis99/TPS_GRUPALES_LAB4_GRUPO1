@@ -29,6 +29,9 @@ public class MovimientoDaoImpl implements MovimientoDao {
     private static final String OBTENER_MOVIMIENTOS_POR_CUENTA = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idCuenta = ? ORDER BY fecha DESC, idMovimiento DESC";
     private static final String OBTENER_MOVIMIENTOS_POR_TIPOMOVIMIENTO = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idTipoMovimiento = ? ORDER BY fecha DESC, idMovimiento DESC";
     private static final String OBTENER_TODOS_LOS_MOVIMIENTOS = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento ORDER BY fecha DESC, idMovimiento DESC";
+    private static final String OBTENER_MOVIMIENTOS_POR_CUENTA_PAGINADO = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idCuenta = ? ORDER BY fecha DESC, idMovimiento DESC LIMIT ? OFFSET ?";
+    private static final String CONTAR_MOVIMIENTOS_POR_CUENTA = "SELECT COUNT(*) FROM Movimiento WHERE idCuenta = ?";
+
     
     @Override
     public boolean agregar(Movimiento movimiento) {
@@ -210,6 +213,66 @@ public class MovimientoDaoImpl implements MovimientoDao {
         }
         return lista;
     }
+    
+    @Override
+    public List<Movimiento> obtenerMovimientosPorCuentaPaginado(int idCuenta, int offset, int limit) {
+        Connection conexion = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Movimiento> lista = new ArrayList<>();
 
+        try {
+            conexion = GestorConexionBD.getConnection();
+            statement = conexion.prepareStatement(OBTENER_MOVIMIENTOS_POR_CUENTA_PAGINADO);
+            statement.setInt(1, idCuenta);
+            statement.setInt(2, limit); // LIMIT: cuántos registros devolver
+            statement.setInt(3, offset); // OFFSET: cuántos registros saltar
+            resultSet = statement.executeQuery();
 
+            while (resultSet.next()) {
+                Movimiento movimiento = new Movimiento();
+                movimiento.setIdMovimiento(resultSet.getInt("idMovimiento"));
+                
+                // Hidratar objetos relacionados: ¡CRÍTICO para evitar NullPointerExceptions!
+                // Asumo que cuentaDao y tipoMovimientoDao están inicializados en el constructor
+                movimiento.setCuenta(cuentaDao.obtenerCuentaPorId(resultSet.getInt("idCuenta")));
+                movimiento.setTipoMovimiento(tipoMovimientoDao.obtenerPorId(resultSet.getInt("idTipoMovimiento")));
+                
+                movimiento.setFecha(resultSet.getDate("fecha"));
+                movimiento.setDetalle(resultSet.getString("detalle"));
+                movimiento.setImporte(resultSet.getBigDecimal("importe"));
+                lista.add(movimiento);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error SQL al obtener movimientos por cuenta paginado: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            GestorConexionBD.closeResources(conexion, statement, resultSet);
+        }
+        return lista;
+    }
+
+    @Override
+    public int contarMovimientosPorCuenta(int idCuenta) {
+        Connection conexion = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int count = 0;
+
+        try {
+            conexion = GestorConexionBD.getConnection();
+            statement = conexion.prepareStatement(CONTAR_MOVIMIENTOS_POR_CUENTA);
+            statement.setInt(1, idCuenta);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                count = resultSet.getInt(1); // El resultado de COUNT(*) es la primera columna
+            }
+        } catch (SQLException e) {
+            System.err.println("Error SQL al contar movimientos por cuenta: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            GestorConexionBD.closeResources(conexion, statement, resultSet);
+        }
+        return count;
+    }
 }
