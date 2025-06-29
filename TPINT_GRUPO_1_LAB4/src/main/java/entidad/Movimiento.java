@@ -1,23 +1,23 @@
 package entidad;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Movimiento {
+	
     private int idMovimiento;
-    private int idCuenta;
-    private int idTipoMovimiento;
-    private LocalDate fecha;
+    private Cuenta cuenta;
+    private TipoMovimiento tipoMovimiento;
+    private Date fecha;
     private String detalle;
     private BigDecimal importe;
 
-    public Movimiento() {
-    }
+    public Movimiento() {}
 
-    public Movimiento(int idMovimiento, int idCuenta, int idTipoMovimiento, LocalDate fecha, String detalle, BigDecimal importe) {
+    public Movimiento(int idMovimiento, Cuenta cuenta, TipoMovimiento tipoMovimiento, Date fecha, String detalle, BigDecimal importe) {
         this.idMovimiento = idMovimiento;
-        this.idCuenta = idCuenta;
-        this.idTipoMovimiento = idTipoMovimiento;
+        this.cuenta = cuenta;
+        this.tipoMovimiento = tipoMovimiento;
         this.fecha = fecha;
         this.detalle = detalle;
         this.importe = importe;
@@ -31,27 +31,35 @@ public class Movimiento {
         this.idMovimiento = idMovimiento;
     }
 
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
+
     public int getIdCuenta() {
-        return idCuenta;
+        return (cuenta != null) ? cuenta.getIdCuenta() : 0;
     }
 
-    public void setIdCuenta(int idCuenta) {
-        this.idCuenta = idCuenta;
+    public TipoMovimiento getTipoMovimiento() {
+        return tipoMovimiento;
     }
 
+    public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
+        this.tipoMovimiento = tipoMovimiento;
+    }
+    
     public int getIdTipoMovimiento() {
-        return idTipoMovimiento;
+        return (tipoMovimiento != null) ? tipoMovimiento.getIdTipoMovimiento() : 0;
     }
 
-    public void setIdTipoMovimiento(int idTipoMovimiento) {
-        this.idTipoMovimiento = idTipoMovimiento;
-    }
-
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
@@ -69,33 +77,5 @@ public class Movimiento {
 
     public void setImporte(BigDecimal importe) {
         this.importe = importe;
-    }
-
-    @Override
-    public String toString() {
-        return "Movimiento [idMovimiento=" + idMovimiento + ", idCuenta=" + idCuenta + ", idTipoMovimiento="
-                + idTipoMovimiento + ", fecha=" + fecha + ", detalle=" + detalle + ", importe=" + importe + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + idMovimiento;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Movimiento other = (Movimiento) obj;
-        if (idMovimiento != other.idMovimiento)
-            return true;
-        return true;
     }
 }

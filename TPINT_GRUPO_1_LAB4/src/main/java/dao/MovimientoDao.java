@@ -1,6 +1,5 @@
 package dao; // Asegúrate de que el paquete sea correcto
 
-import java.time.LocalDate;
 import java.util.List;
 import entidad.Movimiento;
 
@@ -28,15 +27,6 @@ public interface MovimientoDao {
     List<Movimiento> obtenerPorCuenta(int idCuenta);
 
     /**
-     * Obtiene una lista de movimientos dentro de un rango de fechas para una cuenta.
-     * @param idCuenta El ID de la cuenta.
-     * @param fechaInicio La fecha de inicio del rango (inclusive).
-     * @param fechaFin La fecha de fin del rango (inclusive).
-     * @return Una lista de movimientos dentro del rango especificado.
-     */
-    List<Movimiento> obtenerPorCuentaYFechas(int idCuenta, LocalDate fechaInicio, LocalDate fechaFin);
-
-    /**
      * Obtiene una lista de movimientos por tipo de movimiento.
      * @paramidTipoMovimiento El ID del tipo de movimiento.
      * @return Una lista de movimientos del tipo especificado.
@@ -47,5 +37,5 @@ public interface MovimientoDao {
      * Obtiene todos los movimientos registrados en la base de datos.
      * @return Una lista de todos los movimientos.
      */
-    List<Movimiento> listar();
+    List<Movimiento> obtenerTodosLosMovimientos();
 }

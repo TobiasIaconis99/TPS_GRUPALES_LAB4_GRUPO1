@@ -1,29 +1,35 @@
 package daoImpl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.CuentaDao;
 import dao.GestorConexionBD;
 import dao.MovimientoDao;
+import dao.TipoMovimientoDao;
 import entidad.Movimiento;
 
 public class MovimientoDaoImpl implements MovimientoDao {
 
+    private CuentaDao cuentaDao;
+    private TipoMovimientoDao tipoMovimientoDao;
+
+    public MovimientoDaoImpl() {
+        this.cuentaDao = new CuentaDaoImpl(); // Asegúrate de que CuentaDaoImpl exista y sea accesible
+        this.tipoMovimientoDao = new TipoMovimientoDaoImpl(); // Asegúrate de que TipoMovimientoDaoImpl exista y sea accesible
+    }
+
     private static final String AGREGAR_MOVIMIENTO = "INSERT INTO Movimiento (idCuenta, idTipoMovimiento, fecha, detalle, importe) VALUES (?, ?, ?, ?, ?)";
     private static final String OBTENER_MOVIMIENTO_POR_ID = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idMovimiento = ?";
     private static final String OBTENER_MOVIMIENTOS_POR_CUENTA = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idCuenta = ? ORDER BY fecha DESC, idMovimiento DESC";
-    private static final String OBTENER_MOVIMIENTOS_POR_CUENTA_Y_FECHAS = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idCuenta = ? AND fecha BETWEEN ? AND ? ORDER BY fecha DESC, idMovimiento DESC";
     private static final String OBTENER_MOVIMIENTOS_POR_TIPOMOVIMIENTO = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento WHERE idTipoMovimiento = ? ORDER BY fecha DESC, idMovimiento DESC";
-    private static final String LISTAR = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento ORDER BY fecha DESC, idMovimiento DESC";
-
-
+    private static final String OBTENER_TODOS_LOS_MOVIMIENTOS = "SELECT idMovimiento, idCuenta, idTipoMovimiento, fecha, detalle, importe FROM Movimiento ORDER BY fecha DESC, idMovimiento DESC";
+    
     @Override
     public boolean agregar(Movimiento movimiento) {
         Connection conexion = null;
@@ -31,22 +37,27 @@ public class MovimientoDaoImpl implements MovimientoDao {
         boolean exito = false;
         try {
             conexion = GestorConexionBD.getConnection();
-            // Permite obtener las claves generadas automáticamente (AUTO_INCREMENT)
             statement = conexion.prepareStatement(AGREGAR_MOVIMIENTO, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, movimiento.getIdCuenta());
-            statement.setInt(2, movimiento.getIdTipoMovimiento());
-            statement.setDate(3, Date.valueOf(movimiento.getFecha())); // Convertir LocalDate a java.sql.Date
+            
+            // Asegúrate de que los objetos Cuenta y TipoMovimiento no sean null
+            if (movimiento.getCuenta() == null || movimiento.getTipoMovimiento() == null) {
+                System.err.println("ERROR (DAO): Cuenta o TipoMovimiento son nulos en el objeto Movimiento.");
+                return false;
+            }
+            statement.setInt(1, movimiento.getCuenta().getIdCuenta()); // Usar el ID del objeto Cuenta
+            statement.setInt(2, movimiento.getTipoMovimiento().getIdTipoMovimiento()); // Usar el ID del objeto TipoMovimiento
+            
+            statement.setDate(3, new java.sql.Date(movimiento.getFecha().getTime())); // Convertir java.util.Date a java.sql.Date
             statement.setString(4, movimiento.getDetalle());
             statement.setBigDecimal(5, movimiento.getImporte());
 
             int filasAfectadas = statement.executeUpdate();
             exito = filasAfectadas > 0;
 
-            // Si se insertó correctamente, intentamos obtener el ID generado
             if (exito) {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    movimiento.setIdMovimiento(generatedKeys.getInt(1)); // Asignar el ID generado al objeto
+                    movimiento.setIdMovimiento(generatedKeys.getInt(1));
                 }
                 generatedKeys.close();
             }
@@ -54,7 +65,7 @@ public class MovimientoDaoImpl implements MovimientoDao {
             System.err.println("Error SQL al agregar movimiento: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            GestorConexionBD.closeResources(conexion, statement, null); // No hay ResultSet de consulta aquí
+            GestorConexionBD.closeResources(conexion, statement, null);
         }
         return exito;
     }
@@ -75,9 +86,15 @@ public class MovimientoDaoImpl implements MovimientoDao {
             if (resultSet.next()) {
                 movimiento = new Movimiento();
                 movimiento.setIdMovimiento(resultSet.getInt("idMovimiento"));
-                movimiento.setIdCuenta(resultSet.getInt("idCuenta"));
-                movimiento.setIdTipoMovimiento(resultSet.getInt("idTipoMovimiento"));
-                movimiento.setFecha(resultSet.getDate("fecha").toLocalDate()); // Convertir java.sql.Date a LocalDate
+                
+                // CRÍTICO: Hidratar objetos relacionados
+                int idCuenta = resultSet.getInt("idCuenta");
+                movimiento.setCuenta(cuentaDao.obtenerCuentaPorId(idCuenta)); // Obtener objeto Cuenta completo
+                
+                int idTipoMovimiento = resultSet.getInt("idTipoMovimiento");
+                movimiento.setTipoMovimiento(tipoMovimientoDao.obtenerPorId(idTipoMovimiento)); // Obtener objeto TipoMovimiento completo
+
+                movimiento.setFecha(resultSet.getDate("fecha")); // Directamente a java.util.Date
                 movimiento.setDetalle(resultSet.getString("detalle"));
                 movimiento.setImporte(resultSet.getBigDecimal("importe"));
             }
@@ -106,49 +123,18 @@ public class MovimientoDaoImpl implements MovimientoDao {
             while (resultSet.next()) {
                 Movimiento movimiento = new Movimiento();
                 movimiento.setIdMovimiento(resultSet.getInt("idMovimiento"));
-                movimiento.setIdCuenta(resultSet.getInt("idCuenta"));
-                movimiento.setIdTipoMovimiento(resultSet.getInt("idTipoMovimiento"));
-                movimiento.setFecha(resultSet.getDate("fecha").toLocalDate());
+                
+                // CRÍTICO: Hidratar objetos relacionados
+                movimiento.setCuenta(cuentaDao.obtenerCuentaPorId(resultSet.getInt("idCuenta")));
+                movimiento.setTipoMovimiento(tipoMovimientoDao.obtenerPorId(resultSet.getInt("idTipoMovimiento")));
+                
+                movimiento.setFecha(resultSet.getDate("fecha")); // Directamente a java.util.Date
                 movimiento.setDetalle(resultSet.getString("detalle"));
                 movimiento.setImporte(resultSet.getBigDecimal("importe"));
                 lista.add(movimiento);
             }
         } catch (SQLException e) {
             System.err.println("Error SQL al obtener movimientos por cuenta: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            GestorConexionBD.closeResources(conexion, statement, resultSet);
-        }
-        return lista;
-    }
-
-    @Override
-    public List<Movimiento> obtenerPorCuentaYFechas(int idCuenta, LocalDate fechaInicio, LocalDate fechaFin) {
-        Connection conexion = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        List<Movimiento> lista = new ArrayList<>();
-
-        try {
-            conexion = GestorConexionBD.getConnection();
-            statement = conexion.prepareStatement(OBTENER_MOVIMIENTOS_POR_CUENTA_Y_FECHAS);
-            statement.setInt(1, idCuenta);
-            statement.setDate(2, Date.valueOf(fechaInicio));
-            statement.setDate(3, Date.valueOf(fechaFin));
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Movimiento movimiento = new Movimiento();
-                movimiento.setIdMovimiento(resultSet.getInt("idMovimiento"));
-                movimiento.setIdCuenta(resultSet.getInt("idCuenta"));
-                movimiento.setIdTipoMovimiento(resultSet.getInt("idTipoMovimiento"));
-                movimiento.setFecha(resultSet.getDate("fecha").toLocalDate());
-                movimiento.setDetalle(resultSet.getString("detalle"));
-                movimiento.setImporte(resultSet.getBigDecimal("importe"));
-                lista.add(movimiento);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error SQL al obtener movimientos por cuenta y rango de fechas: " + e.getMessage());
             e.printStackTrace();
         } finally {
             GestorConexionBD.closeResources(conexion, statement, resultSet);
@@ -172,9 +158,12 @@ public class MovimientoDaoImpl implements MovimientoDao {
             while (resultSet.next()) {
                 Movimiento movimiento = new Movimiento();
                 movimiento.setIdMovimiento(resultSet.getInt("idMovimiento"));
-                movimiento.setIdCuenta(resultSet.getInt("idCuenta"));
-                movimiento.setIdTipoMovimiento(resultSet.getInt("idTipoMovimiento"));
-                movimiento.setFecha(resultSet.getDate("fecha").toLocalDate());
+                
+                // CRÍTICO: Hidratar objetos relacionados
+                movimiento.setCuenta(cuentaDao.obtenerCuentaPorId(resultSet.getInt("idCuenta")));
+                movimiento.setTipoMovimiento(tipoMovimientoDao.obtenerPorId(resultSet.getInt("idTipoMovimiento")));
+                
+                movimiento.setFecha(resultSet.getDate("fecha")); // Directamente a java.util.Date
                 movimiento.setDetalle(resultSet.getString("detalle"));
                 movimiento.setImporte(resultSet.getBigDecimal("importe"));
                 lista.add(movimiento);
@@ -189,7 +178,7 @@ public class MovimientoDaoImpl implements MovimientoDao {
     }
 
     @Override
-    public List<Movimiento> listar() {
+    public List<Movimiento> obtenerTodosLosMovimientos() {
         Connection conexion = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -197,25 +186,30 @@ public class MovimientoDaoImpl implements MovimientoDao {
 
         try {
             conexion = GestorConexionBD.getConnection();
-            statement = conexion.prepareStatement(LISTAR);
+            statement = conexion.prepareStatement(OBTENER_TODOS_LOS_MOVIMIENTOS);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 Movimiento movimiento = new Movimiento();
                 movimiento.setIdMovimiento(resultSet.getInt("idMovimiento"));
-                movimiento.setIdCuenta(resultSet.getInt("idCuenta"));
-                movimiento.setIdTipoMovimiento(resultSet.getInt("idTipoMovimiento"));
-                movimiento.setFecha(resultSet.getDate("fecha").toLocalDate());
+                
+                // CRÍTICO: Hidratar objetos relacionados
+                movimiento.setCuenta(cuentaDao.obtenerCuentaPorId(resultSet.getInt("idCuenta")));
+                movimiento.setTipoMovimiento(tipoMovimientoDao.obtenerPorId(resultSet.getInt("idTipoMovimiento")));
+                
+                movimiento.setFecha(resultSet.getDate("fecha")); // Directamente a java.util.Date
                 movimiento.setDetalle(resultSet.getString("detalle"));
                 movimiento.setImporte(resultSet.getBigDecimal("importe"));
                 lista.add(movimiento);
             }
         } catch (SQLException e) {
-            System.err.println("Error SQL al obtener todos los movimientos: " + e.getMessage());
+            System.err.println("Error al obtener todos los movimientos: " + e.getMessage());
             e.printStackTrace();
         } finally {
             GestorConexionBD.closeResources(conexion, statement, resultSet);
         }
         return lista;
     }
+
+
 }

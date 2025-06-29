@@ -1,4 +1,7 @@
-/negocio/
-/negocioImpl/
 /dao/
 /daoImpl/
+/entidad/
+/filtros/
+/negocio/
+/negocioImpl/
+/servlet/
