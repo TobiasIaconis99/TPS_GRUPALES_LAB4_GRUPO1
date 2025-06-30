@@ -7,7 +7,7 @@
 <!-- NAVBAR SUPERIOR -->
 <nav class="navbar navbar-expand bg-primary px-3">
     <div class="container-fluid">
-        <a class="navbar-brand text-white" href="InicioAdmin.jsp">
+        <a class="navbar-brand text-white" href="<%= request.getContextPath() %>/ServletInformes">
         	<i class="bi bi-bank me-2 fs-4"></i>
 			BANCO
 		</a>

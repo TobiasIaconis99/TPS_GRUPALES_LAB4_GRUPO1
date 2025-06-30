@@ -2,7 +2,10 @@ package dao; // Asegúrate de que el paquete sea correcto
 
 import java.time.LocalDate;
 import java.util.List;
+
+import entidad.Informes;
 import entidad.Movimiento;
+
 
 public interface MovimientoDao {
 	
@@ -48,4 +51,6 @@ public interface MovimientoDao {
      * @return Una lista de todos los movimientos.
      */
     List<Movimiento> listar();
+    public List<Informes> obtenerEstadisticasPorTipoMovimiento();
+    // para informe A
 }

@@ -12,7 +12,9 @@ import java.util.List;
 
 import dao.GestorConexionBD;
 import dao.MovimientoDao;
+import entidad.Informes;
 import entidad.Movimiento;
+import servlet.ServletInformes;
 
 public class MovimientoDaoImpl implements MovimientoDao {
 
@@ -216,6 +218,38 @@ public class MovimientoDaoImpl implements MovimientoDao {
         } finally {
             GestorConexionBD.closeResources(conexion, statement, resultSet);
         }
+        return lista;
+    }
+    public List<Informes> obtenerEstadisticasPorTipoMovimiento() {
+    	
+        List<Informes> lista = new ArrayList<>();
+        Connection conexion = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total FROM movimiento m JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento GROUP BY tm.nombre";
+
+        try {
+        	conexion = GestorConexionBD.getConnection(); 
+            stmt = conexion.prepareStatement(query);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+            	Informes em = new Informes();
+                em.setTipoMovimiento(rs.getString("tipoMovimiento"));
+                em.setCantidad(rs.getInt("cantidad"));
+                em.setTotal(rs.getBigDecimal("total"));
+                lista.add(em);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+            try { if (conexion != null) conexion.close(); } catch (Exception e) {}
+        }
+
         return lista;
     }
 }

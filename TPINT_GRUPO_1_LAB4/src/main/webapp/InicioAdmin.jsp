@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ page import="java.util.List" %>
+<%@ page import="entidad.Informes" %> 
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -40,6 +42,33 @@
 						</div>
 						<div class="card-body">
 							<canvas id="areaChart" width="100%" height="40"></canvas>
+							<h3>Ingresos A</h3>
+										<table class="table table-bordered">
+				<thead class="table-primary">
+					<tr>
+						<th>Tipo de Movimiento</th>
+						<th>Cantidad</th>
+						<th>Importe Total</th> 
+					
+					</tr>
+				</thead>
+				<tbody>
+					<%
+			List<Informes> lista = (List<Informes>) request.getAttribute("estadisticas");
+			if (lista != null) {
+				for (Informes e : lista) {
+		%>
+					<tr>
+						<td><%= e.getTipoMovimiento() %></td>
+						<td><%= e.getCantidad() %></td>
+						<td>$<%= e.getTotal() %></td>
+					</tr>
+		<%
+				}
+			}
+		%>
+				</tbody>
+			</table>
 						</div>
 					</div>
 				</div>
