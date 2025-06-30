@@ -336,14 +336,38 @@
 	          </div>
 	
 	          <div class="row mb-3">
+	          
 	          	<div class="col-md-6">
 	              <label for="usuario" class="form-label">Usuario</label>
 	              <input type="text" class="form-control" id="usuario" name="usuario" required disabled>
 	            </div>
-	            <div class="col-md-6">
-	              <label for="contrasenia" class="form-label">Clave</label>
-	              <input type="text" class="form-control" id="contrasenia" name="contrasenia" required disabled>
-	            </div>
+	            
+<div class="col-md-6">
+  <label for="contrasenia" class="form-label">Clave</label>
+  <div class="input-group">
+    <input type="password" class="form-control" id="contrasenia" name="contrasenia" required disabled>
+    <span class="input-group-text" style="cursor: pointer; background-color: #e9ecef;" id="toggleClave">
+      <i class="bi bi-eye" id="iconoClave"></i>
+    </span>
+  </div>
+</div>
+
+<!-- Script para mostrar/ocultar la clave -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const inputClave = document.getElementById('contrasenia');
+    const toggleSpan = document.getElementById('toggleClave');
+    const icono = document.getElementById('iconoClave');
+
+    toggleSpan.addEventListener('click', function () {
+      const esPassword = inputClave.type === 'password';
+      inputClave.type = esPassword ? 'text' : 'password';
+      icono.classList.toggle('bi-eye', !esPassword);
+      icono.classList.toggle('bi-eye-slash', esPassword);
+    });
+  });
+</script>
+
 	          </div>
 	
 	        </form>

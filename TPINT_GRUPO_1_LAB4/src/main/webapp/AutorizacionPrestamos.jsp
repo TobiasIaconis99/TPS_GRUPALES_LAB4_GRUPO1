@@ -27,15 +27,15 @@
 					<form method="get" action="" class="row gx-2">
 						<input type="hidden" name="accion" value="listar">
 						<div class="col-md-4">
-							<input type="text" name="busqueda" class="form-control" placeholder="Buscar por..." value="">
+							<input type="text" name="busqueda" class="form-control" placeholder="Buscar por DNI" value="">
 						</div>
 				
 						<div class="col-md-3">
 							<select name="filtro" class="form-select">
-								<option value="">Filtros...</option>
-								<option>Opcion 1</option>
-								<option>Opcion 2</option>
-								<option>Opcion 3</option>
+								<option value="">Todos los estados</option>
+								<option>Pendiente</option>
+								<option>Aprobado</option>
+								<option>Rechazado</option>
 							</select>
 						</div>
 				

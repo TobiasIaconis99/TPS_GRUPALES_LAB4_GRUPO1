@@ -35,7 +35,7 @@
 		    }
 		%>
 		<div class="list-group mb-4">
-		  <a href="#" class="list-group-item list-group-item-action active">Mis cuentas</a>
+		  <a href="#" class="list-group-item list-group-item-action active fw-bold">Mis cuentas</a>
 		
 		  <% if (listaCuentasDelCliente != null && !listaCuentasDelCliente.isEmpty()) { %>
 		      <% for (Cuenta c : listaCuentasDelCliente) { %>
@@ -99,7 +99,7 @@
 			<!-- Tarjeta con imagen de fondo, icono y texto centrado -->
 			<div class="col">
 				<div class="card square-card border-0 shadow bg-light text-white position-relative overflow-hidden">
-					
+					<a href="ConoceMas.jsp" class="stretched-link"></a>
 					<!-- Imagen de fondo -->
 					<img src="<%= request.getContextPath() %>/img/logoBanco.png"
 				     alt="Logo Banco"

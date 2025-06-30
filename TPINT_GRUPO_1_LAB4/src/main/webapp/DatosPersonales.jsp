@@ -164,9 +164,29 @@
 					<input type="text" class="form-control" id="usuario" name="usuario" required value="<%= nombreUsuario %>" disabled>
 				</div>
 				<div class="col-md-6">
-			        <label for="contrasenia" class="form-label">Clave</label>
-			        <input type="text" class="form-control" id="contrasenia" name="contrasenia" required value="<%= clave %>" disabled>
-			    </div>
+				    <label for="contrasenia" class="form-label">Clave</label>
+				    <div class="input-group bg ">
+				        <input type="password" class="form-control" id="contrasenia" name="contrasenia" required value="<%= clave %>" disabled>
+				        <span class="input-group-text" style="cursor: pointer; background-color: #e9ecef;" id="toggleClave">
+				            <i class="bi bi-eye " id="iconoClave"></i>
+				        </span>
+				    </div>
+				</div>
+				<!-- Funcion para que se oculte o se vea la clave -->
+				<script>
+				    document.addEventListener('DOMContentLoaded', function () {
+				        const inputClave = document.getElementById('contrasenia');
+				        const toggleSpan = document.getElementById('toggleClave');
+				        const icono = document.getElementById('iconoClave');
+				
+				        toggleSpan.addEventListener('click', function () {
+				            const esPassword = inputClave.type === 'password';
+				            inputClave.type = esPassword ? 'text' : 'password';
+				            icono.classList.toggle('bi-eye', !esPassword);
+				            icono.classList.toggle('bi-eye-slash', esPassword);
+				        });
+				    });
+				</script>
 			</div>
 
 		</form>
