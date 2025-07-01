@@ -59,26 +59,11 @@
 					</tr>
 				</thead>
 				<tbody>
-				<%
-    List<InformeAdto> lista = (List<InformeAdto>) request.getAttribute("estadisticas");
-    if (lista == null) {
-%>
-    <div class="alert alert-danger">La lista de estadísticas es null 😡</div>
-<%
-    } else if (lista.isEmpty()) {
-%>
-    <div class="alert alert-warning">La lista está vacía 😐</div>
-<%
-    } else { 
-%>
-    <div class="alert alert-success">Se cargaron <%= lista.size() %> registros 😎</div>
-<%
-    }
-%>
+
 					<%
-			List<InformeAdto> lista2 = (List<InformeAdto>) request.getAttribute("estadisticas");
+			List<InformeAdto> lista = (List<InformeAdto>) request.getAttribute("estadisticas");
 			if (lista != null) {
-				for (InformeAdto e : lista2) {
+				for (InformeAdto e : lista) {
 		%>
 		
 					<tr>
@@ -103,25 +88,9 @@
 					</tr>
 				</thead>
 				<tbody>
-				<%
-    List<InformeAdto> listaegresos = (List<InformeAdto>) request.getAttribute("egresos");
-    if (listaegresos == null) {
-%>
-    <div class="alert alert-danger">La lista de estadísticas es null 😡</div>
-<%
-    } else if (lista.isEmpty()) {
-%>
-    <div class="alert alert-warning">La lista está vacía 😐</div>
-<%
-    } else { 
-%>
-    <div class="alert alert-success">Se cargaron <%= lista.size() %> registros 😎</div>
-<%
-    }
-%>
-					<%
-			List<InformeAdto> listaegresos2 = (List<InformeAdto>) request.getAttribute("egresos");
-			if (listaegresos2 != null) {
+			<%
+			List<InformeAdto> listaegresos = (List<InformeAdto>) request.getAttribute("egresos");
+			if (listaegresos != null) {
 				for (InformeAdto e : listaegresos) {
 		%>
 		
