@@ -43,11 +43,14 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" name="nombre" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
+					<div class="col-md-6">
+						<label class="form-label">Nombre</label>
+						<input type="text"
+							name="nombre" class="form-control" required
+							oninput="this.setCustomValidity(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,40}$/.test(this.value) ? '' : 'Ingrese solo letras y entre 2 y 40 caracteres.')">
+					</div>
+
+					<div class="col-md-6">
                         <label class="form-label">Apellido</label>
                         <input type="text" name="apellido" class="form-control" required>
                     </div>

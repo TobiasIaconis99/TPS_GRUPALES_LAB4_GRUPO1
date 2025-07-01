@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Conoce más sobre nosotros</title>
+    <title>Conocé más sobre nosotros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
@@ -15,7 +15,7 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="mb-0">
-                Conoce más sobre nosotros
+                Conocé más sobre nosotros
             </h4>
             <a href="InicioCliente.jsp" class="btn btn-primary">
                 <i class="bi bi-arrow-left-circle me-1"></i> Volver
@@ -67,17 +67,36 @@
                 </div>
 
                 <h5 class="mb-3 text-center">Integrantes del Equipo</h5>
-                <div class="row justify-content-center">
-                    <div class="col-md-8"> <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-center">Manuel Chique</li>
-                            <li class="list-group-item text-center">Nicolás Martín Verón</li>
-                            <li class="list-group-item text-center">Tobías Iaconis</li>
-                            <li class="list-group-item text-center">Nicolás Julián Montesano</li>
-                            <li class="list-group-item text-center">David Elías Ysaguirre</li>
-                            <li class="list-group-item text-center">Pablo Coll Benegas</li>
-                        </ul>
-                    </div>
-                </div>
+					<div class="row justify-content-center">
+					    <div class="col-md-8">
+					        <ul class="list-group list-group-flush">
+					            <li class="list-group-item d-flex align-items-center">
+					                <img src="img/ManuelChique.jpg" alt="Manuel Chique" class="rounded-circle me-3" width="40" height="40">
+					                Manuel Chique
+					            </li>
+					            <li class="list-group-item d-flex align-items-center">
+					                <img src="img/NicolasVeron.jpg" alt="Nicolás Martín Verón" class="rounded-circle me-3" width="40" height="40">
+					                Nicolás Martín Verón
+					            </li>
+					            <li class="list-group-item d-flex align-items-center">
+					                <img src="img/TobiasIaconis.jpg" alt="Tobías Iaconis" class="rounded-circle me-3" width="40" height="40">
+					                Tobías Iaconis
+					            </li>
+					            <li class="list-group-item d-flex align-items-center">
+					                <img src="img/NicolasMontesano.jpg" alt="Nicolás Julián Montesano" class="rounded-circle me-3" width="40" height="40">
+					                Nicolás Julián Montesano
+					            </li>
+					            <li class="list-group-item d-flex align-items-center">
+					                <img src="img/DavidYsaguirre.jpg" alt="David Elías Ysaguirre" class="rounded-circle me-3" width="40" height="40">
+					                David Elías Ysaguirre
+					            </li>
+					            <li class="list-group-item d-flex align-items-center">
+					                <img src="img/PabloBenegas.jpg" alt="Pablo Coll Benegas" class="rounded-circle me-3" width="40" height="40">
+					                Pablo Coll Benegas
+					            </li>
+					        </ul>
+					    </div>
+					</div>
             </div>
         </div>
     </div>
