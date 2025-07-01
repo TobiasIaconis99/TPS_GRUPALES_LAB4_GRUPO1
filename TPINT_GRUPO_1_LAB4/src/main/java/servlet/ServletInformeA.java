@@ -34,8 +34,10 @@ public class ServletInformeA extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		InformesDaoImpl dao = new InformesDaoImpl(); 
 		    List<InformeAdto> estadisticas = dao.obtenerEstadisticasPorTipoMovimiento();
+		    List<InformeAdto> egresos = dao.obtenerEgresos();
 
 		    request.setAttribute("estadisticas", estadisticas);
+		    request.setAttribute("egresos", egresos);
 		    RequestDispatcher rd = request.getRequestDispatcher("InicioAdmin.jsp");
 		    rd.forward(request, response);
 	}

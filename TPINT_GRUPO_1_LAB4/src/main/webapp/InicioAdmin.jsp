@@ -44,11 +44,11 @@
 							<i class="bi bi-bar-chart-line-fill me-2"></i> Informe A
 							<div class="card-body">
 							<canvas id="areaChart" width="100%" height="40"></canvas>
-							<h3>Ingresos A</h3>
 			
 						</div>
 						
 					</div>
+							<h3>Ingresos </h3>
 												<table class="table table-bordered">
 				<thead class="table-primary">
 					<tr>
@@ -69,7 +69,7 @@
 %>
     <div class="alert alert-warning">La lista está vacía 😐</div>
 <%
-    } else {
+    } else { 
 %>
     <div class="alert alert-success">Se cargaron <%= lista.size() %> registros 😎</div>
 <%
@@ -92,6 +92,51 @@
 		%>
 				</tbody>
 			</table>
+									<h3>Egresos </h3>
+												<table class="table table-bordered">
+				<thead class="table-primary">
+					<tr>
+						<th>Tipo de Movimiento</th>
+						<th>Cantidad</th>
+						<th>Importe Total</th> 
+
+					</tr>
+				</thead>
+				<tbody>
+				<%
+    List<InformeAdto> listaegresos = (List<InformeAdto>) request.getAttribute("egresos");
+    if (listaegresos == null) {
+%>
+    <div class="alert alert-danger">La lista de estadísticas es null 😡</div>
+<%
+    } else if (lista.isEmpty()) {
+%>
+    <div class="alert alert-warning">La lista está vacía 😐</div>
+<%
+    } else { 
+%>
+    <div class="alert alert-success">Se cargaron <%= lista.size() %> registros 😎</div>
+<%
+    }
+%>
+					<%
+			List<InformeAdto> listaegresos2 = (List<InformeAdto>) request.getAttribute("egresos");
+			if (listaegresos2 != null) {
+				for (InformeAdto e : listaegresos) {
+		%>
+		
+					<tr>
+						<td><%= e.getTipoMovimiento() %></td>
+						<td><%= e.getCantidad() %></td>
+						<td>$<%= e.getTotal() %></td>
+					</tr>
+		<%
+				}
+			}
+		%>
+				</tbody>
+			</table>
+				
 				
 						</div>
 						<div class="card-body">

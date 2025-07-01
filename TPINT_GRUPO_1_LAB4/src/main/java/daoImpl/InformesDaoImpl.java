@@ -20,7 +20,7 @@ public class InformesDaoImpl implements Informesdao{
 	        PreparedStatement stmt = null;
 	        ResultSet rs = null;
 
-	        String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total FROM movimiento m JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento GROUP BY tm.nombre";
+	        String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total FROM movimiento m JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento WHERE tm.idTipoMovimiento IN (1, 2, 4) GROUP BY tm.nombre;";
 
 	        try {
 	        	conexion = GestorConexionBD.getConnection(); 
@@ -45,6 +45,42 @@ public class InformesDaoImpl implements Informesdao{
 
 	        return lista;
 	    }
+
+	public List<InformeAdto> obtenerEgresos(){
+		
+        List<InformeAdto> lista = new ArrayList<>();
+        Connection conexion = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total FROM movimiento m JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento WHERE tm.idTipoMovimiento IN (3,5) GROUP BY tm.nombre;";
+
+        try {
+        	conexion = GestorConexionBD.getConnection(); 
+            stmt = conexion.prepareStatement(query);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+            	InformeAdto em = new InformeAdto();
+                em.setTipoMovimiento(rs.getString("tipoMovimiento"));
+                em.setCantidad(rs.getInt("cantidad"));
+                em.setTotal(rs.getBigDecimal("total"));
+                lista.add(em);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+            try { if (conexion != null) conexion.close(); } catch (Exception e) {}
+        }
+
+        return lista;
+	}
+	
+	
+	
 	}
 
 
