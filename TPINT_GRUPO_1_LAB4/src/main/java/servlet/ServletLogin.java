@@ -43,7 +43,7 @@ public class ServletLogin extends HttpServlet {
 
 			if (usu.getTipoUsuario().equals("admin")) { // Si es tipo admin
 				// 2. Redireccion al panel de admin
-				response.sendRedirect(request.getContextPath() + "/InicioAdmin.jsp");
+				response.sendRedirect(request.getContextPath() + "/ServletInformeA");
 			} else { // Si no es tipo admin, es cliente
 				// Si el usuario es un cliente, obtenemos sus datos completos
 				ClienteNegocio clienteNegocio = new ClienteNegocioImpl();

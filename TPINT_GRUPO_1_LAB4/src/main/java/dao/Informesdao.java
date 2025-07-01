@@ -1,5 +1,12 @@
 package dao;
 
-public class Informesdao {
 
+import java.util.List;
+
+import InformesDTO.InformeAdto;
+
+public interface Informesdao {
+
+	public List<InformeAdto> obtenerEstadisticasPorTipoMovimiento();
+	
 }

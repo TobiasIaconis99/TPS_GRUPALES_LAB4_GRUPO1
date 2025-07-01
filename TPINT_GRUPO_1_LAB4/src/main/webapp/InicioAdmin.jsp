@@ -1,5 +1,10 @@
+<%@page import="java.lang.ProcessHandle.Info"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+		<%@ page import="java.util.List" %>
+<%@ page import="InformesDTO.InformeAdto" %> 
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -37,14 +42,64 @@
 					<div class="card mb-4">
 						<div class="card-header bg-primary text-white">
 							<i class="bi bi-bar-chart-line-fill me-2"></i> Informe A
+							<div class="card-body">
+							<canvas id="areaChart" width="100%" height="40"></canvas>
+							<h3>Ingresos A</h3>
+			
+						</div>
+						
+					</div>
+												<table class="table table-bordered">
+				<thead class="table-primary">
+					<tr>
+						<th>Tipo de Movimiento</th>
+						<th>Cantidad</th>
+						<th>Importe Total</th> 
+
+					</tr>
+				</thead>
+				<tbody>
+				<%
+    List<InformeAdto> lista = (List<InformeAdto>) request.getAttribute("estadisticas");
+    if (lista == null) {
+%>
+    <div class="alert alert-danger">La lista de estadísticas es null 😡</div>
+<%
+    } else if (lista.isEmpty()) {
+%>
+    <div class="alert alert-warning">La lista está vacía 😐</div>
+<%
+    } else {
+%>
+    <div class="alert alert-success">Se cargaron <%= lista.size() %> registros 😎</div>
+<%
+    }
+%>
+					<%
+			List<InformeAdto> lista2 = (List<InformeAdto>) request.getAttribute("estadisticas");
+			if (lista != null) {
+				for (InformeAdto e : lista2) {
+		%>
+		
+					<tr>
+						<td><%= e.getTipoMovimiento() %></td>
+						<td><%= e.getCantidad() %></td>
+						<td>$<%= e.getTotal() %></td>
+					</tr>
+		<%
+				}
+			}
+		%>
+				</tbody>
+			</table>
+				
 						</div>
 						<div class="card-body">
 							<canvas id="areaChart" width="100%" height="40"></canvas>
+							
 						</div>
 					</div>
-				</div>
-
-				<!-- Tarjeta de Informe B -->
+							<!-- Tarjeta de Informe B -->
 				<div class="col-md-6">
 					<div class="card mb-4">
 						<div class="card-header bg-primary  text-white">
@@ -57,6 +112,9 @@
 				</div>
 			</div>
 		</div>
-	</div>
+				</div>
+
+		
+
 </body>
 </html>

@@ -7,7 +7,7 @@
 <nav class="navbar navbar-expand-lg bg-primary px-3">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-4">
-            <a class="navbar-brand text-white" href="InicioCliente.jsp">
+            <a class="navbar-brand text-white" href="ServletInformeA">
                 <i class="bi bi-bank me-2 fs-4"></i>
                 BANCO
             </a>
