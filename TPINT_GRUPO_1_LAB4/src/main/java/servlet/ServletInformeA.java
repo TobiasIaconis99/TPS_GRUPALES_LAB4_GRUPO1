@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -28,23 +29,31 @@ public class ServletInformeA extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		InformesDaoImpl dao = new InformesDaoImpl(); 
-		    List<InformeAdto> estadisticas = dao.obtenerEstadisticasPorTipoMovimiento();
-		    List<InformeAdto> egresos = dao.obtenerEgresos();
+
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		    InformesDaoImpl dao = new InformesDaoImpl();
+
+		    // Obtener parámetros del filtro
+		    String mesParam = request.getParameter("mes");
+		    String anioParam = request.getParameter("anio");
+
+		    int mes = (mesParam != null) ? Integer.parseInt(mesParam) : LocalDate.now().getMonthValue();
+		    int anio = (anioParam != null) ? Integer.parseInt(anioParam) : LocalDate.now().getYear();
+
+		    List<InformeAdto> estadisticas = dao.obtenerIngresosPorMesYAnio(mes, anio);
+		    List<InformeAdto> egresos = dao.obtenerEgresosPorMesYAnio(mes, anio);
 
 		    request.setAttribute("estadisticas", estadisticas);
 		    request.setAttribute("egresos", egresos);
+		    request.setAttribute("mesSeleccionado", mes);
+		    request.setAttribute("anioSeleccionado", anio);
+
 		    RequestDispatcher rd = request.getRequestDispatcher("InicioAdmin.jsp");
 		    rd.forward(request, response);
-	}
+		}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);

@@ -50,6 +50,24 @@
 						</div>
 						
 					</div>
+					<form method="get" action="ServletInformeA" class="row g-3 mb-4">
+    <div class="col-auto">
+        <label for="mes" class="form-label">Mes:</label>
+        <select name="mes" id="mes" class="form-select">
+            <% for (int i = 1; i <= 12; i++) { %>
+                <option value="<%= i %>"><%= i %></option>
+            <% } %>
+        </select>
+    </div>
+    <div class="col-auto">
+        <label for="anio" class="form-label">Año:</label>
+        <input type="number" name="anio" id="anio" class="form-control" value="2025" min="2000" max="2100">
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </div>
+</form>
+					
 							<h3>Ingresos </h3>
 												<table class="table table-bordered">
 				<thead class="table-primary">
