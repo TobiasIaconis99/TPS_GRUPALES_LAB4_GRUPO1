@@ -2,6 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 		<%@ page import="java.util.List" %>
+		<%@ page import="java.math.BigDecimal" %>
+		
 <%@ page import="InformesDTO.InformeAdto" %> 
 
 
@@ -77,6 +79,17 @@
 		%>
 				</tbody>
 			</table>
+			<%
+    BigDecimal totalIngresos = BigDecimal.ZERO;
+    if (lista != null) {
+        for (InformeAdto e : lista) {
+            totalIngresos = totalIngresos.add(e.getTotal());
+        }
+    }
+%>
+<p><strong>Total Ingresos:</strong> $<%= totalIngresos %></p>
+			
+			
 									<h3>Egresos </h3>
 												<table class="table table-bordered">
 				<thead class="table-primary">
@@ -105,7 +118,28 @@
 		%>
 				</tbody>
 			</table>
+			<%
+    BigDecimal totalEgresos = BigDecimal.ZERO;
+    if (listaegresos != null) {
+        for (InformeAdto e : listaegresos) {
+            totalEgresos = totalEgresos.add(e.getTotal());
+        }
+    }
+%>
+<p><strong>Total Egresos:</strong> $<%= totalEgresos %></p>
+
+<%
+    BigDecimal balance = totalIngresos.subtract(totalEgresos);
+%>
+<div class="alert alert-info mt-4">
+    <strong>Balance (Ingresos - Egresos):</strong> $<%= balance %>
+</div>
+			
 				
+				<%
+    String claseBalance = balance.compareTo(BigDecimal.ZERO) >= 0 ? "alert-success" : "alert-danger";
+%>
+
 				
 						</div>
 						<div class="card-body">
