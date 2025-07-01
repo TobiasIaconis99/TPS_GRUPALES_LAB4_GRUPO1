@@ -78,6 +78,68 @@ public class InformesDaoImpl implements Informesdao{
 
         return lista;
 	}
+	@Override
+	public List<InformeAdto> obtenerIngresosPorMesYAnio(int mes, int anio) {
+	    List<InformeAdto> lista = new ArrayList<>();
+	    String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total " +
+	                   "FROM movimiento m " +
+	                   "JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento " +
+	                   "WHERE tm.idTipoMovimiento IN (1, 2, 4) " +
+	                   "AND MONTH(m.fecha) = ? AND YEAR(m.fecha) = ? " +
+	                   "GROUP BY tm.nombre";
+
+	    try (Connection conexion = GestorConexionBD.getConnection();
+	         PreparedStatement stmt = conexion.prepareStatement(query)) {
+
+	        stmt.setInt(1, mes);
+	        stmt.setInt(2, anio);
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            InformeAdto em = new InformeAdto();
+	            em.setTipoMovimiento(rs.getString("tipoMovimiento"));
+	            em.setCantidad(rs.getInt("cantidad"));
+	            em.setTotal(rs.getBigDecimal("total"));
+	            lista.add(em);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return lista;
+	}
+	public List<InformeAdto> obtenerEgresosPorMesYAnio(int mes, int anio) {
+	    List<InformeAdto> lista = new ArrayList<>();
+	    String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total " +
+	                   "FROM movimiento m " +
+	                   "JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento " +
+	                   "WHERE tm.idTipoMovimiento IN (3,5) " +
+	                   "AND MONTH(m.fecha) = ? AND YEAR(m.fecha) = ? " +
+	                   "GROUP BY tm.nombre";
+
+	    try (Connection conexion = GestorConexionBD.getConnection();
+	         PreparedStatement stmt = conexion.prepareStatement(query)) {
+
+	        stmt.setInt(1, mes);
+	        stmt.setInt(2, anio);
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            InformeAdto em = new InformeAdto();
+	            em.setTipoMovimiento(rs.getString("tipoMovimiento"));
+	            em.setCantidad(rs.getInt("cantidad"));
+	            em.setTotal(rs.getBigDecimal("total"));
+	            lista.add(em);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return lista;
+	}
+
 	
 	
 	
