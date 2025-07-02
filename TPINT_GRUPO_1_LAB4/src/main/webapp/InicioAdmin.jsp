@@ -211,6 +211,20 @@
 						<div class="card-body">
 							<h5 class="card-title mb-3">Contenido de Informe B</h5>
 							<p class="text-muted">Aquí puedes añadir el contenido específico para el Informe B, sin gráficos.</p>
+																				<table class="table table-bordered">
+				<thead class="table-primary">
+					<tr>
+						<th>Nombre Cliente</th>
+						<th>DNI</th>
+						<th>Cantidad de cuentas</th> 
+						<th>Saldo Total</th> 
+
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
 						</div>
 					</div>
 				</div>
