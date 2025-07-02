@@ -4,15 +4,12 @@
     String nombreUsuario = (usuario != null) ? usuario.getNombreUsuario() : "Invitado";
 %>
 
-<!-- NAVBAR SUPERIOR -->
-<nav class="navbar navbar-expand bg-primary px-3">
+<nav class="navbar navbar-expand bg-primary px-3" style="position: sticky; top: 0; z-index: 1040;">
     <div class="container-fluid">
-   
-     <a class="navbar-brand text-white" href="<%= request.getContextPath() %>/ServletInformeA">
-    <i class="bi bi-bank me-2 fs-4"></i>
-    BANCO
-</a>
-
+	    <a class="navbar-brand text-white" href="<%= request.getContextPath() %>/ServletInformeA">
+		    <i class="bi bi-bank me-2 fs-4"></i>
+		    BANCO
+		</a>
         <div class="d-flex align-items-center gap-3">
             <a href="#" class="text-white d-flex align-items-center text-decoration-none">
                 <span class="me-2"><%= nombreUsuario %></span>

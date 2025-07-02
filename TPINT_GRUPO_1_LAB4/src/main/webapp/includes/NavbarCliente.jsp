@@ -4,10 +4,10 @@
     String nombreUsuario = (usuario != null) ? usuario.getNombreUsuario() : "Invitado";
 %>
 
-<nav class="navbar navbar-expand-lg bg-primary px-3">
+<nav class="navbar navbar-expand-lg bg-primary px-3" style="position: sticky; top: 0; z-index: 1040;">
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-4">
-            <a class="navbar-brand text-white" href="ServletInformeA">
+            <a class="navbar-brand text-white" href="InicioCliente.jsp">
                 <i class="bi bi-bank me-2 fs-4"></i>
                 BANCO
             </a>
