@@ -15,31 +15,34 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	private Connection getConnection() throws SQLException {
 		return GestorConexionBD.getConnection();
 	}
+	
+	private static final String INSERT_PRESTAMO = 
+		    "INSERT INTO Prestamos (idCliente, idCuenta, fechaAlta, montoSolicitado, plazoMeses, cantidadCuotas, montoCuota, estado) " +
+		    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 	@Override
 	public boolean agregar(Prestamo p) {
+	    boolean agregado = false;
 
-//        boolean agregado = false;
-//
-//        try (Connection conn = getConnection();
-//             PreparedStatement ps = conn.prepareStatement(obtenerCuentasPorClienteId)) {
-//
-//            ps.setInt(1, p.getIdCliente());
-//            ps.setInt(2, p.getIdCuenta());
-//            ps.setString(3, p.getFechaAlta());
-//            ps.setBigDecimal(4, p.getMontoSolicitado());
-//            ps.setInt(5, p.getPlazoMeses());
-//            ps.setInt(6, p.getCantidadCuotas());
-//            ps.setBigDecimal(7, p.getMontoCuota());
-//            ps.setInt(8, p.getEstado());
-//
-//            agregado = ps.executeUpdate() > 0;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-        return false;
+	    try (Connection conn = getConnection();
+	         PreparedStatement ps = conn.prepareStatement(INSERT_PRESTAMO)) {
+
+	        ps.setInt(1, p.getIdCliente());
+	        ps.setInt(2, p.getIdCuenta());
+	        ps.setString(3, p.getFechaAlta());
+	        ps.setBigDecimal(4, p.getMontoSolicitado());
+	        ps.setInt(5, p.getPlazoMeses());
+	        ps.setInt(6, p.getCantidadCuotas());
+	        ps.setBigDecimal(7, p.getMontoCuota());
+	        ps.setInt(8, p.getEstado());
+
+	        agregado = ps.executeUpdate() > 0;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return agregado;
 	}
 
 	@Override

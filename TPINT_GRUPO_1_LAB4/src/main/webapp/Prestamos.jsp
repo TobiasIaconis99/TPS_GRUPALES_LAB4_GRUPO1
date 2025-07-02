@@ -94,13 +94,16 @@
 							%>
 							<option value="<%=c.getIdCuenta()%>">
 								<%=c.getTipoCuenta().getNombreTipoCuenta()%> -
-								<%=c.getNumeroCuenta()%>
+								<%=c.getNumeroCuenta()%> - $<%=c.getSaldo()%>
 							</option>
+							<input type="hidden" id="hiddenIdCuenta"
+							value="<%=c.getIdCuenta()%>" name="idCuentaName">
 							<%
 							}
 							%>
 						</select>
 					</div>
+
 
 
 
