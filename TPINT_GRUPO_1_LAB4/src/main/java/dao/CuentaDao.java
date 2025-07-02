@@ -1,7 +1,10 @@
 package dao;
 
 import entidad.Cuenta;
+
+import java.math.BigDecimal;
 import java.util.List;
+
 
 public interface CuentaDao {
     boolean agregar(Cuenta cuenta);
@@ -21,4 +24,6 @@ public interface CuentaDao {
     
     Cuenta obtenerCuentaPorId(int id);
     Cuenta obtenerCuentaPorNumero(String numeroCuenta);
+    Cuenta obtenerCuentaPorCBU(String cbu);
+    public boolean modificarSaldo(int idCuenta, BigDecimal monto, boolean sumar);
 }

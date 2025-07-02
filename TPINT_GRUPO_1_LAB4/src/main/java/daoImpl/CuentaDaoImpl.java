@@ -7,6 +7,7 @@ import entidad.Cuenta;
 import entidad.Cliente;
 import entidad.TipoCuenta;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -460,5 +461,75 @@ public class CuentaDaoImpl implements CuentaDao {
             closeResources(conexion, statement, resultSet);
         }
         return lista;
+    }
+    @Override
+    public Cuenta obtenerCuentaPorCBU(String cbu) {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Connection conexion = null;
+        Cuenta cuenta = null;
+
+        try {
+            conexion = getConnection();
+            statement = conexion.prepareStatement("SELECT idCuenta, idCliente, idTipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado FROM Cuenta WHERE cbu = ? AND estado = 1");
+            statement.setString(1, cbu);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                cuenta = new Cuenta();
+                cuenta.setIdCuenta(resultSet.getInt("idCuenta"));
+                cuenta.setNumeroCuenta(resultSet.getString("numeroCuenta"));
+                cuenta.setCbu(resultSet.getString("cbu"));
+                cuenta.setSaldo(resultSet.getBigDecimal("saldo"));
+                cuenta.setFechaCreacion(resultSet.getDate("fechaCreacion"));
+                cuenta.setEstado(resultSet.getBoolean("estado"));
+
+                int idCliente = resultSet.getInt("idCliente");
+                cuenta.setCliente(clienteDao.obtenerPorId(idCliente));
+
+                int idTipoCuenta = resultSet.getInt("idTipoCuenta");
+                cuenta.setTipoCuenta(tipoCuentaDao.obtenerTipoCuentaPorId(idTipoCuenta));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al obtener cuenta por CBU: " + e.getMessage());
+        } finally {
+            closeResources(conexion, statement, resultSet);
+        }
+
+        return cuenta;
+    }
+    @Override
+    public boolean modificarSaldo(int idCuenta, BigDecimal monto, boolean sumar) {
+        PreparedStatement statement = null;
+        Connection conexion = null;
+        boolean exito = false;
+        //idCuenta: ID de la cuenta a modificar.
+
+        //monto: el valor a sumar o restar.
+
+        //sumar: true para sumar, false para restar.
+        final String SQL = "UPDATE Cuenta SET saldo = saldo + ? WHERE idCuenta = ? AND estado = 1";
+
+        try {
+            conexion = getConnection();
+            statement = conexion.prepareStatement(SQL);
+
+            // Si es resta, convertimos el monto a negativo
+            BigDecimal montoAjustado = sumar ? monto : monto.negate();
+            statement.setBigDecimal(1, montoAjustado);
+            statement.setInt(2, idCuenta);
+
+            exito = statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al modificar el saldo de la cuenta: " + e.getMessage());
+        } finally {
+            closeResources(conexion, statement, null);
+        }
+
+        return exito;
     }
 }

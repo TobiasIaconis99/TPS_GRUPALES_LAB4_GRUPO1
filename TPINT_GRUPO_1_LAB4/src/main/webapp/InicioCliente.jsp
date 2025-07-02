@@ -66,7 +66,7 @@
 			<!-- Transferencias -->
 			<div class="col">
 				<div class="card square-card border-0 shadow bg-primary text-white position-relative">
-					<a href="Transferencias.jsp" class="stretched-link"></a>
+						<a href="Transferencias.jsp" class="stretched-link"></a>
 					<div class="card-body d-flex flex-column justify-content-center align-items-center">
 						<i class="bi bi-arrow-left-right fs-1 mb-3"></i>
 						<h5 class="fw-bold fs-5 mb-0">Transferencias</h5>
