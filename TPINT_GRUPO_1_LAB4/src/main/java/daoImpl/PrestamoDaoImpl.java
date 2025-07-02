@@ -2,7 +2,9 @@ package daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.GestorConexionBD;
@@ -44,12 +46,42 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	    return agregado;
 	}
-
+	
 	@Override
 	public List<Prestamo> listar() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<Prestamo> prestamos = new ArrayList<>();
+
+	    String sql = "SELECT idPrestamo, idCliente, idCuenta, fechaAlta, montoSolicitado, plazoMeses, cantidadCuotas, montoCuota, estado FROM Prestamos" +
+	             " WHERE estado = 1";
+
+
+	    try (Connection conn = getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            Prestamo p = new Prestamo();
+
+	            p.setIdPrestamo(rs.getInt("idPrestamo"));
+	            p.setIdCliente(rs.getInt("idCliente"));
+	            p.setIdCuenta(rs.getInt("idCuenta"));
+	            p.setFechaAlta(rs.getString("fechaAlta"));
+	            p.setMontoSolicitado(rs.getBigDecimal("montoSolicitado"));
+	            p.setPlazoMeses(rs.getInt("plazoMeses"));
+	            p.setCantidadCuotas(rs.getInt("cantidadCuotas"));
+	            p.setMontoCuota(rs.getBigDecimal("montoCuota"));
+	            p.setEstado(rs.getInt("estado"));
+
+	            prestamos.add(p);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return prestamos;
 	}
+
 
 	@Override
 	public boolean modificar(Prestamo u) {
