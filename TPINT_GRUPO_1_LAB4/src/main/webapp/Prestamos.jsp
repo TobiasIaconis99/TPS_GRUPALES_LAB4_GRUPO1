@@ -31,7 +31,8 @@
 				Solicitar nuevo préstamo
 			</div>
 			<div class="card-body">
-				<form id="formNuevoPrestamo" method="post" action="SolicitarPrestamoServlet">
+				<fo
+				rm id="formNuevoPrestamo" method="post" action="SolicitarPrestamoServlet">
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<label for="montoSolicitado" class="form-label">Importe solicitado</label>
