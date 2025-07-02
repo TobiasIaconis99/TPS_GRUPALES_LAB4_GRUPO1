@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import InformesDTO.InformeAdto;
+import InformesDTO.InformeBdto;
 import dao.GestorConexionBD;
+
 import dao.Informesdao;
 
 public class InformesDaoImpl implements Informesdao{
@@ -140,7 +142,36 @@ public class InformesDaoImpl implements Informesdao{
 	    return lista;
 	}
 
-	
+	@Override
+	public List<InformeBdto> listarClientesmax(int mes, int anio) {
+	    List<InformeBdto> lista = new ArrayList<>();
+	    
+	    String query= "SELECT    c.nombre AS nombreCliente,    c.dni as DNI,    COUNT(ct.idCuenta) AS cantidadCuentas, "
+	    		+ "   SUM(ct.saldo) AS saldoTotal FROM     cliente c JOIN    cuenta ct ON c.id = ct.idCliente WHERE "
+	    		+ "   ct.estado = 1 AND MONTH(ct.fechaCreacion) = ? AND YEAR(ct.fechaCreacion) = ? GROUP BY     c.id, c.nombre, c.dni ORDER BY     saldoTotal DESC LIMIT 5;";
+	    try (Connection conexion = GestorConexionBD.getConnection();
+		         PreparedStatement stmt = conexion.prepareStatement(query)) {
+
+		        stmt.setInt(1, mes);
+		        stmt.setInt(2, anio);
+		        ResultSet rs = stmt.executeQuery();
+
+		        while (rs.next()) {
+		            InformeBdto em = new InformeBdto();
+		            em.setNombreCliente(rs.getString("nombreCliente"));
+		            em.setDNI(rs.getInt("DNI"));
+		            em.setCantCuentas(rs.getInt("cantidadCuentas"));
+		            em.setSaldoTotal(rs.getBigDecimal("saldoTotal"));
+		            lista.add(em);
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+	    
+	    return lista;
+	}
+
 	
 	
 	}

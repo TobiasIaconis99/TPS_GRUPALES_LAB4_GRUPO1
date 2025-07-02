@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import InformesDTO.InformeAdto;
+import InformesDTO.InformeBdto;
 import daoImpl.InformesDaoImpl;
 
 /**
@@ -39,14 +40,21 @@ public class ServletInformeA extends HttpServlet {
 
 		    int mes = (mesParam != null) ? Integer.parseInt(mesParam) : LocalDate.now().getMonthValue();
 		    int anio = (anioParam != null) ? Integer.parseInt(anioParam) : LocalDate.now().getYear();
-
+		    // informe a
 		    List<InformeAdto> estadisticas = dao.obtenerIngresosPorMesYAnio(mes, anio);
 		    List<InformeAdto> egresos = dao.obtenerEgresosPorMesYAnio(mes, anio);
+		    //informe b
+		    List<InformeBdto> clientes= dao.listarClientesmax(mes, anio);
 
+		    // request informe a
 		    request.setAttribute("estadisticas", estadisticas);
 		    request.setAttribute("egresos", egresos);
 		    request.setAttribute("mesSeleccionado", mes);
 		    request.setAttribute("anioSeleccionado", anio);
+		    // request informe b
+		    request.setAttribute("clientes", clientes);
+		    
+		    
 
 		    RequestDispatcher rd = request.getRequestDispatcher("InicioAdmin.jsp");
 		    rd.forward(request, response);
