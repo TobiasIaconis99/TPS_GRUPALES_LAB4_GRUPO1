@@ -56,7 +56,15 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String SELECT_LAST_NUMERO_CUENTA = "SELECT MAX(numeroCuenta) FROM Cuenta";
     private static final String SELECT_LAST_CBU = "SELECT MAX(cbu) FROM Cuenta";
     private static final String COUNT_ACTIVE_CUENTAS_BY_CLIENTE_ID = "SELECT COUNT(*) FROM Cuenta WHERE estado = 1 AND idCliente = ?";
+    private static final String obtenerCuentasPorClienteId = 
+    	    "SELECT c.idCuenta, c.numeroCuenta, c.cbu, c.saldo, c.fechaCreacion, c.estado AS estadoCuenta, " +
+    	    "t.idTipoCuenta, t.nombreTipoCuenta, t.estado AS estadoTipoCuenta " +
+    	    "FROM Cuenta c " +
+    	    "INNER JOIN TipoCuenta t ON c.idTipoCuenta = t.idTipoCuenta " +
+    	    "WHERE c.idCliente = ?";
 
+
+    
     @Override
     public boolean agregar(Cuenta cuenta) {
         PreparedStatement statement = null;
@@ -461,4 +469,49 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         return lista;
     }
+
+
+    
+    @Override
+    public List<Cuenta> obtenerCuentaPorClienteId(int id) {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Connection conexion = null;
+        List<Cuenta> lista = new ArrayList<>();
+
+        try {
+            conexion = getConnection();
+            statement = conexion.prepareStatement(obtenerCuentasPorClienteId);
+            statement.setInt(1, id); 
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Cuenta cuenta = new Cuenta();
+                cuenta.setIdCuenta(resultSet.getInt("idCuenta"));
+                cuenta.setNumeroCuenta(resultSet.getString("numeroCuenta"));
+                cuenta.setCbu(resultSet.getString("cbu"));
+                cuenta.setSaldo(resultSet.getBigDecimal("saldo"));
+                cuenta.setFechaCreacion(resultSet.getDate("fechaCreacion"));
+                cuenta.setEstado(resultSet.getBoolean("estadoCuenta")); // ✅ alias en la consulta
+
+                TipoCuenta tipoCuenta = new TipoCuenta();
+                tipoCuenta.setIdTipoCuenta(resultSet.getInt("idTipoCuenta"));
+                tipoCuenta.setNombreTipoCuenta(resultSet.getString("nombreTipoCuenta")); // ✅ valor correcto
+                tipoCuenta.setEstado(resultSet.getBoolean("estadoTipoCuenta")); // ✅ alias en la consulta
+
+                cuenta.setTipoCuenta(tipoCuenta);
+
+                lista.add(cuenta);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al obtener cuentas del cliente ID " + id + ": " + e.getMessage());
+        } finally {
+            closeResources(conexion, statement, resultSet);
+        }
+
+        return lista;
+    }
+
 }

@@ -1,3 +1,6 @@
+<%@page import="negocioImpl.CuentaNegocioImpl"%>
+<%@page import="negocio.CuentaNegocio"%>
+<%@page import="dao.CuentaDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="entidad.Prestamo"%>
@@ -5,6 +8,9 @@
 <%@page import="negocio.TipoCuentaNegocio"%>
 <%@page import="java.util.List"%>
 <%@page import="negocioImpl.TipoCuentaNegocioImpl"%>
+<%@page import="entidad.Cuenta"%>
+<%@page import="entidad.Cliente"%>
+
 
 
 <!DOCTYPE html>
@@ -43,7 +49,7 @@
 				préstamo</div>
 			<div class="card-body">
 				<form id="formNuevoPrestamo" method="post"
-					action="SolicitarPrestamoServlet">
+					action="ServletSolicitarPrestamo">
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<label for="montoSolicitado" class="form-label">Importe
@@ -65,26 +71,38 @@
 					</div>
 
 
-					<%
-					TipoCuentaNegocio tpcNegocio = new TipoCuentaNegocioImpl();
-					List<TipoCuenta> listTipoCuenta = tpcNegocio.listar();
-					%>
+
 					<div class="mb-3">
 						<label for="cuentaDestino" class="form-label">Cuenta para
-							depósito</label> <select class="form-select" id="cuentaDestino"
+							depósito</label>
+						<%
+						Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
+						int idCliente = -1;
+						if (cliente != null) {
+							idCliente = cliente.getId();
+						}
+
+						CuentaNegocio cNegocio = new CuentaNegocioImpl();
+						List<Cuenta> cuentas = cNegocio.obtenerCuentaPorClienteId(idCliente);
+						%>
+
+						<select class="form-select" id="cuentaDestino"
 							name="cuentaDestino" required>
-							<option value="">-- Seleccionar --</option>
+							<option value="">Seleccione una cuenta...</option>
 							<%
-							for (TipoCuenta tpc : listTipoCuenta) {
-								String value = tpc.getCodigo(); // Ej: CA-123456
-								String label = tpc.getNombre() + " - " + value; // Ej: Caja de Ahorro - CA-123456
+							for (Cuenta c : cuentas) {
 							%>
-							<option value="<%=value%>"><%=label%></option>
+							<option value="<%=c.getIdCuenta()%>">
+								<%=c.getTipoCuenta().getNombreTipoCuenta()%> -
+								<%=c.getNumeroCuenta()%>
+							</option>
 							<%
 							}
 							%>
 						</select>
 					</div>
+
+
 
 
 					<div class="row">
