@@ -11,6 +11,7 @@ public interface MovimientoDao {
      * @return true si el movimiento se agregó exitosamente, false en caso contrario.
      */
     boolean agregar(Movimiento movimiento);
+    int agregarYDevolverId(Movimiento movimiento);
 
     /**
      * Obtiene un movimiento por su ID único.

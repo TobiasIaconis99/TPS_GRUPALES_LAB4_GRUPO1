@@ -275,4 +275,46 @@ public class MovimientoDaoImpl implements MovimientoDao {
         }
         return count;
     }
+    
+    @Override
+    public int agregarYDevolverId(Movimiento movimiento) {
+        Connection conexion = null;
+        PreparedStatement statement = null;
+        ResultSet generatedKeys = null;
+        int idGenerado = -1;
+
+        try {
+            conexion = GestorConexionBD.getConnection();
+            statement = conexion.prepareStatement(AGREGAR_MOVIMIENTO, Statement.RETURN_GENERATED_KEYS);
+
+            if (movimiento.getCuenta() == null || movimiento.getTipoMovimiento() == null) {
+                System.err.println("ERROR (DAO): Cuenta o TipoMovimiento son nulos en el objeto Movimiento.");
+                return -1;
+            }
+
+            statement.setInt(1, movimiento.getCuenta().getIdCuenta());
+            statement.setInt(2, movimiento.getTipoMovimiento().getIdTipoMovimiento());
+            statement.setDate(3, new java.sql.Date(movimiento.getFecha().getTime()));
+            statement.setString(4, movimiento.getDetalle());
+            statement.setBigDecimal(5, movimiento.getImporte());
+
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    idGenerado = generatedKeys.getInt(1);
+                    movimiento.setIdMovimiento(idGenerado);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("ERROR (DAO): al agregar movimiento y devolver ID: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            GestorConexionBD.closeResources(conexion, statement, generatedKeys);
+        }
+
+        return idGenerado;
+    }
 }
