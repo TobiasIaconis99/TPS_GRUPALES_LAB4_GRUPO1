@@ -61,6 +61,18 @@ public class Prestamo {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
+
+	public void setIdPrestamo(int idPrestamo) {
+		this.idPrestamo = idPrestamo;
+	}
+
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public void setIdCuenta(int idCuenta) {
+		this.idCuenta = idCuenta;
+	}
     
     
 
