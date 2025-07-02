@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,9 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import daoImpl.PrestamoDaoImpl;
 import entidad.Prestamo;
+import entidad.TipoCuenta;
 import negocio.PrestamoNegocio;
+import negocio.TipoCuentaNegocio;
 import negocio.UsuarioNegocio;
 import negocioImpl.PrestamoNegocioImpl;
+import negocioImpl.TipoCuentaNegocioImpl;
 import negocioImpl.UsuarioNegocioImpl;
 
 /**
@@ -35,7 +39,26 @@ public class ServletPrestamo extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		TipoCuentaNegocio pNegocio = new TipoCuentaNegocioImpl();
+			
+//			@Override
+//			public TipoCuenta obtenerTipoCuentaPorId(int id) {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//			
+//			@Override
+//			public List<TipoCuenta> listar() {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+			
+//			TipoCuentaNegocio tpcNegocio = new TipoCuentaNegocioImpl();
+//			List<TipoCuenta> listTipoCuenta = tpcNegocio.listar();
+//		};
+		
+		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
