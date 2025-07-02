@@ -1,9 +1,14 @@
+<%@page import="negocioImpl.NegocioCuotaImpl"%>
+<%@page import="negocio.NegocioCuota"%>
 <%@page import="negocioImpl.PrestamoNegocioImpl"%>
 <%@page import="negocio.PrestamoNegocio"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="entidad.Prestamo"%>
 <%@page import="java.util.List"%>
+<%@page import="entidad.Cuota"%>
+<%@page import="negocio.NegocioCuota"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,16 +82,15 @@
  %>
 							<form method="post" action="PagarCuotaServlet"
 								class="d-flex align-items-center">
-								<!--                             <select name="cuentaPago" class="form-select form-select-sm me-2" required> -->
-								<!--                                 <option value="">Seleccionar</option> -->
-								<!--                                 <option value="CA-123456">CA-123</option> -->
-								<!--                                 <option value="CC-987654">CC-456</option> -->
-								<!--                             </select> -->
+
 								<input type="hidden" name="idPrestamo"
 									value="<%=p.getIdPrestamo()%>" />
 								<button type="button" data-bs-toggle="modal"
-									data-bs-target="#modalVerCuotas" class="btn btn-sm btn-primary">Ver
-									cuotas</button>
+									onclick="guardarPrestamoId(<%=p.getIdPrestamo()%>)"
+									data-bs-target="#modalVerCuotas" class="btn btn-sm btn-primary">
+									Ver cuotas</button>
+
+								<input id="idPrestamoHidden" type="hidden">
 							</form> <%
  }
  %>
@@ -102,41 +106,64 @@
 
 	<div class="modal fade" id="modalVerCuotas" tabindex="-1"
 		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- ampliamos el tamaño -->
 			<div class="modal-content">
 				<form action="<%=request.getContextPath()%>/ServletUsuario"
 					method="post">
 					<input type="hidden" name="accion" value="modificar">
-					<%-- Acción explícita para modificar --%>
+
 					<div class="modal-header">
 						<i class="bi bi-pencil-square fs-5 me-1"></i>
-						<h5 class="modal-title" id="modalEditarUsuarioLabel">Prestamo</h5>
+						<h5 class="modal-title" id="modalEditarUsuarioLabel">Préstamo
+							- Cuotas</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Cerrar"></button>
 					</div>
+
 					<div class="modal-body">
-						<div class="mb-3 d-none">
-							<label class="form-label">ID</label> <input type="hidden"
-								name="idUsuario" id="edit-idUsuario"> <span
-								class="form-control bg-light border" id="label-idUsuario"></span>
-						</div>
-						<div class="mb-3">
-							<label for="edit-nombreUsuario" class="form-label">Usuario</label>
-							<input type="text" class="form-control bg-light border"
-								name="nombreUsuario" id="edit-nombreUsuario" required>
-						</div>
-						<div class="mb-3">
-							<label for="edit-clave" class="form-label">Clave</label> <input
-								type="text" class="form-control bg-light border" name="clave"
-								id="edit-clave" required>
-						</div>
-						<div class="mb-3">
-							<label for="edit-tipoUsuario" class="form-label">Tipo de
-								usuario</label> <input type="hidden" name="tipoUsuario"
-								id="edit-tipoUsuario"> <span
-								class="form-control bg-light border" id="label-tipoUsuario"></span>
-						</div>
+						<!-- Tabla de cuotas -->
+						<%
+						NegocioCuota negocioCuota = new NegocioCuotaImpl();
+						List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(1);
+						%>
+						<table class="table table-bordered table-striped">
+							<thead class="table-light">
+								<tr>
+									<th>Cuota</th>
+									<th>Importe</th>
+									<th>Fecha de vencimiento</th>
+									<th>Fecha de pago</th>
+									<th>Estado</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- Acá deberías recorrer tu lista de cuotas con JSTL o scriptlet -->
+								<tr>
+									<td>1</td>
+									<td>$5.500</td>
+									<td>2025-07-01</td>
+									<td><em>No pagada</em></td>
+									<td><span class="badge bg-warning text-dark">Pendiente</span></td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>$5.500</td>
+									<td>2025-08-01</td>
+									<td><em>No pagada</em></td>
+									<td><span class="badge bg-warning text-dark">Pendiente</span></td>
+								</tr>
+								<tr class="table-success">
+									<td>3</td>
+									<td>$5.500</td>
+									<td>2025-06-01</td>
+									<td>2025-06-05</td>
+									<td><span class="badge bg-success">Pagada</span></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
+
 					<div class="modal-footer">
 						<button type="submit" class="btn btn-primary"
 							data-bs-toggle="tooltip" data-bs-placement="top"
@@ -151,5 +178,15 @@
 	</div>
 
 
+
 </body>
+
+<script>
+	function guardarPrestamoId(idPrestamo){
+		console.log("hola");
+		document.getElementById('idPrestamoHidden').value = idPrestamo;
+		
+	}
+</script>
+
 </html>
