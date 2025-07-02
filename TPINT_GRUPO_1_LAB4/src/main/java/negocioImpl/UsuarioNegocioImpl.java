@@ -12,12 +12,34 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
     private UsuarioDao dao = new UsuarioDaoImpl();
 
     @Override
-    public Usuario loguear(String nombreUsuario, String clave) {
-        if (nombreUsuario == null || clave == null ||
-            nombreUsuario.trim().isEmpty() || clave.trim().isEmpty()) {
+    public Usuario loguear(String nombreUsuarioInput, String claveInput) {
+        // 1. Validaciones básicas de entrada
+        if (nombreUsuarioInput == null || claveInput == null ||
+            nombreUsuarioInput.trim().isEmpty() || claveInput.trim().isEmpty()) {
             return null;
         }
-        return dao.loguear(nombreUsuario.trim(), clave.trim());
+
+        // 2. Normalizar las entradas (quitar espacios al inicio/final)
+        String usuarioTrimmed = nombreUsuarioInput.trim();
+        String claveTrimmed = claveInput.trim();
+
+        // 3. Buscar el usuario por nombre de usuario (sin la clave aún)
+        Usuario usuarioEnDB = dao.obtenerPorNombreUsuario(usuarioTrimmed);
+
+        // 4. Realizar la validación de las credenciales en la capa de negocio
+        if (usuarioEnDB != null && usuarioEnDB.isEstado()) {
+            // Comparamos el nombre de usuario y la clave de forma STRICTA (case-sensitive)
+            // con lo que se obtuvo de la base de datos.
+            // Si la DB es case-insensitive, usuarioEnDB.getNombreUsuario() podría ser "admin"
+            // mientras que usuarioTrimmed es "ADMIN". La igualdad debe ser exacta.
+            if (usuarioEnDB.getNombreUsuario().equals(usuarioTrimmed) &&
+                usuarioEnDB.getClave().equals(claveTrimmed)) {
+                return usuarioEnDB;
+            }
+        }
+        
+        // Si llegamos aquí, el usuario no existe, no está activo, o las credenciales no coinciden exactamente
+        return null; 
     }
 
     @Override
@@ -35,9 +57,26 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 
     @Override
     public boolean modificar(Usuario u) {
-        if (!validarUsuario(u, false)) {
+
+        Usuario usuarioOriginal = dao.obtenerPorId(u.getIdUsuario());
+        if (usuarioOriginal == null) {
+            System.err.println("ERROR NEGOCIO (Modificar): Usuario con ID " + u.getIdUsuario() + " no encontrado para modificar.");
             return false;
         }
+
+        // Normalizar el nuevo nombre de usuario
+        String nuevoNombreUsuario = u.getNombreUsuario().trim();
+        u.setNombreUsuario(nuevoNombreUsuario); 
+
+        // Verificar si el nombre de usuario ha sido modificado y si el nuevo nombre ya existe
+        if (!nuevoNombreUsuario.equalsIgnoreCase(usuarioOriginal.getNombreUsuario())) {
+            Usuario usuarioExistenteConMismoNombre = dao.obtenerPorNombreUsuario(nuevoNombreUsuario);
+            if (usuarioExistenteConMismoNombre != null && usuarioExistenteConMismoNombre.getIdUsuario() != u.getIdUsuario()) {
+                System.err.println("ERROR NEGOCIO (Modificar): El nombre de usuario '" + nuevoNombreUsuario + "' ya existe para otro usuario.");
+                return false;
+            }
+        }
+        
         return dao.modificar(u);
     }
 

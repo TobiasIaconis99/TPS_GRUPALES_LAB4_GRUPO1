@@ -26,7 +26,7 @@
 			<br />
 		<div class="row mb-3 align-items-end">
 			<div class="col-md-9">
-				<form action="<%= request.getContextPath() %>/ServletUsuario" method="get" class="row g-2">
+				<form action="<%= request.getContextPath() %>/ServletUsuario" method="get" class="row g-2" id="formFiltrosUsuarios">
 					<input type="hidden" name="accion" value="listar" />
 
 					<div class="col-md-4">
@@ -40,8 +40,9 @@
 							<option value="cliente" <%= "cliente".equals(request.getParameter("tipoFiltro")) ? "selected" : "" %>>Cliente</option>
 						</select>
 					</div>
-					<div class="col-md-3">
-						<button type="submit" class="btn btn-primary w-100" data-bs-toggle="tooltip" data-bs-placement="top" title="Buscar el usuario"><i class="bi bi-search me-1"></i> Buscar</button>
+					<div class="col-md-3 d-flex">
+						<button type="submit" class="btn btn-primary w-50 me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Buscar el usuario"><i class="bi bi-search me-1"></i> Buscar</button>
+						<button type="button" class="btn btn-secondary w-50" onclick="limpiarFiltrosUsuarios()" data-bs-toggle="tooltip" data-bs-placement="top" title="Limpiar todos los filtros"><i class="bi bi-funnel me-1"></i> Limpiar</button>
 					</div>
 				</form>
 				</div>
@@ -122,55 +123,142 @@
 	</div>
 
 	<script>
-	function cargarUsuario(id, nombre, clave, tipo) {
-	    document.getElementById("edit-idUsuario").value = id;
-	    document.getElementById("edit-nombreUsuario").value = nombre;
-	    document.getElementById("edit-clave").value = clave;
-	    document.getElementById("edit-idUsuario").value = id;
-	    document.getElementById("label-idUsuario").textContent = id;
+    function cargarUsuario(id, nombre, clave, tipo) {
+        document.getElementById("edit-idUsuario").value = id;
+        document.getElementById("label-idUsuario").textContent = id;
 
-	    // Seteamos el valor oculto
-	    document.getElementById("edit-tipoUsuario").value = tipo;
+        // Limpiar estilos y mensajes de error previos al cargar un nuevo usuario
+        const campos = ["edit-nombreUsuario", "edit-claveUsuario", "edit-repetirClaveUsuario"];
+        const errores = ["nombreUsuarioError", "claveUsuarioError", "repetirClaveUsuarioError"];
 
-	    // Mostramos el texto en el label visual
-	    document.getElementById("label-tipoUsuario").textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+        campos.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.classList.remove('is-invalid', 'is-valid');
+            }
+        });
+        errores.forEach(id => {
+            const errorSpan = document.getElementById(id);
+            if (errorSpan) {
+                errorSpan.textContent = '';
+            }
+        });
+
+        // Cargar los valores del usuario
+        document.getElementById("edit-nombreUsuario").value = nombre;
+        document.getElementById("edit-claveUsuario").value = clave;
+        document.getElementById("edit-repetirClaveUsuario").value = clave; // Para que coincida inicialmente
+
+        document.getElementById("edit-tipoUsuario").value = tipo;
+        document.getElementById("label-tipoUsuario").textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+
+        // Opcional: Validar al cargar si los campos vienen con algún valor que deba validarse
+        validarNombreUsuarioModal();
+        validarClaveModal();
+        validarRepetirClaveModal();
+    }
+
+    // Función para limpiar filtros en el ABML de Usuarios
+    function limpiarFiltrosUsuarios() {
+        const form = document.getElementById('formFiltrosUsuarios');
+        form.elements['nombreFiltro'].value = ''; // Limpiar campo de texto
+        form.elements['tipoFiltro'].value = ''; // Seleccionar "Todos los tipos"
+        form.submit(); // Enviar el formulario para aplicar los filtros limpios
+    }
+
+    // --- Funciones de Validación para el Modal de Edición de Usuario ---
+
+	function validarNombreUsuarioModal() {
+	    const usuarioInput = document.getElementById('edit-nombreUsuario');
+	    const usuarioError = document.getElementById('nombreUsuarioError');
+	    const usuario = usuarioInput.value.trim();
+	    // La regex ya incluye la longitud de 3 a 20 caracteres.
+	    const regex = /^[a-zA-Z0-9._]{3,20}$/;
+	
+	    if (usuario === '') {
+	        usuarioError.textContent = 'El nombre de usuario es obligatorio.';
+	        usuarioInput.classList.add('is-invalid');
+	        usuarioInput.classList.remove('is-valid');
+	        return false;
+	    } else if (!regex.test(usuario)) {
+	        usuarioError.textContent = 'El usuario debe tener entre 3 y 20 caracteres y solo puede contener letras, números, puntos y guiones bajos.';
+	        usuarioInput.classList.add('is-invalid');
+	        usuarioInput.classList.remove('is-valid');
+	        return false;
+	    } else {
+	        usuarioError.textContent = '';
+	        usuarioInput.classList.remove('is-invalid');
+	        usuarioInput.classList.add('is-valid');
+	        return true;
+	    }
 	}
 
+    function validarClaveModal() {
+        const claveInput = document.getElementById('edit-claveUsuario');
+        const claveError = document.getElementById('claveUsuarioError');
+        const clave = claveInput.value;
 
-		// Si añades eliminación de usuarios, necesitarías funciones similares a las de Cliente
-		/*
-		let idUsuarioAEliminar = "";
-		function setIdUsuarioAEliminar(id) {
-			idUsuarioAEliminar = id;
-		}
-		function confirmarEliminarUsuario() {
-			const form = document.createElement('form');
-			form.method = 'POST';
-			form.action = '<%= request.getContextPath() %>/ServletUsuario';
-			
-			const accionInput = document.createElement('input');
-			accionInput.type = 'hidden';
-			accionInput.name = 'accion';
-			accionInput.value = 'eliminar';
-			form.appendChild(accionInput);
+        const passwordRegex = /^(?=.*\d).{4,}$/; // Al menos 4 caracteres y al menos 1 número
 
-			const idInput = document.createElement('input');
-			idInput.type = 'hidden';
-			idInput.name = 'idUsuario';
-			idInput.value = idUsuarioAEliminar;
-			form.appendChild(idInput);
+        if (clave === '') {
+            claveError.textContent = 'La clave es obligatoria.';
+            claveInput.classList.add('is-invalid');
+            claveInput.classList.remove('is-valid');
+            return false;
+        } else if (!passwordRegex.test(clave)) {
+            claveError.textContent = 'La clave debe tener al menos 4 caracteres y contener al menos un número.';
+            claveInput.classList.add('is-invalid');
+            claveInput.classList.remove('is-valid');
+            return false;
+        } else {
+            claveError.textContent = '';
+            claveInput.classList.remove('is-invalid');
+            claveInput.classList.add('is-valid');
+            return true;
+        }
+    }
 
-			document.body.appendChild(form);
-			form.submit();
-		}
-		*/
+    function validarRepetirClaveModal() {
+        const claveInput = document.getElementById('edit-claveUsuario');
+        const repetirClaveInput = document.getElementById('edit-repetirClaveUsuario');
+        const repetirClaveError = document.getElementById('repetirClaveUsuarioError');
+
+        const clave = claveInput.value;
+        const repetirClave = repetirClaveInput.value;
+
+        if (repetirClave === '') {
+            repetirClaveError.textContent = 'Debe repetir la clave.';
+            repetirClaveInput.classList.add('is-invalid');
+            repetirClaveInput.classList.remove('is-valid');
+            return false;
+        } else if (clave !== repetirClave) {
+            repetirClaveError.textContent = 'Las claves no coinciden.';
+            repetirClaveInput.classList.add('is-invalid');
+            repetirClaveInput.classList.remove('is-valid');
+            return false;
+        } else {
+            repetirClaveError.textContent = '';
+            repetirClaveInput.classList.remove('is-invalid');
+            repetirClaveInput.classList.add('is-valid');
+            return true;
+        }
+    }
+
+    // Función principal de validación para el formulario del modal de edición
+    function validarFormularioEditarUsuario() {
+        const isNombreUsuarioValid = validarNombreUsuarioModal();
+        const isClaveValid = validarClaveModal();
+        const isRepetirClaveValid = validarRepetirClaveModal();
+
+        return isNombreUsuarioValid && isClaveValid && isRepetirClaveValid;
+    }
 	</script>
 
 	<div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="<%= request.getContextPath() %>/ServletUsuario" method="post">
-					<input type="hidden" name="accion" value="modificar"> <%-- Acción explícita para modificar --%>
+				<form action="<%= request.getContextPath() %>/ServletUsuario" method="post" onsubmit="return validarFormularioEditarUsuario()"> <%-- **Validación al enviar** --%>
+					<input type="hidden" name="accion" value="modificar">
 					<div class="modal-header">
 						<i class="bi bi-pencil-square fs-5 me-1"></i>
 						<h5 class="modal-title" id="modalEditarUsuarioLabel">Editar usuario</h5>
@@ -184,12 +272,22 @@
 						</div>
 						<div class="mb-3">
 							<label for="edit-nombreUsuario" class="form-label">Usuario</label>
-							<input type="text" class="form-control bg-light border" name="nombreUsuario" id="edit-nombreUsuario" required>
+							<input type="text" class="form-control" name="nombreUsuario" id="edit-nombreUsuario" required
+                                   onkeyup="validarNombreUsuarioModal()" onchange="validarNombreUsuarioModal()">
+                            <div id="nombreUsuarioError" class="invalid-feedback"></div>
 						</div>
 						<div class="mb-3">
-							<label for="edit-clave" class="form-label">Clave</label>
-							<input type="text" class="form-control bg-light border" name="clave" id="edit-clave" required>
+							<label for="edit-claveUsuario" class="form-label">Clave</label>
+							<input type="text" class="form-control" name="clave" id="edit-claveUsuario" required
+                                   onkeyup="validarClaveModal(); validarRepetirClaveModal()" onchange="validarClaveModal(); validarRepetirClaveModal()">
+                            <div id="claveUsuarioError" class="invalid-feedback"></div>
 						</div>
+                        <div class="mb-3">
+                            <label for="edit-repetirClaveUsuario" class="form-label">Repetir Clave</label>
+                            <input type="text" class="form-control" id="edit-repetirClaveUsuario" required
+                                   onkeyup="validarRepetirClaveModal()" onchange="validarRepetirClaveModal()">
+                            <div id="repetirClaveUsuarioError" class="invalid-feedback"></div>
+                        </div>
 						<div class="mb-3">
 						    <label for="edit-tipoUsuario" class="form-label">Tipo de usuario</label>
 						    <input type="hidden" name="tipoUsuario" id="edit-tipoUsuario">

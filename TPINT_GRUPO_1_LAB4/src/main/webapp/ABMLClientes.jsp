@@ -30,11 +30,11 @@
 			<br />
 			<div class="row mb-3 align-items-end">
 				<div class="col-md-9">
-					<form method="get" action="ServletCliente" class="row gx-2">
+					<form method="get" action="ServletCliente" class="row gx-2" id="formFiltros">
 						<input type="hidden" name="accion" value="listar">
 				
 						<div class="col-md-4">
-							<input type="text" name="busqueda" class="form-control" placeholder="Buscar por DNI, nombre o apellido"
+							<input type="text" name="busqueda" class="form-control" placeholder="Buscar por DNI o Nombre y Apellido"
 								value="<%= request.getParameter("busqueda") != null ? request.getParameter("busqueda") : "" %>">
 						</div>
 				
@@ -47,10 +47,13 @@
 							</select>
 						</div>
 				
-						<div class="col-md-3">
-							<button class="btn btn-primary w-100" type="submit">
-								<i class="bi bi-search me-1"></i> Buscar
-							</button>
+						<div class="col-md-3 d-flex"> 
+						    <button class="btn btn-primary w-50 me-1" type="submit"> 
+						        <i class="bi bi-search me-1"></i> Buscar
+						    </button>
+						    <button class="btn btn-secondary w-50" type="button" onclick="limpiarFiltros()">
+						        <i class="bi bi-funnel me-1"></i> Limpiar
+						    </button>
 						</div>
 					</form>
 				</div>
@@ -260,13 +263,27 @@
             document.getElementById("usuario").value = usuario;
             document.getElementById("contrasenia").value = clave;
 		}
+		
+		// Funcion para limpiar filtros
+		function limpiarFiltros() {
+		    // Obtener el formulario por su ID
+		    const form = document.getElementById('formFiltros');
+		    // Restablecer el valor del campo de búsqueda a vacío
+		    form.elements['busqueda'].value = '';
+		    // Restablecer la selección del filtro de sexo a la primera opción (Todos los sexos)
+		    form.elements['filtroSexo'].value = '';
+		    // Enviar el formulario para aplicar los filtros "limpios" (volver a listar sin filtros)
+		    form.submit();
+		}
 	</script>
 	
 	<div class="modal fade" id="modalVerCliente" tabindex="-1" aria-labelledby="modalVerClienteLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h1 class="modal-title fs-5" id="modalVerClienteLabel">Ver cliente</h1>
+	        <h4 class="modal-title fs-5" id="modalVerClienteLabel">
+	        	Ver cliente
+	        </h4>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
 	      </div>
 	      <div class="modal-body">
@@ -342,31 +359,31 @@
 	              <input type="text" class="form-control" id="usuario" name="usuario" required disabled>
 	            </div>
 	            
-<div class="col-md-6">
-  <label for="contrasenia" class="form-label">Clave</label>
-  <div class="input-group">
-    <input type="password" class="form-control" id="contrasenia" name="contrasenia" required disabled>
-    <span class="input-group-text" style="cursor: pointer; background-color: #e9ecef;" id="toggleClave">
-      <i class="bi bi-eye" id="iconoClave"></i>
-    </span>
-  </div>
-</div>
-
-<!-- Script para mostrar/ocultar la clave -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const inputClave = document.getElementById('contrasenia');
-    const toggleSpan = document.getElementById('toggleClave');
-    const icono = document.getElementById('iconoClave');
-
-    toggleSpan.addEventListener('click', function () {
-      const esPassword = inputClave.type === 'password';
-      inputClave.type = esPassword ? 'text' : 'password';
-      icono.classList.toggle('bi-eye', !esPassword);
-      icono.classList.toggle('bi-eye-slash', esPassword);
-    });
-  });
-</script>
+				<div class="col-md-6">
+				  <label for="contrasenia" class="form-label">Clave</label>
+				  <div class="input-group">
+				    <input type="password" class="form-control" id="contrasenia" name="contrasenia" required disabled>
+				    <span class="input-group-text" style="cursor: pointer; background-color: #e9ecef;" id="toggleClave">
+				      <i class="bi bi-eye" id="iconoClave"></i>
+				    </span>
+				  </div>
+				</div>
+				
+				<!-- Script para mostrar/ocultar la clave -->
+				<script>
+				  document.addEventListener('DOMContentLoaded', function () {
+				    const inputClave = document.getElementById('contrasenia');
+				    const toggleSpan = document.getElementById('toggleClave');
+				    const icono = document.getElementById('iconoClave');
+				
+				    toggleSpan.addEventListener('click', function () {
+				      const esPassword = inputClave.type === 'password';
+				      inputClave.type = esPassword ? 'text' : 'password';
+				      icono.classList.toggle('bi-eye', !esPassword);
+				      icono.classList.toggle('bi-eye-slash', esPassword);
+				    });
+				  });
+				</script>
 
 	          </div>
 	

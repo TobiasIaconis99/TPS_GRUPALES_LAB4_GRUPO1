@@ -32,22 +32,22 @@
 			<br>
 
 			<div class="card mb-4 shadow-sm">
-				<div class="card-header bg-secondary text-white d-flex align-items-center">
+				<div class="card-header bg-primary text-white d-flex align-items-center">
 					<i class="bi bi-funnel-fill me-2"></i> Filtros de Informe
 				</div>
 				<div class="card-body">
-					<form action="ServletInformeA" method="get" class="row g-3 align-items-end">
-						<div class="col-md-4">
+					<form action="ServletInformes" method="get" class="row g-3 align-items-end">
+						<div class="col-md-3"> <%-- Ajustado a col-md-3 --%>
 							<label for="mes" class="form-label">Mes:</label>
-							<select class="form-select" id="mes" name="mes" required>
-								<% 
-									// Obtener el mes actual
-									int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1; // Calendar.MONTH es 0-11
+							<select class="form-select" id="mes" name="mes">
+								<%
+									int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
 									String selectedMonth = request.getParameter("mes");
-									if (selectedMonth == null || selectedMonth.isEmpty()) {
-										selectedMonth = String.valueOf(currentMonth); // Si no hay filtro, usar el mes actual
+									if (selectedMonth == null) {
+										selectedMonth = "";
 									}
 								%>
+								<option value="" <%= selectedMonth.equals("") ? "selected" : "" %>>Todos los meses</option>
 								<option value="1" <%= "1".equals(selectedMonth) ? "selected" : "" %>>Enero</option>
 								<option value="2" <%= "2".equals(selectedMonth) ? "selected" : "" %>>Febrero</option>
 								<option value="3" <%= "3".equals(selectedMonth) ? "selected" : "" %>>Marzo</option>
@@ -62,29 +62,35 @@
 								<option value="12" <%= "12".equals(selectedMonth) ? "selected" : "" %>>Diciembre</option>
 							</select>
 						</div>
-						<div class="col-md-4">
+
+						<div class="col-md-3"> <%-- Ajustado a col-md-3 --%>
 							<label for="anio" class="form-label">Año:</label>
-							<select class="form-select" id="anio" name="anio" required>
-								<% 
+							<select class="form-select" id="anio" name="anio">
+								<%
 									int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 									String selectedYear = request.getParameter("anio");
-									if (selectedYear == null || selectedYear.isEmpty()) {
-										selectedYear = String.valueOf(currentYear); // Si no hay filtro, usar el año actual
+									if (selectedYear == null) {
+										selectedYear = "";
 									}
-									for (int i = currentYear + 1; i >= currentYear - 5; i--) { 
 								%>
-									<option value="<%= i %>" <%= String.valueOf(i).equals(selectedYear) ? "selected" : "" %>><%= i %></option>
+								<option value="" <%= selectedYear.equals("") ? "selected" : "" %>>Todos los años</option>
+								<%
+									for (int i = currentYear; i >= currentYear - 5; i--) {
+								%>
+									<option value="<%= i %>" <%= String.valueOf(i).equals(selectedYear) ? "selected" : "" %>>
+										<%= i %>
+									</option>
 								<%
 									}
 								%>
 							</select>
 						</div>
-						<div class="col-md-4">
-							<button type="submit" class="btn btn-primary">
-								<i class="bi bi-funnel-fill me-2"></i> Aplicar Filtros
+						<div class="col-md-6 d-flex justify-content-end align-items-end"> <%-- Ajustado a col-md-6 y añadido justify-content-end align-items-end para alinear a la derecha y abajo --%>
+							<button type="submit" class="btn btn-primary me-2"> <%-- Añadido me-2 para un pequeño margen entre botones --%>
+								<i class="bi bi-funnel-fill me-2"></i> Aplicar
 							</button>
-							<a href="ServletInformeA" class="btn btn-secondary">
-								<i class="bi bi-x-circle me-2"></i> Limpiar Filtros
+							<a href="ServletInformes" class="btn btn-secondary">
+								<i class="bi bi-trash me-2"></i> Limpiar
 							</a>
 						</div>
 					</form>
@@ -99,8 +105,7 @@
 						</div>
 						<div class="card-body">
 							<div class="card-title mb-3">
-								Los ingresos son todos los movimientos que aumentan el saldo de una cuenta. 
-								Y los egresos son los movimientos que disminuyen el saldo.
+								Detalle de los movimientos que representan ingresos y egresos en las cuentas durante el período seleccionado.
 							</div>
 							
 							<hr>
@@ -207,53 +212,49 @@
 				<div class="col-md-6">
 					<div class="card mb-4 shadow-sm">
 						<div class="card-header bg-primary text-white d-flex align-items-center">
-							<i class="bi bi-bar-chart-line-fill me-2"></i> Informe B
+							<i class="bi bi-people-fill me-2"></i> Top 5 clientes más activos
 						</div>
 						<div class="card-body">
-							<h5 class="card-title mb-3">Contenido de Informe B</h5>
-							<p class="text-muted">Top 5 de clientes con mayor saldo </p>
-				<table class="table table-bordered">
-				<thead class="table-primary">
-					<tr>
-						<th>Nombre Cliente</th>
-						<th>DNI</th>
-						<th>Cantidad de cuentas</th> 
-						<th>Saldo Total</th> 
-
-					</tr>
-				</thead>
-				<tbody>
-
+							<div class="card-title mb-3">
+								Clientes con mayor cantidad de movimientos realizados en el período seleccionado.
+							</div>
+							<hr>
+							<table class="table table-bordered table-hover">
+								<thead class="table-primary">
+									<tr>
+										<th>Nombre Cliente</th>
+										<th>DNI</th>
+										<th>Cantidad de Movimientos</th>
+									</tr>
+								</thead>
+								<tbody>
 									<%
-										List<InformeBdto> listaclientes = (List<InformeBdto>) request.getAttribute("clientes");
-										if (listaclientes != null && !listaclientes.isEmpty()) { 
-											for (InformeBdto c : listaclientes) {
+										List<InformeBdto> clientesActivos = (List<InformeBdto>) request.getAttribute("clientesActivos");
+										if (clientesActivos != null && !clientesActivos.isEmpty()) {
+											for (InformeBdto b : clientesActivos) {
 									%>
 												<tr>
-													<td><%= c.getNombreCliente() %></td>
-													<td><%= c.getDNI() %></td>
-													<td><%= c.getCantCuentas() %></td>
-													<td>$<%= c.getSaldoTotal() %></td>
+													<td><%= b.getNombreCliente() %></td>
+													<td><%= b.getDNI() %></td>
+													<td><%= b.getCantidadMovimientos() %></td>
 												</tr>
 									<%
 											}
 										} else {
 									%>
 											<tr>
-												<td colspan="3" class="text-center text-muted">No hay datos de egresos disponibles.</td>
+												<td colspan="3" class="text-center text-muted">No hay datos disponibles para este período.</td>
 											</tr>
 									<%
 										}
 									%>
-							
-				</tbody>
-			</table>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 </body>
 </html>

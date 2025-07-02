@@ -44,18 +44,30 @@ public class ServletCliente extends HttpServlet {
 			    String busqueda = request.getParameter("busqueda");
 			    String filtroSexo = request.getParameter("filtroSexo");
 
+			    // Normalizar parámetros vacíos
 			    if (busqueda != null && busqueda.trim().isEmpty()) busqueda = null;
 			    if (filtroSexo != null && filtroSexo.trim().isEmpty()) filtroSexo = null;
 
+			    // Validar filtroSexo (solo acepta M, F, O)
+			    if (filtroSexo != null && !filtroSexo.matches("M|F|O")) {
+			        session.setAttribute("mensajeError", "Filtro de sexo inválido.");
+			        response.sendRedirect("ServletCliente?accion=listar");
+			        return;
+			    }
+
+			    // Validar y obtener número de página
 			    int pagina = 1;
 			    int cantidadPorPagina = 10;
 
-			    if (request.getParameter("pagina") != null) {
-			        try {
+			    try {
+			        if (request.getParameter("pagina") != null) {
 			            pagina = Integer.parseInt(request.getParameter("pagina"));
-			        } catch (NumberFormatException e) {
-			            pagina = 1;
+			            if (pagina < 1) pagina = 1;
 			        }
+			    } catch (NumberFormatException e) {
+			        session.setAttribute("mensajeError", "Número de página inválido.");
+			        response.sendRedirect("ServletCliente?accion=listar");
+			        return;
 			    }
 
 			    // Obtener datos filtrados con paginación
@@ -63,7 +75,15 @@ public class ServletCliente extends HttpServlet {
 			    int totalRegistros = clienteNegocio.contarFiltrado(busqueda, filtroSexo);
 			    int totalPaginas = (int) Math.ceil((double) totalRegistros / cantidadPorPagina);
 
-			    // Enviar a la vista
+			    // Evitar redireccionar a una página que no existe (por ejemplo: página 10 cuando hay solo 2)
+			    if (pagina > totalPaginas && totalPaginas > 0) {
+			        response.sendRedirect("ServletCliente?accion=listar&pagina=" + totalPaginas +
+			                (busqueda != null ? "&busqueda=" + busqueda : "") +
+			                (filtroSexo != null ? "&filtroSexo=" + filtroSexo : ""));
+			        return;
+			    }
+
+			    // Enviar datos a la vista
 			    request.setAttribute("listaClientes", listaClientesFiltrados);
 			    request.setAttribute("paginaActual", pagina);
 			    request.setAttribute("totalPaginas", totalPaginas);
@@ -72,17 +92,18 @@ public class ServletCliente extends HttpServlet {
 
 			    RequestDispatcher rd = request.getRequestDispatcher("ABMLClientes.jsp");
 			    rd.forward(request, response);
-				break;
+			    break;
+
 				
-			case "formularioAgregarCliente": // Esto podria estar en un servlet de Provincias
+			case "formularioAgregarCliente":
 				ProvinciaNegocio provinciaNegocio = new ProvinciaNegocioImpl();  
 				List<Provincia> listaProvincias = provinciaNegocio.listar();
 				request.setAttribute("listaProvincias", listaProvincias);
 				RequestDispatcher rdAgregar = request.getRequestDispatcher("AgregarCliente.jsp");
 				rdAgregar.forward(request, response);
 				break;
-			case "formularioModificarCliente": // Esto podria estar en un servlet de Provincias
 				
+			case "formularioModificarCliente":
 				String dniModificar = request.getParameter("dni");
 				if (dniModificar == null || dniModificar.isEmpty()) {
 					session.setAttribute("mensajeError", "DNI del cliente no especificado para modificar.");

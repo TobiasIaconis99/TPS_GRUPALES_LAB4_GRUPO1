@@ -14,5 +14,6 @@ public interface UsuarioDao {
     public List<Usuario> buscarConFiltros(String nombre, String tipo, int offset, int cantidad);
     public int contarConFiltros(String nombre, String tipo);
 
-
+    public Usuario obtenerPorId(int idUsuario);
+    public Usuario obtenerPorNombreUsuario(String nombreUsuario);
 }

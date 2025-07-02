@@ -16,9 +16,7 @@ public interface Informesdao {
 	public List<InformeAdto> obtenerEgresosPorMesYAnio(int mes, int anio) ;
 	
 	// Informe B
-	
-	public List<InformeBdto> listarClientesmax(int mes, int anio);
-	
+	List<InformeBdto> listarClientesConMasMovimientos(int mes, int anio);
 }
 
 

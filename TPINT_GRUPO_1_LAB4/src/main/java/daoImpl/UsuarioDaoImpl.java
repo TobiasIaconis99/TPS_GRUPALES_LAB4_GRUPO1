@@ -213,6 +213,59 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return total;
     }
 
+    @Override
+    public Usuario obtenerPorId(int idUsuario) {
+        String query = "SELECT idUsuario, nombreUsuario, clave, tipoUsuario, estado FROM Usuario WHERE idUsuario = ? AND estado = 1";
+        Usuario usuario = null;
 
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
 
+            ps.setInt(1, idUsuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setNombreUsuario(rs.getString("nombreUsuario"));
+                    usuario.setClave(rs.getString("clave"));
+                    usuario.setTipoUsuario(rs.getString("tipoUsuario"));
+                    usuario.setEstado(rs.getBoolean("estado"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error SQL al obtener usuario por ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return usuario;
+    }
+
+    @Override
+    public Usuario obtenerPorNombreUsuario(String nombreUsuario) {
+        String query = "SELECT idUsuario, nombreUsuario, clave, tipoUsuario, estado FROM Usuario WHERE LOWER(nombreUsuario) = LOWER(?) AND estado = 1";
+        Usuario usuario = null;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, nombreUsuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setNombreUsuario(rs.getString("nombreUsuario"));
+                    usuario.setClave(rs.getString("clave"));
+                    usuario.setTipoUsuario(rs.getString("tipoUsuario"));
+                    usuario.setEstado(rs.getBoolean("estado"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error SQL al obtener usuario por nombre de usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return usuario;
+    }
 }

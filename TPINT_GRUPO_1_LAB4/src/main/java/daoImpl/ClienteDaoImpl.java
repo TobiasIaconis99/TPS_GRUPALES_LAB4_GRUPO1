@@ -509,92 +509,92 @@ public class ClienteDaoImpl implements ClienteDao {
 	    return cliente;
 	}
 
-	@Override
-	public List<Cliente> listarFiltrado(String busqueda, String sexo, int pagina, int limite) {
-	    List<Cliente> lista = new ArrayList<>();
+	 @Override
+	    public List<Cliente> listarFiltrado(String busqueda, String sexo, int pagina, int limite) {
+	        List<Cliente> lista = new ArrayList<>();
 
-	    String sql = "SELECT c.*, " +
-	            "u.idUsuario, u.nombreUsuario, u.clave, u.tipoUsuario, u.estado AS usuarioEstado, " +
-	            "l.idLocalidad, l.nombreLocalidad, l.idProvincia AS lIdProvincia, l.estado AS localidadEstado, " +
-	            "p.idProvincia AS pIdProvincia, p.nombreProvincia, p.estado AS provinciaEstado " +
-	            "FROM Cliente c " +
-	            "JOIN Usuario u ON c.idUsuario = u.idUsuario " +
-	            "JOIN Localidad l ON c.idLocalidad = l.idLocalidad " +
-	            "JOIN Provincia p ON l.idProvincia = p.idProvincia " +
-	            "WHERE c.estado = 1";
+	        String sql = "SELECT c.*, " +
+	                "u.idUsuario, u.nombreUsuario, u.clave, u.tipoUsuario, u.estado AS usuarioEstado, " +
+	                "l.idLocalidad, l.nombreLocalidad, l.idProvincia AS lIdProvincia, l.estado AS localidadEstado, " +
+	                "p.idProvincia AS pIdProvincia, p.nombreProvincia, p.estado AS provinciaEstado " +
+	                "FROM Cliente c " +
+	                "JOIN Usuario u ON c.idUsuario = u.idUsuario " +
+	                "JOIN Localidad l ON c.idLocalidad = l.idLocalidad " +
+	                "JOIN Provincia p ON l.idProvincia = p.idProvincia " +
+	                "WHERE c.estado = 1";
 
-	    // Aplicar filtros
-	    if (busqueda != null && !busqueda.isEmpty()) {
-	        sql += " AND (c.dni LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ?)";
-	    }
-	    if (sexo != null && !sexo.isEmpty()) {
-	        sql += " AND c.sexo = ?";
-	    }
-
-	    sql += " LIMIT ? OFFSET ?";
-
-	    try (Connection conn = getConnection();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
-
-	        int i = 1;
+	        // Aplicar filtros
 	        if (busqueda != null && !busqueda.isEmpty()) {
-	            String like = "%" + busqueda + "%";
-	            ps.setString(i++, like);
-	            ps.setString(i++, like);
-	            ps.setString(i++, like);
+	            // Concatenar nombre y apellido para la búsqueda combinada
+	            // También se mantiene la búsqueda por DNI para completar el AND
+	            sql += " AND (c.dni LIKE ? OR CONCAT(c.nombre, ' ', c.apellido) LIKE ?)";
 	        }
 	        if (sexo != null && !sexo.isEmpty()) {
-	            ps.setString(i++, sexo);
-	        }
-	        ps.setInt(i++, limite);
-	        ps.setInt(i++, (pagina - 1) * limite);
-
-	        ResultSet rs = ps.executeQuery();
-	        while (rs.next()) {
-	            Cliente c = new Cliente();
-	            c.setId(rs.getInt("id"));
-	            c.setDni(rs.getString("dni"));
-	            c.setCuil(rs.getString("cuil"));
-	            c.setNombre(rs.getString("nombre"));
-	            c.setApellido(rs.getString("apellido"));
-	            c.setSexo(rs.getString("sexo"));
-	            c.setNacionalidad(rs.getString("nacionalidad"));
-	            c.setFechaNacimiento(rs.getDate("fechaNacimiento"));
-	            c.setDireccion(rs.getString("direccion"));
-	            c.setCorreo(rs.getString("correo"));
-	            c.setTelefono(rs.getString("telefono"));
-	            c.setEstado(rs.getBoolean("estado"));
-
-	            Usuario u = new Usuario();
-	            u.setIdUsuario(rs.getInt("idUsuario"));
-	            u.setNombreUsuario(rs.getString("nombreUsuario"));
-	            u.setClave(rs.getString("clave"));
-	            u.setTipoUsuario(rs.getString("tipoUsuario"));
-	            u.setEstado(rs.getBoolean("usuarioEstado"));
-	            c.setUsuario(u);
-
-	            Provincia p = new Provincia();
-	            p.setIdProvincia(rs.getInt("pIdProvincia"));
-	            p.setNombreProvincia(rs.getString("nombreProvincia"));
-	            p.setEstado(rs.getBoolean("provinciaEstado"));
-
-	            Localidad l = new Localidad();
-	            l.setIdLocalidad(rs.getInt("idLocalidad"));
-	            l.setNombreLocalidad(rs.getString("nombreLocalidad"));
-	            l.setProvincia(p);
-	            l.setEstado(rs.getBoolean("localidadEstado"));
-	            c.setLocalidad(l);
-
-	            lista.add(c);
+	            sql += " AND c.sexo = ?";
 	        }
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
+	        sql += " LIMIT ? OFFSET ?";
+
+	        try (Connection conn = getConnection();
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	            int i = 1;
+	            if (busqueda != null && !busqueda.isEmpty()) {
+	                String like = "%" + busqueda + "%";
+	                ps.setString(i++, like); // Para DNI
+	                ps.setString(i++, like); // Para CONCAT(nombre, ' ', apellido)
+	            }
+	            if (sexo != null && !sexo.isEmpty()) {
+	                ps.setString(i++, sexo);
+	            }
+	            ps.setInt(i++, limite);
+	            ps.setInt(i++, (pagina - 1) * limite);
+
+	            ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	                Cliente c = new Cliente();
+	                c.setId(rs.getInt("id"));
+	                c.setDni(rs.getString("dni"));
+	                c.setCuil(rs.getString("cuil"));
+	                c.setNombre(rs.getString("nombre"));
+	                c.setApellido(rs.getString("apellido"));
+	                c.setSexo(rs.getString("sexo"));
+	                c.setNacionalidad(rs.getString("nacionalidad"));
+	                c.setFechaNacimiento(rs.getDate("fechaNacimiento"));
+	                c.setDireccion(rs.getString("direccion"));
+	                c.setCorreo(rs.getString("correo"));
+	                c.setTelefono(rs.getString("telefono"));
+	                c.setEstado(rs.getBoolean("estado"));
+
+	                Usuario u = new Usuario();
+	                u.setIdUsuario(rs.getInt("idUsuario"));
+	                u.setNombreUsuario(rs.getString("nombreUsuario"));
+	                u.setClave(rs.getString("clave"));
+	                u.setTipoUsuario(rs.getString("tipoUsuario"));
+	                u.setEstado(rs.getBoolean("usuarioEstado"));
+	                c.setUsuario(u);
+
+	                Provincia p = new Provincia();
+	                p.setIdProvincia(rs.getInt("pIdProvincia"));
+	                p.setNombreProvincia(rs.getString("nombreProvincia"));
+	                p.setEstado(rs.getBoolean("provinciaEstado"));
+
+	                Localidad l = new Localidad();
+	                l.setIdLocalidad(rs.getInt("idLocalidad"));
+	                l.setNombreLocalidad(rs.getString("nombreLocalidad"));
+	                l.setProvincia(p);
+	                l.setEstado(rs.getBoolean("localidadEstado"));
+	                c.setLocalidad(l);
+
+	                lista.add(c);
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	        return lista;
 	    }
-
-	    return lista;
-	}
-
 
 	@Override
 	public int contarFiltrado(String busqueda, String sexo) {
@@ -629,5 +629,4 @@ public class ClienteDaoImpl implements ClienteDao {
 	    }
 	    return 0;
 	}
-
 }

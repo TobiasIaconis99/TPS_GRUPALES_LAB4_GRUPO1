@@ -80,23 +80,29 @@ public class InformesDaoImpl implements Informesdao{
 
         return lista;
 	}
+	
 	@Override
 	public List<InformeAdto> obtenerIngresosPorMesYAnio(int mes, int anio) {
 	    List<InformeAdto> lista = new ArrayList<>();
-	    String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total " +
-	                   "FROM movimiento m " +
-	                   "JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento " +
-	                   "WHERE tm.idTipoMovimiento IN (1, 2, 4) " +
-	                   "AND MONTH(m.fecha) = ? AND YEAR(m.fecha) = ? " +
-	                   "GROUP BY tm.nombre";
+	    StringBuilder query = new StringBuilder(
+	        "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total " +
+	        "FROM movimiento m " +
+	        "JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento " +
+	        "WHERE tm.idTipoMovimiento IN (1, 2, 4) "
+	    );
+
+	    if (mes != -1) query.append("AND MONTH(m.fecha) = ? ");
+	    if (anio != -1) query.append("AND YEAR(m.fecha) = ? ");
+	    query.append("GROUP BY tm.nombre");
 
 	    try (Connection conexion = GestorConexionBD.getConnection();
-	         PreparedStatement stmt = conexion.prepareStatement(query)) {
+	         PreparedStatement stmt = conexion.prepareStatement(query.toString())) {
 
-	        stmt.setInt(1, mes);
-	        stmt.setInt(2, anio);
+	        int index = 1;
+	        if (mes != -1) stmt.setInt(index++, mes);
+	        if (anio != -1) stmt.setInt(index++, anio);
+
 	        ResultSet rs = stmt.executeQuery();
-
 	        while (rs.next()) {
 	            InformeAdto em = new InformeAdto();
 	            em.setTipoMovimiento(rs.getString("tipoMovimiento"));
@@ -104,76 +110,82 @@ public class InformesDaoImpl implements Informesdao{
 	            em.setTotal(rs.getBigDecimal("total"));
 	            lista.add(em);
 	        }
-
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-
-	    return lista;
-	}
-	public List<InformeAdto> obtenerEgresosPorMesYAnio(int mes, int anio) {
-	    List<InformeAdto> lista = new ArrayList<>();
-	    String query = "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total " +
-	                   "FROM movimiento m " +
-	                   "JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento " +
-	                   "WHERE tm.idTipoMovimiento IN (3,5) " +
-	                   "AND MONTH(m.fecha) = ? AND YEAR(m.fecha) = ? " +
-	                   "GROUP BY tm.nombre";
-
-	    try (Connection conexion = GestorConexionBD.getConnection();
-	         PreparedStatement stmt = conexion.prepareStatement(query)) {
-
-	        stmt.setInt(1, mes);
-	        stmt.setInt(2, anio);
-	        ResultSet rs = stmt.executeQuery();
-
-	        while (rs.next()) {
-	            InformeAdto em = new InformeAdto();
-	            em.setTipoMovimiento(rs.getString("tipoMovimiento"));
-	            em.setCantidad(rs.getInt("cantidad"));
-	            em.setTotal(rs.getBigDecimal("total"));
-	            lista.add(em);
-	        }
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
 	    return lista;
 	}
 
 	@Override
-	public List<InformeBdto> listarClientesmax(int mes, int anio) {
-	    List<InformeBdto> lista = new ArrayList<>();
-	    
-	    String query= "SELECT    c.nombre AS nombreCliente,    c.dni as DNI,    COUNT(ct.idCuenta) AS cantidadCuentas, "
-	    		+ "   SUM(ct.saldo) AS saldoTotal FROM     cliente c JOIN    cuenta ct ON c.id = ct.idCliente WHERE "
-	    		+ "   ct.estado = 1 AND MONTH(ct.fechaCreacion) = ? AND YEAR(ct.fechaCreacion) = ? GROUP BY     c.id, c.nombre, c.dni ORDER BY     saldoTotal DESC LIMIT 5;";
+	public List<InformeAdto> obtenerEgresosPorMesYAnio(int mes, int anio) {
+	    List<InformeAdto> lista = new ArrayList<>();
+	    StringBuilder query = new StringBuilder(
+	        "SELECT tm.nombre AS tipoMovimiento, COUNT(*) AS cantidad, SUM(m.importe) AS total " +
+	        "FROM movimiento m " +
+	        "JOIN tipomovimiento tm ON m.idTipoMovimiento = tm.idTipoMovimiento " +
+	        "WHERE tm.idTipoMovimiento IN (3, 5) "
+	    );
+
+	    if (mes != -1) query.append("AND MONTH(m.fecha) = ? ");
+	    if (anio != -1) query.append("AND YEAR(m.fecha) = ? ");
+	    query.append("GROUP BY tm.nombre");
+
 	    try (Connection conexion = GestorConexionBD.getConnection();
-		         PreparedStatement stmt = conexion.prepareStatement(query)) {
+	         PreparedStatement stmt = conexion.prepareStatement(query.toString())) {
 
-		        stmt.setInt(1, mes);
-		        stmt.setInt(2, anio);
-		        ResultSet rs = stmt.executeQuery();
+	        int index = 1;
+	        if (mes != -1) stmt.setInt(index++, mes);
+	        if (anio != -1) stmt.setInt(index++, anio);
 
-		        while (rs.next()) {
-		            InformeBdto em = new InformeBdto();
-		            em.setNombreCliente(rs.getString("nombreCliente"));
-		            em.setDNI(rs.getInt("DNI"));
-		            em.setCantCuentas(rs.getInt("cantidadCuentas"));
-		            em.setSaldoTotal(rs.getBigDecimal("saldoTotal"));
-		            lista.add(em);
-		        }
-
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
-	    
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            InformeAdto em = new InformeAdto();
+	            em.setTipoMovimiento(rs.getString("tipoMovimiento"));
+	            em.setCantidad(rs.getInt("cantidad"));
+	            em.setTotal(rs.getBigDecimal("total"));
+	            lista.add(em);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	    return lista;
 	}
 
-	
-	
+	@Override
+	public List<InformeBdto> listarClientesConMasMovimientos(int mes, int anio) {
+	    List<InformeBdto> lista = new ArrayList<>();
+
+	    StringBuilder query = new StringBuilder(
+	        "SELECT c.nombre AS nombreCliente, c.dni, COUNT(m.idMovimiento) AS cantidadMovimientos " +
+	        "FROM cliente c " +
+	        "JOIN cuenta ct ON c.id = ct.idCliente " +
+	        "JOIN movimiento m ON m.idCuenta = ct.idCuenta " +
+	        "WHERE 1=1 "
+	    );
+
+	    if (mes != -1) query.append("AND MONTH(m.fecha) = ? ");
+	    if (anio != -1) query.append("AND YEAR(m.fecha) = ? ");
+	    query.append("GROUP BY c.dni, c.nombre ORDER BY cantidadMovimientos DESC LIMIT 5");
+
+	    try (Connection conexion = GestorConexionBD.getConnection();
+	         PreparedStatement stmt = conexion.prepareStatement(query.toString())) {
+
+	        int index = 1;
+	        if (mes != -1) stmt.setInt(index++, mes);
+	        if (anio != -1) stmt.setInt(index++, anio);
+
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            InformeBdto dto = new InformeBdto();
+	            dto.setNombreCliente(rs.getString("nombreCliente"));
+	            dto.setDNI(rs.getInt("dni"));
+	            dto.setCantidadMovimientos(rs.getInt("cantidadMovimientos"));
+	            lista.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return lista;
 	}
 
-
+}

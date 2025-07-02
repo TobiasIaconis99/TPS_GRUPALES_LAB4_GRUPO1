@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -18,14 +17,14 @@ import daoImpl.InformesDaoImpl;
 /**
  * Servlet implementation class ServletInformeA
  */
-@WebServlet("/ServletInformeA")
-public class ServletInformeA extends HttpServlet {
+@WebServlet("/ServletInformes")
+public class ServletInformes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletInformeA() {
+    public ServletInformes() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,13 +37,14 @@ public class ServletInformeA extends HttpServlet {
 		    String mesParam = request.getParameter("mes");
 		    String anioParam = request.getParameter("anio");
 
-		    int mes = (mesParam != null) ? Integer.parseInt(mesParam) : LocalDate.now().getMonthValue();
-		    int anio = (anioParam != null) ? Integer.parseInt(anioParam) : LocalDate.now().getYear();
+		    int mes = (mesParam != null && !mesParam.isEmpty()) ? Integer.parseInt(mesParam) : -1;
+		    int anio = (anioParam != null && !anioParam.isEmpty()) ? Integer.parseInt(anioParam) : -1;
+
 		    // informe a
 		    List<InformeAdto> estadisticas = dao.obtenerIngresosPorMesYAnio(mes, anio);
 		    List<InformeAdto> egresos = dao.obtenerEgresosPorMesYAnio(mes, anio);
 		    //informe b
-		    List<InformeBdto> clientes= dao.listarClientesmax(mes, anio);
+		    List<InformeBdto> clientesActivos = dao.listarClientesConMasMovimientos(mes, anio);
 
 		    // request informe a
 		    request.setAttribute("estadisticas", estadisticas);
@@ -52,9 +52,7 @@ public class ServletInformeA extends HttpServlet {
 		    request.setAttribute("mesSeleccionado", mes);
 		    request.setAttribute("anioSeleccionado", anio);
 		    // request informe b
-		    request.setAttribute("clientes", clientes);
-		    
-		    
+		    request.setAttribute("clientesActivos", clientesActivos);
 
 		    RequestDispatcher rd = request.getRequestDispatcher("InicioAdmin.jsp");
 		    rd.forward(request, response);
