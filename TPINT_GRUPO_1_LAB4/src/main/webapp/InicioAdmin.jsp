@@ -4,6 +4,7 @@
 		<%@ page import="java.util.List" %>
 		<%@ page import="java.math.BigDecimal" %>
 		<%@ page import="InformesDTO.InformeAdto" %> 
+		<%@ page import="InformesDTO.InformeBdto" %> 
 		<%@ page import="java.util.Calendar" %> 
 
 <!DOCTYPE html>
@@ -210,8 +211,8 @@
 						</div>
 						<div class="card-body">
 							<h5 class="card-title mb-3">Contenido de Informe B</h5>
-							<p class="text-muted">Aquí puedes añadir el contenido específico para el Informe B, sin gráficos.</p>
-																				<table class="table table-bordered">
+							<p class="text-muted">Top 5 de clientes con mayor saldo </p>
+				<table class="table table-bordered">
 				<thead class="table-primary">
 					<tr>
 						<th>Nombre Cliente</th>
@@ -223,6 +224,28 @@
 				</thead>
 				<tbody>
 
+									<%
+										List<InformeBdto> listaclientes = (List<InformeBdto>) request.getAttribute("clientes");
+										if (listaclientes != null && !listaclientes.isEmpty()) { 
+											for (InformeBdto c : listaclientes) {
+									%>
+												<tr>
+													<td><%= c.getNombreCliente() %></td>
+													<td><%= c.getDNI() %></td>
+													<td><%= c.getCantCuentas() %></td>
+													<td>$<%= c.getSaldoTotal() %></td>
+												</tr>
+									<%
+											}
+										} else {
+									%>
+											<tr>
+												<td colspan="3" class="text-center text-muted">No hay datos de egresos disponibles.</td>
+											</tr>
+									<%
+										}
+									%>
+							
 				</tbody>
 			</table>
 						</div>
