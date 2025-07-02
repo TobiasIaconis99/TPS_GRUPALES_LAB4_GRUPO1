@@ -27,19 +27,27 @@
 			<hr>
 		</div>
 
-		<!-- Mensajes -->
 		<%
-			if (request.getAttribute("mensaje") != null) {
-		%>
-			<div class="alert alert-success"><%= request.getAttribute("mensaje") %></div>
-		<%
-			}
-			if (request.getAttribute("error") != null) {
-		%>
-			<div class="alert alert-danger"><%= request.getAttribute("error") %></div>
-		<%
-			}
-		%>
+            String mensaje = (String) request.getAttribute("mensaje");
+            String error = (String) request.getAttribute("error");
+
+            if (mensaje != null && !mensaje.isEmpty()) {
+        %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%= mensaje %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+        <%
+            }
+            if (error != null && !error.isEmpty()) {
+        %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+        <%
+            }
+        %>
 
 		<%
             Cliente clienteLogueado = (Cliente) session.getAttribute("clienteLogueado");
@@ -56,7 +64,7 @@
 			<div class="mb-3">
 				<label for="cuentaOrigen" class="form-label">Cuenta de origen</label>
 				<select class="form-select" id="cuentaOrigen" name="cuentaOrigen" required>
-			    <option value="">-- Seleccione una cuenta --</option>
+			    <option value="">Seleccione una cuenta</option>
 			    <% if (cuentasCliente != null && !cuentasCliente.isEmpty()) {
 			        for (Cuenta cuenta : cuentasCliente) { %>
 			            <option value="<%= cuenta.getIdCuenta() %>">

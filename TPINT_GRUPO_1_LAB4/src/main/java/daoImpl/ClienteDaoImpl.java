@@ -303,71 +303,82 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	@Override
 	public boolean eliminar(String dniAEliminar) {
-		String queryCliente = "UPDATE Cliente SET estado = 0 WHERE DNI = ?";
-		String queryUsuario = "UPDATE Usuario SET estado = 0 WHERE idUsuario = (SELECT idUsuario FROM Cliente WHERE DNI = ?)"; 
+	    String queryCliente = "UPDATE Cliente SET estado = 0 WHERE DNI = ?";
+	    String queryUsuario = "UPDATE Usuario SET estado = 0 WHERE idUsuario = ?";
+	    String queryCuentas = "UPDATE Cuenta SET estado = 0 WHERE idCliente = ?";
 
-		Connection conn = null;
-		PreparedStatement psCliente = null;
-		PreparedStatement psUsuario = null;
-		boolean exito = false;
+	    Connection conn = null;
+	    PreparedStatement psCliente = null;
+	    PreparedStatement psUsuario = null;
+	    PreparedStatement psCuentas = null;
+	    boolean exito = false;
 
-		try {
-			conn = getConnection();
-			conn.setAutoCommit(false); 
+	    try {
+	        conn = getConnection();
+	        conn.setAutoCommit(false);
 
-			// Intentar obtener el idUsuario asociado para deshabilitarlo
-			String selectUserIdQuery = "SELECT idUsuario FROM Cliente WHERE DNI = ?";
-			int idUsuarioAsociado = -1;
-			try (PreparedStatement psSelect = conn.prepareStatement(selectUserIdQuery)) {
-				psSelect.setString(1, dniAEliminar);
-				try (ResultSet rs = psSelect.executeQuery()) {
-					if (rs.next()) {
-						idUsuarioAsociado = rs.getInt("idUsuario");
-					}
-				}
-			}
+	        // 1. Obtener idUsuario e idCliente a partir del DNI
+	        String querySelect = "SELECT idUsuario, id FROM Cliente WHERE DNI = ?";
+	        int idUsuario = -1;
+	        int idCliente = -1;
+	        try (PreparedStatement psSelect = conn.prepareStatement(querySelect)) {
+	            psSelect.setString(1, dniAEliminar);
+	            try (ResultSet rs = psSelect.executeQuery()) {
+	                if (rs.next()) {
+	                    idUsuario = rs.getInt("idUsuario");
+	                    idCliente = rs.getInt("id");
+	                } else {
+	                    // Cliente no encontrado, cancelar
+	                    conn.rollback();
+	                    return false;
+	                }
+	            }
+	        }
 
-			// Deshabilitar el Cliente (baja lógica)
-			psCliente = conn.prepareStatement(queryCliente);
-			psCliente.setString(1, dniAEliminar);
-			int filasClienteAfectadas = psCliente.executeUpdate();
+	        // 2. Baja lógica del cliente
+	        psCliente = conn.prepareStatement(queryCliente);
+	        psCliente.setString(1, dniAEliminar);
+	        int filasCliente = psCliente.executeUpdate();
 
-			// Deshabilitar el Usuario asociado si se encontró uno
-			int filasUsuarioAfectadas = 0;
-			if (idUsuarioAsociado != -1) {
-				psUsuario = conn.prepareStatement(queryUsuario);
-				psUsuario.setString(1, dniAEliminar); 
-				filasUsuarioAfectadas = psUsuario.executeUpdate();
-			}
+	        // 3. Baja lógica del usuario asociado
+	        psUsuario = conn.prepareStatement(queryUsuario);
+	        psUsuario.setInt(1, idUsuario);
+	        int filasUsuario = psUsuario.executeUpdate();
 
-			// Confirmar si el cliente fue afectado y (si había usuario) el usuario también
-			if (filasClienteAfectadas > 0 && (idUsuarioAsociado == -1 || filasUsuarioAfectadas > 0)) {
-				conn.commit(); 
-				exito = true;
-			} else {
-				conn.rollback(); 
-			}
+	        // 4. Baja lógica de todas las cuentas asociadas al cliente
+	        psCuentas = conn.prepareStatement(queryCuentas);
+	        psCuentas.setInt(1, idCliente);
+	        int filasCuentas = psCuentas.executeUpdate(); // Puede ser 0 si no tiene cuentas, y sigue siendo válido
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			if (conn != null) {
-				try {
-					conn.rollback();
-				} catch (SQLException ex) {
-					ex.printStackTrace();
-				}
-			}
-		} finally {
-			try {
-				if (psCliente != null) psCliente.close();
-				if (psUsuario != null) psUsuario.close();
-				if (conn != null) conn.close(); 
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return exito;
+	        if (filasCliente > 0 && filasUsuario > 0) {
+	            conn.commit();
+	            exito = true;
+	        } else {
+	            conn.rollback();
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        if (conn != null) {
+	            try {
+	                conn.rollback();
+	            } catch (SQLException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	    } finally {
+	        try {
+	            if (psCliente != null) psCliente.close();
+	            if (psUsuario != null) psUsuario.close();
+	            if (psCuentas != null) psCuentas.close();
+	            if (conn != null) conn.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return exito;
 	}
+
 
 	@Override
     public Cliente obtenerPorId(int id) {

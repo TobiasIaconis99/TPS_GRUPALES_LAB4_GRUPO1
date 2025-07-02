@@ -248,7 +248,16 @@ public class ServletCuenta extends HttpServlet {
             	cuenta.setFechaCreacion(java.sql.Date.valueOf(LocalDate.now()));
             	cuenta.setSaldo(saldo); 
             	cuenta.setEstado(true);
-
+            	
+            	Cuenta cuentaExistente = cuentaNegocio.obtenerCuentaPorId(idCuenta);
+            	if (cuentaExistente == null) {
+            	    session.setAttribute("mensajeErrorCuenta", "Cuenta no encontrada.");
+            	    response.sendRedirect("ServletCuenta?accion=listar");
+            	    return;
+            	}
+            	
+            	cuenta.setNumeroCuenta(cuentaExistente.getNumeroCuenta());
+            	cuenta.setCbu(cuentaExistente.getCbu());
 
             	boolean fueModificado = cuentaNegocio.modificar(cuenta);
             	System.out.println("ServletCuenta: Resultado de cuentaNegocio.agregar = " + fueModificado); // Debug
