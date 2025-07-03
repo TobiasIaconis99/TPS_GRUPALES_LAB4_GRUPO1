@@ -15,6 +15,9 @@ public interface CuentaNegocio {
     List<Cuenta> listarCuentasPorCliente(int idCliente);
     List<Cuenta> obtenerCuentaPorClienteId(int id);
     
+    
+    
+    
     boolean existeNumeroCuenta(String numeroCuenta);
     boolean existeCbu(String cbu);
     

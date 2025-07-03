@@ -39,7 +39,7 @@ public class NegocioCuotaImpl implements NegocioCuota {
 	@Override
 	public List<Cuota> obtenerCuotasPorIdPrestamo(int idPrestamo) {
 		// TODO Auto-generated method stub
-		return cDao.listar();
+		return cDao.obtenerCuotasPorIdPrestamo(idPrestamo);
 	}
 
 }

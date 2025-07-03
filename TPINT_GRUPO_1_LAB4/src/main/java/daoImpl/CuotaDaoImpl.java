@@ -14,7 +14,7 @@ public class CuotaDaoImpl implements CuotaDao {
 
     private static final String SELECT_CUOTAS_BY_ID_PRESTAMO =
         "SELECT idCuota, idPrestamo, numeroCuota, monto, fechaPago, pagada " +
-        "FROM cuotas WHERE idPrestamo = ? ORDER BY numeroCuota ASC";
+        "FROM cuota WHERE idPrestamo = ? ORDER BY numeroCuota ASC";
 
     @Override
     public List<Cuota> obtenerCuotasPorIdPrestamo(int idPrestamo) {

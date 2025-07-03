@@ -32,9 +32,9 @@
 
 
 		<%
-			PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
-			NegocioCuota cNegocio = new NegocioCuotaImpl(); 
-			List<Prestamo> prestamos = pNegocio.listar();
+		PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
+		NegocioCuota cNegocio = new NegocioCuotaImpl();
+		List<Prestamo> prestamos = pNegocio.listar();
 		%>
 
 
@@ -56,6 +56,7 @@
 							<th>Cantidad de Cuotas</th>
 							<th>Monto por Cuota</th>
 							<th>Estado</th>
+							<th>Acciones</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -72,6 +73,10 @@
 							<td><%=p.getCantidadCuotas()%></td>
 							<td>$<%=p.getMontoCuota()%></td>
 							<td><%=p.getEstado()%></td>
+							<td>
+							<a
+								href="CuotasPrestamo.jsp?idPrestamo=<%=p.getIdPrestamo()%>"
+								class="btn btn-primary"> Ver cuotas </a>
 						</tr>
 						<%
 						}
@@ -101,7 +106,6 @@
 					</div>
 
 					<div class="modal-body">
-						<!-- Tabla de cuotas -->
 						<%
 						NegocioCuota negocioCuota = new NegocioCuotaImpl();
 						List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(1);
@@ -117,31 +121,32 @@
 								</tr>
 							</thead>
 							<tbody>
-								<!-- Acá deberías recorrer tu lista de cuotas con JSTL o scriptlet -->
+								<%
+								for (Cuota cuota : cuotas) {
+								%>
 								<tr>
-									<td>1</td>
-									<td>$5.500</td>
-									<td>2025-07-01</td>
-									<td><em>No pagada</em></td>
-									<td><span class="badge bg-warning text-dark">Pendiente</span></td>
+									<td><%=cuota.getNumeroCuota()%></td>
+									<td>$<%=cuota.getMonto()%></td>
+									<td><%=cuota.getFechaPago()%></td>
+									<td><%=cuota.getFechaPago() == null ? "<em>No pagada</em>" : cuota.getFechaPago()%>
+									</td>
+									<td>
+										<%
+										if (cuota.getPagada()) {
+										%> <span class="badge bg-success">Pagada</span> <%
+ } else {
+ %> <span class="badge bg-warning text-dark">Pendiente</span> <%
+ }
+ %>
+									</td>
 								</tr>
-								<tr>
-									<td>2</td>
-									<td>$5.500</td>
-									<td>2025-08-01</td>
-									<td><em>No pagada</em></td>
-									<td><span class="badge bg-warning text-dark">Pendiente</span></td>
-								</tr>
-								<tr class="table-success">
-									<td>3</td>
-									<td>$5.500</td>
-									<td>2025-06-01</td>
-									<td>2025-06-05</td>
-									<td><span class="badge bg-success">Pagada</span></td>
-								</tr>
+								<%
+								}
+								%>
 							</tbody>
 						</table>
 					</div>
+
 
 					<div class="modal-footer">
 						<button type="submit" class="btn btn-primary"
@@ -150,6 +155,7 @@
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
+						<input id="idPrestamoHidden" type="hidden">
 					</div>
 				</form>
 			</div>
@@ -162,9 +168,8 @@
 
 <script>
 	function guardarPrestamoId(idPrestamo) {
-		console.log("hola");
+		console.log("ID préstamo:", idPrestamo);
 		document.getElementById('idPrestamoHidden').value = idPrestamo;
-
 	}
 </script>
 
