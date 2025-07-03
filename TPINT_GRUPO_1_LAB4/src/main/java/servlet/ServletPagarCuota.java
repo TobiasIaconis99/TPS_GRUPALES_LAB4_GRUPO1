@@ -11,8 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.CuentaDao;
 import dao.CuotaDao;
+import dao.MovimientoDao;
 import daoImpl.CuentaDaoImpl;
 import daoImpl.CuotaDaoImpl;
+import daoImpl.MovimientoDaoImpl;
+import entidad.Cuenta;
+import entidad.Movimiento;
+import entidad.TipoMovimiento;
 
 /**
  * Servlet implementation class ServletPagarCuota
@@ -70,10 +75,23 @@ public class ServletPagarCuota extends HttpServlet {
 
 	    CuentaDao cuentaDao = new CuentaDaoImpl();
 	    cuentaDao.descontarSaldo(idCuenta, montoCuota);
+	    
+	    
+	    //tengo que registrar el movimiento
+	    MovimientoDao mDao = new MovimientoDaoImpl();
+	    Movimiento movimiento = new Movimiento();
+	    Cuenta cuenta = new Cuenta();
+	    cuenta.setIdCuenta(idCuenta);	   
+	    movimiento.setCuenta(cuenta);
+	    TipoMovimiento tipoMovimiento = new TipoMovimiento();
+	    tipoMovimiento.setIdTipoMovimiento(3);
+	    movimiento.setTipoMovimiento(tipoMovimiento);
+	    movimiento.setFecha(new java.util.Date());
+	    movimiento.setImporte(montoCuota.negate());
+	    mDao.agregar(movimiento);
+	    
 
-	    request.getSession().setAttribute("mensajeExito", "La cuota se pago exitosamente");
-	   
-
+	    request.getSession().setAttribute("mensajeExito", "La cuota se pago exitosamente");	  
 	    response.sendRedirect("CuotasPrestamo.jsp?idPrestamo=" + idPrestamo);
 	}
 
