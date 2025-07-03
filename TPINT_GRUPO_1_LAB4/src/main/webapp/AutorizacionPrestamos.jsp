@@ -1,3 +1,8 @@
+<%@page import="daoImpl.CuentaDaoImpl"%>
+<%@page import="entidad.Cuenta"%>
+<%@page import="entidad.Cliente"%>
+<%@page import="entidad.Prestamo"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -37,6 +42,9 @@
 								<option>Aprobado</option>
 								<option>Rechazado</option>
 							</select>
+							
+							
+							
 						</div>
 				
 						<div class="col-md-3">
@@ -65,27 +73,54 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>Pablo Torres</td>
-						<td>10001</td>
-						<td>2025-06-12</td>
-						<td>$50.000</td>
-						<td>12</td>
-						<td>12</td>
-						<td>$4.800</td>
-						<td>Pendiente</td>
-						<td>
-							<div class="d-flex">
-								<button class="btn btn-sm btn-success me-2">
-									<i class="bi bi-check-circle"></i>
-								</button>
-								<button class="btn btn-sm btn-danger">
-									<i class="bi bi-x-circle"></i>
-								</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
+<%
+
+if (listaPrestamos != null) {
+    for (Prestamo p : listaPrestamos) {
+%>
+    <tr>
+        <td><%= p.getCliente().getNombre() %> <%= p.getCliente().getApellido() %></td>
+        <td><%= p.getCuenta().getNumeroCuenta() %></td>
+        <td><%= p.getFechaAlta() %></td>
+        <td>$<%= p.getImportePedido() %></td>
+        <td><%= p.getPlazoMeses() %></td>
+        <td><%= p.getCantidadCuotas() %></td>
+        <td>$<%= p.getMontoCuota() %></td>
+        <td>
+            <%
+                String estado = "Desconocido";
+                switch(p.getEstado()) {
+                    case "0": estado = "Rechazado"; break;
+                    case "1": estado = "Pendiente"; break;
+                    case "2": estado = "Aprobado"; break;
+                }
+            %>
+            <%= estado %>
+        </td>
+        <td>
+            <div class="d-flex">
+                <form action="ServletPrestamo" method="post" style="display:inline;">
+                    <input type="hidden" name="accion" value="aprobarPrestamo" />
+                    <input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
+                    <button class="btn btn-sm btn-success me-2" title="Aprobar">
+                        <i class="bi bi-check-circle"></i>
+                    </button>
+                </form>
+                <form action="ServletPrestamo" method="post" style="display:inline;">
+                    <input type="hidden" name="accion" value="rechazarPrestamo" />
+                    <input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
+                    <button class="btn btn-sm btn-danger" title="Rechazar">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
+<%
+    }
+}
+%>
+</tbody>
 			</table>
 		</div>
 		
