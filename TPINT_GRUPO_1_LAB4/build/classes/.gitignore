@@ -1,3 +1,9 @@
-/negocioImpl/
+/InformesDTO/
+/dao/
+/daoImpl/
+/entidad/
+/excepciones/
 /filtros/
+/negocio/
+/negocioImpl/
 /servlet/

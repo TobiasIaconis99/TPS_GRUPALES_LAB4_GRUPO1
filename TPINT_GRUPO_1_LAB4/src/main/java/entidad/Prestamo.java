@@ -14,6 +14,8 @@ public class Prestamo {
     private int cantidadCuotas; // ← renombrado desde cuotasTotales
     private BigDecimal montoCuota; // ← renombrado desde montoPorCuota
     private String estado; // ← tipo ENUM en DB, lo manejamos como String en Java
+    private Cliente cliente; 
+    private Cuenta cuenta;  
 
     // Getters y Setters
     public int getIdPrestamo() {
@@ -86,5 +88,22 @@ public class Prestamo {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+ // AÑADE los Getters y Setters para los objetos Cliente y Cuenta
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 }
