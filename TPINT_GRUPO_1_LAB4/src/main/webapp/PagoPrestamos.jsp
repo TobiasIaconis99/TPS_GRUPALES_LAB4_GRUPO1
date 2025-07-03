@@ -25,11 +25,9 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+	<%@ include file="includes/NavbarCliente.jsp"%>
 	<!-- Pagar cuotas -->
 	<div class="card">
-		<div class="card-header bg-primary text-white">Pago de cuotas
-			pendientes</div>
-
 
 		<%
 		PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
@@ -40,16 +38,15 @@
 
 
 		<div class="card">
-			<div class="card-header bg-primary text-white">Listado de
-				Préstamos Activos</div>
+
 
 			<div class="card-body">
 				<table class="table table-bordered table-striped">
 					<thead class="table-light">
 						<tr>
-							<th>ID Préstamo</th>
-							<th>ID Cliente</th>
-							<th>ID Cuenta</th>
+							<th hidden="hidden">ID Préstamo</th>
+							<th hidden="hidden">ID Cliente</th>
+							<th hidden="hidden">ID Cuenta</th>
 							<th>Fecha Alta</th>
 							<th>Monto Solicitado</th>
 							<th>Plazo (Meses)</th>
@@ -64,19 +61,21 @@
 						for (Prestamo p : prestamos) {
 						%>
 						<tr>
-							<td><%=p.getIdPrestamo()%></td>
-							<td><%=p.getIdCliente()%></td>
-							<td><%=p.getIdCuenta()%></td>
+							<td hidden="hidden"><%=p.getIdPrestamo()%></td>
+							<td hidden="hidden"><%=p.getIdCliente()%></td>
+							<td hidden="hidden"><%=p.getIdCuenta()%></td>
 							<td><%=p.getFechaAlta()%></td>
 							<td>$<%=p.getImportePedido()%></td>
 							<td><%=p.getPlazoMeses()%></td>
 							<td><%=p.getCantidadCuotas()%></td>
 							<td>$<%=p.getMontoCuota()%></td>
 							<td><%=p.getEstado()%></td>
-							<td>
-							<a
+							<td><a
 								href="CuotasPrestamo.jsp?idPrestamo=<%=p.getIdPrestamo()%>"
-								class="btn btn-primary"> Ver cuotas </a>
+								class="btn btn-primary <%=(p.getEstado().equalsIgnoreCase("Pendiente") || p.getEstado().equalsIgnoreCase("Rechazado")) ? "disabled" : ""%>"
+								target="_blank"> Ver cuotas </a>
+							</td>
+
 						</tr>
 						<%
 						}
