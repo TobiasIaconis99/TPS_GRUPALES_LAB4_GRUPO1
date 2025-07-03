@@ -12,5 +12,6 @@ public interface NegocioCuota {
     boolean modificar(Usuario u);
     boolean eliminar(int idUsuario);
     List<Cuota> obtenerCuotasPorIdPrestamo(int idPrestamo);
+    boolean pagarCuota(int idCuota);
 
 }

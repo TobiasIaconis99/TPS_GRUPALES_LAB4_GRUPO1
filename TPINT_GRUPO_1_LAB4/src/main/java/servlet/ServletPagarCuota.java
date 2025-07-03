@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.CuotaDao;
+import daoImpl.CuotaDaoImpl;
+
 /**
  * Servlet implementation class ServletPagarCuota
  */
@@ -34,8 +37,10 @@ public class ServletPagarCuota extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+		String idCuotaString = request.getParameter("idCuotaHidden");
+		int idCuota = Integer.parseInt(request.getParameter("idCuotaHidden"));
+		CuotaDao cDao = new CuotaDaoImpl();
+		cDao.pagarCuota(idCuota);
 		doGet(request, response);
 	}
 

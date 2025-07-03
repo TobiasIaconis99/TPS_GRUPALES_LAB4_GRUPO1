@@ -11,6 +11,7 @@ public interface CuotaDao {
     boolean agregar(Usuario u);
     boolean modificar(Usuario u);
     boolean eliminar(int idUsuario);
+    boolean pagarCuota(int idCuota);
     List<Cuota> obtenerCuotasPorIdPrestamo(int idPrestamo);
     
     

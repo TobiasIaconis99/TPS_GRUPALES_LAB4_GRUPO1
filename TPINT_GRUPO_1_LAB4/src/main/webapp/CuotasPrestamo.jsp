@@ -61,7 +61,7 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 				<td>
 					<button type="button" class="btn btn-primary btn-sm"
 						<%=c.getPagada() ? "disabled" : ""%>
-						onclick="guardarMontoCuota(<%=c.getMonto()%>)"
+						onclick="guardarMontoCuota(<%=c.getMonto()%>, <%=c.getIdCuota()%>)"
 						data-bs-toggle="modal" data-bs-target="#modalPagarCuota">
 						Pagar</button>
 				</td>
@@ -137,8 +137,10 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
-						<input id="idPrestamoHidden" type="hidden"> <input
-							id="idMontoCuota" type="hidden">
+						<input id="idPrestamoHidden" type="hidden"> 
+						<input id="idMontoCuota" type="hidden">
+						<input id="idCuota" type="hidden" name="idCuotaHidden">
+							
 					</div>
 				</form>
 			</div>
@@ -147,9 +149,12 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 
 
 	<script>
-	function guardarMontoCuota(montoCuota){
+	function guardarMontoCuota(montoCuota, idCuota){
 		document.getElementById('idMontoCuota').value = montoCuota;
+		document.getElementById('idCuota').value = idCuota;
+		
 		console.log("Monto cuota guardado:", montoCuota);
+		console.log("id cuota guardado:", idCuota);
 	}
 
 	function cuentaSeleccionada(selectElement) {
