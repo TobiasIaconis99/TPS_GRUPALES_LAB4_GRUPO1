@@ -22,7 +22,9 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 </script>
 
 </head>
-<body class="container mt-4">
+<body>
+
+<%@ include file="includes/NavbarCliente.jsp"%>
 	<h2>
 		Cuotas del préstamo N°
 		<%=idPrestamo%></h2>
@@ -49,12 +51,11 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 				<td><%=c.getFechaPago() != null ? c.getFechaPago() : "<em>No pagada</em>"%></td>
 				<td><span
 					class="badge <%=c.getPagada() ? "bg-success" : "bg-warning text-dark"%>">
-						<%=c.getPagada() ? "Pagada" : "Pendiente"%>
+						<%=c.getPagada() ? "Pagada" : "Sin pagar"%>
 				</span></td>
 				<td>
 					<button type="button" class="btn btn-primary btn-sm"
-						data-bs-toggle="modal" data-bs-target="#modalPagarCuota">Ver
-						cuotas</button>
+						data-bs-toggle="modal" data-bs-target="#modalPagarCuota">Pagar</button>
 				</td>
 
 			</tr>

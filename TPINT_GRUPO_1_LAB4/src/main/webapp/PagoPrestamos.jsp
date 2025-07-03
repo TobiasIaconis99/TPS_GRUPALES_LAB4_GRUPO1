@@ -72,7 +72,10 @@
 							<td><%=p.getEstado()%></td>
 							<td><a
 								href="CuotasPrestamo.jsp?idPrestamo=<%=p.getIdPrestamo()%>"
-								class="btn btn-primary"> Ver cuotas </a>
+								class="btn btn-primary <%=(p.getEstado().equalsIgnoreCase("Pendiente") || p.getEstado().equalsIgnoreCase("Rechazado")) ? "disabled" : ""%>"
+								target="_blank"> Ver cuotas </a>
+							</td>
+
 						</tr>
 						<%
 						}
