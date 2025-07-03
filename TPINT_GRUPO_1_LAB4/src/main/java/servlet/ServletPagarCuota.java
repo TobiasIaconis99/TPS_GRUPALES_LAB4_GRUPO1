@@ -44,20 +44,22 @@ public class ServletPagarCuota extends HttpServlet {
 	    String idCuotaString = request.getParameter("idCuotaHidden");
 	    String idCuentaString = request.getParameter("cuentaDestino");
 	    String montoCuotaString = request.getParameter("idMontoCuota");
+	    String idPrestamoString = request.getParameter("idPrestamoHidden");
 
-	    if (idCuotaString == null || idCuentaString == null || montoCuotaString == null ||
-	        idCuotaString.isEmpty() || idCuentaString.isEmpty() || montoCuotaString.isEmpty()) {
-	        // Podés redirigir a una página de error o lanzar excepción
+	    if (idCuotaString == null || idCuentaString == null || montoCuotaString == null || idPrestamoString == null ||
+	        idCuotaString.isEmpty() || idCuentaString.isEmpty() || montoCuotaString.isEmpty() || idPrestamoString.isEmpty()) {
 	        throw new ServletException("Faltan parámetros obligatorios.");
 	    }
 
 	    int idCuota;
 	    int idCuenta;
+	    int idPrestamo;
 	    BigDecimal montoCuota;
 
 	    try {
 	        idCuota = Integer.parseInt(idCuotaString);
 	        idCuenta = Integer.parseInt(idCuentaString);
+	        idPrestamo = Integer.parseInt(idPrestamoString);
 	        montoCuota = new BigDecimal(montoCuotaString);
 	    } catch (NumberFormatException e) {
 	        throw new ServletException("Parámetros numéricos inválidos.", e);
@@ -69,10 +71,12 @@ public class ServletPagarCuota extends HttpServlet {
 	    CuentaDao cuentaDao = new CuentaDaoImpl();
 	    cuentaDao.descontarSaldo(idCuenta, montoCuota);
 
-	    String idPrestamo = request.getParameter("idPrestamoHidden");
-	    response.sendRedirect("CuotasPrestamo.jsp?idPrestamo=" + idPrestamo);
+	    request.getSession().setAttribute("mensajeExito", "La cuota se pago exitosamente");
+	   
 
+	    response.sendRedirect("CuotasPrestamo.jsp?idPrestamo=" + idPrestamo);
 	}
+
 
 
 }

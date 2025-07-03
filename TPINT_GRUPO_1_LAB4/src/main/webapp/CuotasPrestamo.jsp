@@ -34,6 +34,37 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 		Cuotas del préstamo N°
 		<%=idPrestamo%></h2>
 
+	<%
+	// Mensaje exito
+	String mensajeExito = (String) session.getAttribute("mensajeExito");
+	if (mensajeExito != null) {
+		session.removeAttribute("mensajeExito");
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<i class="bi bi-check-circle me-1"></i>
+		<%=mensajeExito%>
+		<button type="button" class="btn-close" data-bs-dismiss="alert"
+			aria-label="Close"></button>
+	</div>
+	<%
+	}
+	// Mensaje error
+	String mensajeError = (String) session.getAttribute("mensajeError");
+	if (mensajeError != null) {
+	session.removeAttribute("mensajeError");
+	%>
+	<div class="alert alert-danger alert-dismissible fade show"
+		role="alert">
+		<i class="bi bi-x-circle me-1"></i>
+		<%=mensajeError%>
+		<button type="button" class="btn-close" data-bs-dismiss="alert"
+			aria-label="Close"></button>
+	</div>
+	<%
+	}
+	%>
+
 	<table class="table table-bordered table-striped mt-3">
 		<thead class="table-light">
 			<tr>
@@ -136,11 +167,11 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
-						<input id="idPrestamoHidden" type="hidden" name="idPrestamoHidden"> <input
-							id="idMontoCuota" type="hidden" name="idMontoCuota"> <input id="idCuota"
-							type="hidden" name="idCuotaHidden"> <input id="idCuenta"
-							type="hidden" name="idCuentaHidden">
-							<input id="idCuenta" type="hidden" name="idPrestamo">
+						<input id="idPrestamoHidden" type="hidden" name="idPrestamoHidden">
+						<input id="idMontoCuota" type="hidden" name="idMontoCuota">
+						<input id="idCuota" type="hidden" name="idCuotaHidden"> <input
+							id="idCuenta" type="hidden" name="idCuentaHidden"> <input
+							id="idCuenta" type="hidden" name="idPrestamo">
 					</div>
 				</form>
 			</div>
