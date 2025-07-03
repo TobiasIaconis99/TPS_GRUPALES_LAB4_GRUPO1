@@ -18,6 +18,7 @@ import entidad.Cuenta;
 import entidad.Localidad;
 import entidad.Provincia;
 import entidad.TipoCuenta;
+import daoImpl.CuentaDaoImpl;
 
 public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
 
@@ -52,7 +53,7 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
         "UPDATE Prestamo SET estado = ? WHERE idPrestamo = ?"; // Ahora el estado será un String (ej. "Aprobado")
     
     private static final String SELECT_PRESTAMO_PARA_CUOTAS = 
-        "SELECT cantidadCuotas, montoCuota, fechaAlta FROM Prestamo WHERE idPrestamo = ?";
+        "SELECT cantidadCuotas,importePedido, montoCuota,idCuenta, fechaAlta FROM Prestamo WHERE idPrestamo = ?";
 
     @Override
     public boolean modificarEstado(int idPrestamo, int idEstado) {
@@ -85,10 +86,20 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
                             psSelect.setInt(1, idPrestamo);
                             try (ResultSet rs = psSelect.executeQuery()) {
                                 if (rs.next()) {
-                                    int cantidadCuotas = rs.getInt("cantidadCuotas");
+
+                                	int cantidadCuotas = rs.getInt("cantidadCuotas");
                                     BigDecimal montoCuota = rs.getBigDecimal("montoCuota");
                                     java.sql.Date fechaAltaPrestamo = rs.getDate("fechaAlta");
-
+                                    
+                                    BigDecimal importePedido = rs.getBigDecimal("importePedido");
+                                    int idCuenta = rs.getInt("idCuenta");
+                                    
+                                    //agrego saldo a la cuenta
+                                    CuentaDaoImpl cuentaDao = new CuentaDaoImpl(); 
+                                    cuentaDao.modificarSaldo(idCuenta,importePedido,true);
+                                    
+                                    
+                                    
                                     try (PreparedStatement psInsertCuota = conn.prepareStatement(INSERT_CUOTA)) {
                                         Calendar cal = Calendar.getInstance();
                                         cal.setTime(fechaAltaPrestamo);
