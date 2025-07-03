@@ -38,12 +38,45 @@
 	<div class="container my-5">
 
 
-		
+
 		<!-- Título -->
 		<div class="list-group mb-4">
 			<h4>Préstamos</h4>
 			<hr>
 		</div>
+
+		<%
+		// Mensaje exito
+		String mensajeExito = (String) session.getAttribute("mensajeExito");
+		if (mensajeExito != null) {
+			session.removeAttribute("mensajeExito");
+		%>
+		<div class="alert alert-success alert-dismissible fade show"
+			role="alert">
+			<i class="bi bi-check-circle me-1"></i>
+			<%=mensajeExito%>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Close"></button>
+		</div>
+		<%
+		}
+		// Mensaje error
+		String mensajeError = (String) session.getAttribute("mensajeError");
+		if (mensajeError != null) {
+		session.removeAttribute("mensajeError");
+		%>
+		<div class="alert alert-danger alert-dismissible fade show"
+			role="alert">
+			<i class="bi bi-x-circle me-1"></i>
+			<%=mensajeError%>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Close"></button>
+		</div>
+		<%
+		}
+		%>
+
+
 
 		<!-- Solicitar préstamo -->
 		<div class="card mb-5">
@@ -98,7 +131,7 @@
 								<%=c.getTipoCuenta().getNombreTipoCuenta()%> -
 								<%=c.getNumeroCuenta()%> - $<%=c.getSaldo()%>
 							</option>
-						
+
 							<%
 							}
 							%>
@@ -112,7 +145,8 @@
 					<div class="row">
 						<div class="col-md-8"></div>
 						<div class="col-md-4 d-flex align-items-end">
-							<button type="submit" class="btn btn-primary w-100">Solicitar prestamo</button>
+							<button type="submit" class="btn btn-primary w-100">Solicitar
+								prestamo</button>
 						</div>
 					</div>
 				</form>

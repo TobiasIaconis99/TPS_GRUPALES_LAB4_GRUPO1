@@ -113,6 +113,7 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 
 	        pNegocio.agregar(p);
 
+	        session.setAttribute("mensajeExito", "El préstamo se registró correctamente.");
 	        response.sendRedirect("Prestamos.jsp");
 
 	    } catch (Exception e) {
