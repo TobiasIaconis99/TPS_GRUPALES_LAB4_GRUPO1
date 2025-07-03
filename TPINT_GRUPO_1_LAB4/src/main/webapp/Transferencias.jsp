@@ -21,9 +21,18 @@
 	<!-- Navbar cliente -->
 	<%@ include file="includes/NavbarCliente.jsp" %>
 
+	
+
 	<div class="container my-5">
 		<div class="list-group mb-4">
-			<h4>Transferencias</h4>
+			<div class="d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">
+					Transferencias
+				</h4>
+				<a href="InicioCliente.jsp" class="btn btn-primary">
+					<i class="bi bi-arrow-left-circle me-1"></i> Volver
+				</a>
+			</div>
 			<hr>
 		</div>
 

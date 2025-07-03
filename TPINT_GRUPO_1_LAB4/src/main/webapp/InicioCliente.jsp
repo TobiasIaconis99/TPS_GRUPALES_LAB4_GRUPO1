@@ -96,21 +96,26 @@
 				</div>
 			</div>
 		
-			<!-- Tarjeta con imagen de fondo, icono y texto centrado -->
 			<div class="col">
-				<div class="card square-card border-0 shadow bg-light text-white position-relative overflow-hidden">
-					<a href="ConoceMas.jsp" class="stretched-link"></a>
+				<div class="card border-0 shadow bg-light text-white position-relative overflow-hidden square-card">
+					<a href="ConoceMas.jsp" class="stretched-link" aria-label="Conocé más sobre nosotros"></a>
+			
 					<!-- Imagen de fondo -->
 					<img src="<%= request.getContextPath() %>/img/logoBanco.png"
-				     alt="Logo Banco"
-				     class="w-100 h-100 position-absolute top-0 start-0"
-				     style="object-fit: cover; filter: brightness(0.5);">
+					     alt="Logo del Banco"
+					     class="w-100 h-100 position-absolute top-0 start-0"
+					     style="object-fit: cover;" />
+			
+					<!-- Capa de color primario semitransparente -->
+					<div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(var(--bs-primary-rgb), 0.5);"></div>
+			
 					<!-- Contenido centrado sobre la imagen -->
 					<div class="position-absolute top-50 start-50 translate-middle text-center">
 						<h5 class="fw-bold fs-5 mb-0">Conocé más sobre nosotros</h5>
 					</div>
 				</div>
 			</div>
+
 		</div>
 
 

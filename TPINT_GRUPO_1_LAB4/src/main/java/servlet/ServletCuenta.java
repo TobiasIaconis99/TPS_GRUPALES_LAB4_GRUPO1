@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors; // Importar Collectors
+import java.util.Arrays;
+import java.text.Normalizer;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,48 +50,52 @@ public class ServletCuenta extends HttpServlet {
 
             // Parámetros de paginación
             int paginaActual = 1;
-            int registrosPorPagina = 10; // Define cuántos registros mostrar por página
+            int registrosPorPagina = 10;
             try {
                 String paginaParam = request.getParameter("pagina");
                 if (paginaParam != null && !paginaParam.isEmpty()) {
                     paginaActual = Integer.parseInt(paginaParam);
                 }
             } catch (NumberFormatException e) {
-                // Si el parámetro de página no es válido, se mantiene la página 1
+                // Se mantiene página 1
             }
 
             // 1. Obtener todas las cuentas activas
             List<Cuenta> todasLasCuentas = cuentaNegocio.listarCuentasActivas();
             List<Cuenta> cuentasFiltradas = todasLasCuentas;
 
-            // 2. Aplicar filtro por tipo de cuenta (si existe)
+            // 2. Filtrar por tipo de cuenta
             if (filtroTipoCuenta != null && !filtroTipoCuenta.isEmpty()) {
                 try {
                     int idTipo = Integer.parseInt(filtroTipoCuenta);
                     cuentasFiltradas = cuentasFiltradas.stream()
                             .filter(c -> c.getTipoCuenta().getIdTipoCuenta() == idTipo)
-                            .collect(Collectors.toList()); // Usar collect(Collectors.toList())
+                            .collect(Collectors.toList());
                 } catch (NumberFormatException e) {
                     System.err.println("Error al parsear filtroTipoCuenta: " + e.getMessage());
-                    // No hacer nada, se mantiene la lista sin filtrar por tipo
                 }
             }
 
-            // 3. Aplicar búsqueda por cliente (si existe)
+            // 3. Filtrar por búsqueda de cliente
             if (busquedaCliente != null && !busquedaCliente.isEmpty()) {
-                String busquedaLower = busquedaCliente.toLowerCase();
+                String busquedaNormalizada = normalizar(busquedaCliente.trim());
+                String[] palabrasClave = busquedaNormalizada.split("\\s+");
+
                 cuentasFiltradas = cuentasFiltradas.stream()
-                        .filter(c -> c.getCliente().getDni().toLowerCase().contains(busquedaLower) ||
-                                     c.getCliente().getNombre().toLowerCase().contains(busquedaLower) ||
-                                     c.getCliente().getApellido().toLowerCase().contains(busquedaLower))
-                        .collect(Collectors.toList()); // Usar collect(Collectors.toList())
+                    .filter(c -> {
+                        String combinado = normalizar(
+                            c.getCliente().getDni() + " " +
+                            c.getCliente().getNombre() + " " +
+                            c.getCliente().getApellido()
+                        );
+                        return Arrays.stream(palabrasClave).allMatch(combinado::contains);
+                    })
+                    .collect(Collectors.toList());
             }
-            
-            // Paginación de la lista filtrada
+
+            // 4. Paginación
             int totalCuentas = cuentasFiltradas.size();
             int totalPaginas = (int) Math.ceil((double) totalCuentas / registrosPorPagina);
-
-            // Calcular el índice de inicio y fin para la paginación
             int startIndex = (paginaActual - 1) * registrosPorPagina;
             int endIndex = Math.min(startIndex + registrosPorPagina, totalCuentas);
 
@@ -97,14 +104,22 @@ public class ServletCuenta extends HttpServlet {
             request.setAttribute("listaCuentas", cuentasPaginadas);
             request.setAttribute("paginaActual", paginaActual);
             request.setAttribute("totalPaginas", totalPaginas);
-            
-            // También necesitamos la lista de clientes para el modal "Nueva cuenta"
             request.setAttribute("listaClientes", clienteNegocio.listar());
 
             RequestDispatcher rd = request.getRequestDispatcher("ABMLCuentas.jsp");
             rd.forward(request, response);
         }
+        
+
     }
+    
+    private String normalizar(String texto) {
+        return Normalizer
+                .normalize(texto, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .toLowerCase();
+    }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

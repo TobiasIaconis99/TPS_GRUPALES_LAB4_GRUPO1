@@ -71,8 +71,9 @@ public class FiltroSeguridad implements Filter {
         boolean isClientPage = path.startsWith("/cliente/") || 
                                path.equals("/DatosPersonales.jsp") || 
                                path.equals("/InicioCliente.jsp") ||
-                               path.equals("/CuentasCliente.jsp") ||
-                               path.equals("/MovimientosCliente.jsp") ||
+                               path.equals("/Movimientos.jsp") ||
+                               path.equals("/Transferencias.jsp") ||
+                               path.equals("/Prestamos.jsp") ||
                                path.endsWith("NavbarCliente.jsp"); 
 
         if (usuario.getTipoUsuario().equals("admin")) {

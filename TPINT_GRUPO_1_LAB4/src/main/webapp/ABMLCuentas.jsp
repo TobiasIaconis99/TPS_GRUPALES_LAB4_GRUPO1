@@ -25,7 +25,7 @@
 			<br />
 			<div class="row mb-3 align-items-end">
 			    <div class="col-md-9">
-			        <form method="get" action="<%= request.getContextPath() %>/ServletCuenta" class="row gx-2">
+			        <form method="get" action="<%= request.getContextPath() %>/ServletCuenta" class="row gx-2" id="formFiltros">
 			            <input type="hidden" name="accion" value="listar" />
 			            
 			            <div class="col-md-4">
@@ -42,11 +42,14 @@
 			                </select>
 			            </div>
 			            
-			            <div class="col-md-3">
-			                <button class="btn btn-primary w-100" type="submit">
-			                    <i class="bi bi-search me-1"></i> Buscar
-			                </button>
-			            </div>
+						<div class="col-md-3 d-flex"> 
+						    <button class="btn btn-primary w-50 me-1" type="submit"> 
+						        <i class="bi bi-search me-1"></i> Buscar
+						    </button>
+						    <button class="btn btn-secondary w-50" type="button" onclick="limpiarFiltros()">
+						        <i class="bi bi-funnel me-1"></i> Limpiar
+						    </button>
+						</div>
 			        </form>
 			    </div>
 			    <div class="col-md-3 d-flex justify-content-end">
@@ -201,7 +204,13 @@
 	    document.getElementById('inputSaldo').value = saldo;
 	    document.getElementById('ddlTipoCuenta').value = tipoCuenta;
 	}
-
+	
+	function limpiarFiltros() {
+	    const form = document.getElementById('formFiltros');
+	    form.elements['busquedaCliente'].value = '';
+	    form.elements['filtroTipoCuenta'].value = '';
+	    form.submit();
+	}
 </script>
 
 

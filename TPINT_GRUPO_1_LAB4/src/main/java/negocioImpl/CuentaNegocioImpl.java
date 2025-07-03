@@ -1,12 +1,19 @@
 package negocioImpl;
 
 import dao.CuentaDao;
+import dao.MovimientoDao;
+import dao.TipoMovimientoDao;
 import daoImpl.CuentaDaoImpl;
+import daoImpl.MovimientoDaoImpl;
+import daoImpl.TipoMovimientoDaoImpl;
 import entidad.Cuenta;
+import entidad.Movimiento;
+import entidad.TipoMovimiento;
 import negocio.CuentaNegocio;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class CuentaNegocioImpl implements CuentaNegocio {
@@ -17,26 +24,55 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         this.cuentaDao = new CuentaDaoImpl();
     }
 
-    @Override
     public boolean agregar(Cuenta cuenta) {
-        // 1. Validación de negocio: Verificar si el cliente ya tiene 3 cuentas activas
-        if (!tieneMenos3CuentasAct(cuenta.getCliente().getId())) { // Usamos el nuevo método de negocio
+        // 1. Validación de negocio
+        if (!tieneMenos3CuentasAct(cuenta.getCliente().getId())) {
             System.out.println("CuentaNegocioImpl: El cliente ya tiene 3 o más cuentas activas. No se puede agregar.");
             return false;
         }
 
-        // 2. Generar numero de cuenta y CBU (Delegamos al DAO para que haga la consulta de max+1)
+        // 2. Generar datos de la cuenta
         cuenta.setNumeroCuenta(cuentaDao.generarSiguienteNumeroCuenta());
         cuenta.setCbu(cuentaDao.generarSiguienteCBU());
-        
-        // 3. Asignar valores por defecto que son parte de la lógica de negocio al crear una cuenta
         cuenta.setSaldo(new BigDecimal("10000.00")); // Saldo inicial
-        cuenta.setFechaCreacion(java.sql.Date.valueOf(LocalDate.now())); // Fecha actual
-        cuenta.setEstado(true); // Cuenta activa por defecto
+        cuenta.setFechaCreacion(java.sql.Date.valueOf(LocalDate.now()));
+        cuenta.setEstado(true);
 
-        // 4. Llamar al DAO para persistir la cuenta
-        System.out.println("CuentaNegocioImpl: Intentando agregar cuenta con Nro: " + cuenta.getNumeroCuenta() + ", CBU: " + cuenta.getCbu() + ", Saldo: " + cuenta.getSaldo());
-        return cuentaDao.agregar(cuenta);
+        // 3. Persistir cuenta
+        System.out.println("CuentaNegocioImpl: Intentando agregar cuenta con Nro: " + cuenta.getNumeroCuenta());
+        boolean cuentaAgregada = cuentaDao.agregar(cuenta);
+
+        if (!cuentaAgregada) {
+            return false;
+        }
+        
+        Cuenta cuentaInsertada = cuentaDao.obtenerCuentaPorCBU(cuenta.getCbu());
+        cuenta.setIdCuenta(cuentaInsertada.getIdCuenta());
+
+        // 4. Crear movimiento de tipo AltaCuenta
+        TipoMovimientoDao tipoMovimientoDao = new TipoMovimientoDaoImpl();
+        MovimientoDao movimientoDao = new MovimientoDaoImpl();
+
+        TipoMovimiento tipoAltaCuenta = tipoMovimientoDao.obtenerPorNombre("AltaCuenta");
+        if (tipoAltaCuenta == null) {
+            System.err.println("Error: Tipo de movimiento 'AltaCuenta' no definido.");
+            return false;
+        }
+
+        Movimiento movimiento = new Movimiento();
+        movimiento.setCuenta(cuenta);
+        movimiento.setTipoMovimiento(tipoAltaCuenta);
+        movimiento.setFecha(new Date());
+        movimiento.setDetalle("Alta de cuenta nueva");
+        movimiento.setImporte(new BigDecimal("10000.00")); // Mismo que el saldo inicial
+
+        boolean movimientoRegistrado = movimientoDao.agregar(movimiento);
+        if (!movimientoRegistrado) {
+            System.err.println("Error: No se pudo registrar el movimiento de AltaCuenta.");
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -96,7 +132,6 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
 	@Override
 	public List<Cuenta> obtenerCuentaPorClienteId(int id) {
-		
-		return cuentaDao.obtenerCuentaPorClienteId(id);
+		return cuentaDao.listarCuentasPorCliente(id);
 	}
 }
