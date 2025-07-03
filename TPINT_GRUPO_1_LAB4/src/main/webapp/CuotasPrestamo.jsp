@@ -136,10 +136,11 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
-						<input id="idPrestamoHidden" type="hidden"> <input
+						<input id="idPrestamoHidden" type="hidden" name="idPrestamoHidden"> <input
 							id="idMontoCuota" type="hidden" name="idMontoCuota"> <input id="idCuota"
 							type="hidden" name="idCuotaHidden"> <input id="idCuenta"
 							type="hidden" name="idCuentaHidden">
+							<input id="idCuenta" type="hidden" name="idPrestamo">
 					</div>
 				</form>
 			</div>
@@ -151,6 +152,14 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 	function guardarMontoCuota(montoCuota, idCuota){
 		document.getElementById('idMontoCuota').value = montoCuota;
 		document.getElementById('idCuota').value = idCuota;
+		
+		
+		const params = new URLSearchParams(window.location.search);
+		const idPrestamo = params.get("idPrestamo");
+		
+		document.getElementById("idPrestamoHidden").value = idPrestamo;
+		console.log("idPres:" + document.getElementById("idPrestamoHidden").value)
+		
 		
 		
 		console.log("Monto cuota guardado:", montoCuota);

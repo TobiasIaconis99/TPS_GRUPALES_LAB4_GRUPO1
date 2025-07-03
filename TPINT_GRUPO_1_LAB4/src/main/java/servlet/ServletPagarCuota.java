@@ -41,18 +41,38 @@ public class ServletPagarCuota extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idCuotaString = request.getParameter("idCuotaHidden");
-		int idCuota = Integer.parseInt(idCuotaString);
-		String idCuentaString = request.getParameter("cuentaDestino");
-		int idCuenta = Integer.parseInt(idCuentaString);
-		CuotaDao cDao = new CuotaDaoImpl();
-		cDao.pagarCuota(idCuota);
-		CuentaDao cuentaDao = new CuentaDaoImpl();
-		String montoCuotaString = request.getParameter("idMontoCuota");
-		BigDecimal montoCuota = new BigDecimal(montoCuotaString);
-		
-		cuentaDao.descontarSaldo(idCuenta, montoCuota);
-		doGet(request, response);
+	    String idCuotaString = request.getParameter("idCuotaHidden");
+	    String idCuentaString = request.getParameter("cuentaDestino");
+	    String montoCuotaString = request.getParameter("idMontoCuota");
+
+	    if (idCuotaString == null || idCuentaString == null || montoCuotaString == null ||
+	        idCuotaString.isEmpty() || idCuentaString.isEmpty() || montoCuotaString.isEmpty()) {
+	        // Podés redirigir a una página de error o lanzar excepción
+	        throw new ServletException("Faltan parámetros obligatorios.");
+	    }
+
+	    int idCuota;
+	    int idCuenta;
+	    BigDecimal montoCuota;
+
+	    try {
+	        idCuota = Integer.parseInt(idCuotaString);
+	        idCuenta = Integer.parseInt(idCuentaString);
+	        montoCuota = new BigDecimal(montoCuotaString);
+	    } catch (NumberFormatException e) {
+	        throw new ServletException("Parámetros numéricos inválidos.", e);
+	    }
+
+	    CuotaDao cDao = new CuotaDaoImpl();
+	    cDao.pagarCuota(idCuota);
+
+	    CuentaDao cuentaDao = new CuentaDaoImpl();
+	    cuentaDao.descontarSaldo(idCuenta, montoCuota);
+
+	    String idPrestamo = request.getParameter("idPrestamoHidden");
+	    response.sendRedirect("CuotasPrestamo.jsp?idPrestamo=" + idPrestamo);
+
 	}
+
 
 }
