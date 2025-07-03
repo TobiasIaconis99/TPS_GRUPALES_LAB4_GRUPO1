@@ -115,6 +115,8 @@ public class ServletAutorizacionPrestamos extends HttpServlet {
             request.setAttribute("tipoMensaje", "warning");
         }
 
-        doGet(request, response);
+        request.getSession().setAttribute("mensajeExito", "La cuota se pagó exitosamente");
+        response.sendRedirect("ServletAutorizacionPrestamos?accion=listar");
+
     }
 }

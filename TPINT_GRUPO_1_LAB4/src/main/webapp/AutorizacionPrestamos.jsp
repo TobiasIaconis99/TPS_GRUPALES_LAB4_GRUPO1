@@ -2,8 +2,14 @@
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="entidad.Cliente" %>
 <%@ page import="entidad.Prestamo" %>
+<%@page import="entidad.TipoCuenta"%>
 <%@ page import="daoImpl.ClienteDaoImpl" %>
+<%@ page import="daoImpl.CuentaDaoImpl" %>
 <%@ page import="java.util.List" %>
+<%@page import="negocioImpl.TipoCuentaNegocioImpl"%>
+<%@page import="negocioImpl.CuentaNegocioImpl"%>
+<%@page import="negocio.CuentaNegocio"%>
+<%@page import="negocio.TipoCuentaNegocio"%>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -91,17 +97,15 @@ if (listaPrestamos != null && !listaPrestamos.isEmpty()) {
     	
     	ClienteDaoImpl clDaoImp = new ClienteDaoImpl();
     	Cliente cliente = clDaoImp.obtenerPorId(p.getIdCliente());
-		
 
-		//CuentaNegocio cNegocio = new CuentaNegocioImpl();
-		//List<Cuenta> cuentas = cNegocio.obtenerCuentaPorClienteId(idCliente);
-%>
+		CuentaDaoImpl cuentaDaoImp = new CuentaDaoImpl();
+		Cuenta cuenta = cuentaDaoImp.obtenerCuentaPorId(p.getIdCuenta());
+		 %>
     <tr>
         <td><%= p.getIdPrestamo() %></td>
-<%--         <td><%= p.getCliente().getNombre() %> <%= p.getCliente().getApellido() %> (<%= p.getCliente().getDni() %>)</td> --%>
 		<td><%= cliente.getNombre()%> <%= cliente.getApellido()%></td>
-        <%--<td><%= p.getCuenta().getNumeroCuenta() %></td>--%>
-        <td><%= p.getIdCuenta() %></td>
+    
+        <td><%= cuenta.getNumeroCuenta() %></td>
         <td><%= p.getFechaAlta() %></td>
         <td>$<%= String.format("%,.2f", p.getImportePedido()) %></td>
         <td><%= p.getPlazoMeses() %></td>
@@ -111,7 +115,6 @@ if (listaPrestamos != null && !listaPrestamos.isEmpty()) {
             <%
                 String estadoDisplay = "Desconocido";
                 String badgeClass = "bg-secondary";
-                // AQUI ES EL CAMBIO: Usar las cadenas de texto de la BD
                 switch(p.getEstado()) {
                     case "Rechazado": estadoDisplay = "Rechazado"; badgeClass = "bg-danger"; break;
                     case "Pendiente": estadoDisplay = "Pendiente"; badgeClass = "bg-warning text-dark"; break;
