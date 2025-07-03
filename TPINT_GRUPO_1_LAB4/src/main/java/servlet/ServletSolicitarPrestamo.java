@@ -83,47 +83,39 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	        throws ServletException, IOException {
 
-		PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
+	    PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
 
-		try {
-			Prestamo p = new Prestamo();
+	    try {
+	    	Prestamo p = new Prestamo();
 
-			p.setIdCuenta(Integer.parseInt(request.getParameter("idCuentaName")));
-			
-			HttpSession session = request.getSession();
-			Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
-			int idCliente = -1;
-			if (cliente != null) {
-				idCliente = cliente.getId();
-			}
-			
-			
-			p.setIdCliente(idCliente);			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String fechaFormateada = LocalDate.now().format(formatter);
-			p.setFechaAlta(fechaFormateada);			
-			BigDecimal monto = new BigDecimal(request.getParameter("montoSolicitado"));
-			p.setMontoSolicitado(monto);			
-			int cuotasCant = Integer.parseInt(request.getParameter("cuotas"));
-			p.setPlazoMeses(cuotasCant);
-			p.setCantidadCuotas(cuotasCant);			
-			BigDecimal montoFinal = monto.multiply(new BigDecimal("1.10"));			
-			BigDecimal montoPorCuota = montoFinal.divide(new BigDecimal(cuotasCant), 2, RoundingMode.HALF_UP);
-			montoPorCuota = new BigDecimal(232);
-			p.setMontoCuota(montoPorCuota);				
-			p.setEstado(1);
+	    	HttpSession session = request.getSession();
+	    	Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
 
-			pNegocio.agregar(p);
+	    	p.setDniCliente(cliente.getDni());
+	    	p.setIdCuentaDestino(Integer.parseInt(request.getParameter("cuentaDestino")));
+	    	p.setFechaAlta(new java.sql.Date(System.currentTimeMillis())); // Fecha actual
 
-			response.sendRedirect("Prestamos.jsp");
+	    	BigDecimal monto = new BigDecimal(request.getParameter("montoSolicitado"));
+	    	int cuotas = Integer.parseInt(request.getParameter("cuotas"));
+	    	p.setMontoSolicitado(monto);
+	    	p.setCuotasTotales(cuotas);
+	    	p.setMontoPorCuota(monto.divide(new BigDecimal(cuotas), 2, RoundingMode.HALF_UP));
 
-		} catch (Exception e) {
-			e.printStackTrace(); // importante para depurar
-			request.setAttribute("error", "Hubo un error al registrar el préstamo.");
-//			request.getRequestDispatcher("nuevoPrestamo.jsp").forward(request, response);
-		}
+	    	p.setEstado(1); // Estado pendiente
+
+	    	pNegocio.agregar(p);
+
+	    	response.sendRedirect("Prestamos.jsp");
+
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        request.setAttribute("error", "Hubo un error al registrar el préstamo.");
+	        // request.getRequestDispatcher("nuevoPrestamo.jsp").forward(request, response);
+	    }
 	}
+
 
 }

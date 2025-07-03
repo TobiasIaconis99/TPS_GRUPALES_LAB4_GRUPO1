@@ -23,17 +23,18 @@ public class PrestamoNegocioImpl implements PrestamoNegocio, CuentaNegocio {
 
 	@Override
 	public boolean agregar(Prestamo p) {
-        Cuenta cuenta = cuentaNegocio.obtenerCuentaPorId(p.getIdCuenta());
-        if (cuenta == null) {
-            System.err.println("Cuenta no encontrada con ID: " + p.getIdCuenta());
-            return false;
-        }
-
-        BigDecimal saldoDisponible = cuenta.getSaldo();
-        if (p.getMontoSolicitado().compareTo(saldoDisponible) >= 1000) {
-            System.err.println("Monto solicitado de ser minimo del 1000: " + saldoDisponible + ", Solicitado: " + p.getMontoSolicitado());
-            return false;
-        }
+//		Cuenta cuenta = cuentaNegocio.obtenerCuentaPorId(p.getIdCuenta());
+//		if (cuenta == null) {
+//			System.err.println("Cuenta no encontrada con ID: " + p.getIdCuenta());
+//			return false;
+//		}
+//
+//		BigDecimal saldoDisponible = cuenta.getSaldo();
+//		if (p.getMontoSolicitado().compareTo(saldoDisponible) >= 1000) {
+//			System.err.println("Monto solicitado de ser minimo del 1000: " + saldoDisponible + ", Solicitado: "
+//					+ p.getMontoSolicitado());
+//			return false;
+//		}
 		return dao.agregar(p);
 	}
 

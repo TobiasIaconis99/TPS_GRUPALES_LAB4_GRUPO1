@@ -29,80 +29,59 @@
 	<div class="card">
 		<div class="card-header bg-primary text-white">Pago de cuotas
 			pendientes</div>
+
+
 		<%
-		PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
-		List<Prestamo> prestamos = pNegocio.listar();
-		int nroCuota = 1;
+			PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
+			NegocioCuota cNegocio = new NegocioCuotaImpl(); 
+			List<Prestamo> prestamos = pNegocio.listar();
 		%>
 
-		<div class="card-body">
 
-			<h6>Listado de Préstamos</h6>
 
-			<table class="table table-bordered table-striped">
-				<thead class="table-light">
-					<tr>
-						<th>Cuota</th>
-						<th>Importe</th>
-						<th>Fecha de vencimiento</th>
-						<th>Fecha de pago</th>
-						<th>Acción</th>
-					</tr>
-				</thead>
-				<tbody>
-					<%
-					for (Prestamo p : prestamos) {
-						// Simulamos fechas, porque el modelo Prestamo aún no tiene campo de vencimiento ni pago
-						String fechaVencimiento = "2025-07-01"; // deberías calcular esto según lógica
-						String fechaPago = ""; // vacío si no se pagó
+		<div class="card">
+			<div class="card-header bg-primary text-white">Listado de
+				Préstamos Activos</div>
 
-						boolean pagado = false; // deberías obtenerlo desde la base de datos o tu modelo
-
-						// Mostrar la fila con estilo distinto si está pagada
-						String rowClass = pagado ? "table-success" : "";
-					%>
-					<tr class="<%=rowClass%>">
-						<td><%=nroCuota++%></td>
-						<td>$<%=p.getMontoCuota()%></td>
-						<td><%=fechaVencimiento%></td>
-						<td>
-							<%
-							if (pagado) {
-							%> <%=fechaPago%> <%
- } else {
- %> <em>No pagada</em> <%
- }
- %>
-						</td>
-						<td>
-							<%
-							if (pagado) {
-							%> <i class="bi bi-check-circle-fill text-success"></i> Pagada <%
- } else {
- %>
-							<form method="post" action="PagarCuotaServlet"
-								class="d-flex align-items-center">
-
-								<input type="hidden" name="idPrestamo"
-									value="<%=p.getIdPrestamo()%>" />
-								<button type="button" data-bs-toggle="modal"
-									onclick="guardarPrestamoId(<%=p.getIdPrestamo()%>)"
-									data-bs-target="#modalVerCuotas" class="btn btn-sm btn-primary">
-									Ver cuotas</button>
-
-								<input id="idPrestamoHidden" type="hidden">
-							</form> <%
- }
- %>
-						</td>
-					</tr>
-					<%
-					}
-					%>
-				</tbody>
-			</table>
+			<div class="card-body">
+				<table class="table table-bordered table-striped">
+					<thead class="table-light">
+						<tr>
+							<th>ID Préstamo</th>
+							<th>ID Cliente</th>
+							<th>ID Cuenta</th>
+							<th>Fecha Alta</th>
+							<th>Monto Solicitado</th>
+							<th>Plazo (Meses)</th>
+							<th>Cantidad de Cuotas</th>
+							<th>Monto por Cuota</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+						for (Prestamo p : prestamos) {
+						%>
+						<tr>
+							<td><%=p.getIdPrestamo()%></td>
+							<td><%=p.getIdCliente()%></td>
+							<td><%=p.getIdCuenta()%></td>
+							<td><%=p.getFechaAlta()%></td>
+							<td>$<%=p.getMontoSolicitado()%></td>
+							<td><%=p.getPlazoMeses()%></td>
+							<td><%=p.getCantidadCuotas()%></td>
+							<td>$<%=p.getMontoCuota()%></td>
+							<td><%=p.getEstado() == 1 ? "Activo" : "Inactivo"%></td>
+						</tr>
+						<%
+						}
+						%>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
+
 
 	<div class="modal fade" id="modalVerCuotas" tabindex="-1"
 		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
@@ -182,10 +161,10 @@
 </body>
 
 <script>
-	function guardarPrestamoId(idPrestamo){
+	function guardarPrestamoId(idPrestamo) {
 		console.log("hola");
 		document.getElementById('idPrestamoHidden').value = idPrestamo;
-		
+
 	}
 </script>
 

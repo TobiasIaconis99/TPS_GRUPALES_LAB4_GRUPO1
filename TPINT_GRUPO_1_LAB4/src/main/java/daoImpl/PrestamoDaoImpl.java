@@ -17,26 +17,28 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	private Connection getConnection() throws SQLException {
 		return GestorConexionBD.getConnection();
 	}
-	
+
 	private static final String INSERT_PRESTAMO = 
-		    "INSERT INTO Prestamos (idCliente, idCuenta, fechaAlta, montoSolicitado, plazoMeses, cantidadCuotas, montoCuota, estado) " +
+		    "INSERT INTO Prestamo (idCliente, idCuenta, fechaAlta, importePedido, plazoMeses, cantidadCuotas, montoCuota, estado) " +
 		    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+
 
 	@Override
 	public boolean agregar(Prestamo p) {
 	    boolean agregado = false;
 
-	    try (Connection conn = getConnection();
+	    try (Connection conn = getConnection(); 
 	         PreparedStatement ps = conn.prepareStatement(INSERT_PRESTAMO)) {
 
-	        ps.setInt(1, p.getIdCliente());
-	        ps.setInt(2, p.getIdCuenta());
-	        ps.setString(3, p.getFechaAlta());
-	        ps.setBigDecimal(4, p.getMontoSolicitado());
-	        ps.setInt(5, p.getPlazoMeses());
-	        ps.setInt(6, p.getCantidadCuotas());
-	        ps.setBigDecimal(7, p.getMontoCuota());
-	        ps.setInt(8, p.getEstado());
+	        ps.setInt(1, p.getIdCliente()); // idCliente
+	        ps.setInt(2, p.getIdCuenta());  // idCuenta
+	        ps.setDate(3, p.getFechaAlta()); // fechaAlta
+	        ps.setBigDecimal(4, p.getImportePedido()); // importePedido
+	        ps.setInt(5, p.getPlazoMeses()); // plazoMeses
+	        ps.setInt(6, p.getCantidadCuotas()); // cantidadCuotas
+	        ps.setBigDecimal(7, p.getMontoCuota()); // montoCuota
+	        ps.setString(8, p.getEstado()); // estado ENUM ('Pendiente', 'Aprobado', 'Rechazado')
 
 	        agregado = ps.executeUpdate() > 0;
 
@@ -46,14 +48,13 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	    return agregado;
 	}
-	
+
+
 	@Override
 	public List<Prestamo> listar() {
 	    List<Prestamo> prestamos = new ArrayList<>();
 
-	    String sql = "SELECT idPrestamo, idCliente, idCuenta, fechaAlta, montoSolicitado, plazoMeses, cantidadCuotas, montoCuota, estado FROM Prestamos" +
-	             " WHERE estado = 1";
-
+	    String sql = "SELECT idPrestamo, idCliente, idCuenta, fechaAlta, importePedido, plazoMeses, cantidadCuotas, montoCuota, estado FROM Prestamo";
 
 	    try (Connection conn = getConnection();
 	         PreparedStatement ps = conn.prepareStatement(sql);
@@ -65,12 +66,12 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	            p.setIdPrestamo(rs.getInt("idPrestamo"));
 	            p.setIdCliente(rs.getInt("idCliente"));
 	            p.setIdCuenta(rs.getInt("idCuenta"));
-	            p.setFechaAlta(rs.getString("fechaAlta"));
-	            p.setMontoSolicitado(rs.getBigDecimal("montoSolicitado"));
+	            p.setFechaAlta(rs.getDate("fechaAlta"));
+	            p.setImportePedido(rs.getBigDecimal("importePedido"));
 	            p.setPlazoMeses(rs.getInt("plazoMeses"));
 	            p.setCantidadCuotas(rs.getInt("cantidadCuotas"));
 	            p.setMontoCuota(rs.getBigDecimal("montoCuota"));
-	            p.setEstado(rs.getInt("estado"));
+	            p.setEstado(rs.getString("estado")); // 'Pendiente', 'Aprobado', etc.
 
 	            prestamos.add(p);
 	        }
