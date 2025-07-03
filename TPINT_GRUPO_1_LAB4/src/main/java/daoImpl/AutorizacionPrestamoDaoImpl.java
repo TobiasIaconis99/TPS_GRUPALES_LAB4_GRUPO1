@@ -154,12 +154,22 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
             List<String> conditions = new ArrayList<>();
             List<Object> params = new ArrayList<>();
 
-//            if (busquedaDNI != null && !busquedaDNI.trim().isEmpty()) {
-//                conditions.add("(c.DNI LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ?)");
-//                params.add("%" + busquedaDNI.trim() + "%");
-//                params.add("%" + busquedaDNI.trim() + "%");
-//                params.add("%" + busquedaDNI.trim() + "%");
-//            }
+            
+            
+
+         
+        
+            
+            if (busquedaDNI != null && !busquedaDNI.trim().isEmpty()) {
+            	
+            	sql.append(" JOIN Cliente c ON p.idCliente = c.id ");
+            	
+                conditions.add(" (c.DNI LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ?) ");
+                params.add("%" + busquedaDNI.trim() + "%");
+                params.add("%" + busquedaDNI.trim() + "%");
+                params.add("%" + busquedaDNI.trim() + "%");
+                
+            }
 
             
             
