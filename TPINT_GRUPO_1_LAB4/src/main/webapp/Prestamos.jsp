@@ -37,7 +37,7 @@
 
 	<div class="container my-5">
 
-s
+
 		
 		<!-- Título -->
 		<div class="list-group mb-4">
@@ -112,8 +112,7 @@ s
 					<div class="row">
 						<div class="col-md-8"></div>
 						<div class="col-md-4 d-flex align-items-end">
-							<button type="submit" class="btn btn-primary w-100">Realizar
-								transferencia</button>
+							<button type="submit" class="btn btn-primary w-100">Solicitar prestamo</button>
 						</div>
 					</div>
 				</form>

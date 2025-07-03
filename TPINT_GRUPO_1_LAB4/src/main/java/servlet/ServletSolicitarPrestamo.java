@@ -93,20 +93,23 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 	        HttpSession session = request.getSession();
 	        Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
 
-	        p.setIdCliente(cliente.getId()); // ahora usamos el ID del cliente
-	        p.setIdCuenta(Integer.parseInt(request.getParameter("cuentaDestino"))); // idCuenta
-	        p.setFechaAlta(new java.sql.Date(System.currentTimeMillis())); // fecha actual
+	        p.setIdCliente(cliente.getId()); 
+	        p.setIdCuenta(Integer.parseInt(request.getParameter("cuentaDestino"))); 
+	        p.setFechaAlta(new java.sql.Date(System.currentTimeMillis())); 
 
-	        BigDecimal importe = new BigDecimal(request.getParameter("montoSolicitado"));
-	        int plazo = Integer.parseInt(request.getParameter("cuotas"));
+	        BigDecimal importeOriginal = new BigDecimal(request.getParameter("montoSolicitado"));
 	        int cuotas = Integer.parseInt(request.getParameter("cuotas"));
+	        int plazo = cuotas;
 
-	        p.setImportePedido(importe);
+	        
+	        BigDecimal interesFijo = new BigDecimal("0.10");
+	        BigDecimal importeConInteres = importeOriginal.add(importeOriginal.multiply(interesFijo));
+
+	        p.setImportePedido(importeConInteres);
 	        p.setPlazoMeses(plazo);
 	        p.setCantidadCuotas(cuotas);
-	        p.setMontoCuota(importe.divide(new BigDecimal(cuotas), 2, RoundingMode.HALF_UP));
-
-	        p.setEstado("Pendiente"); // estado ENUM como String
+	        p.setMontoCuota(importeConInteres.divide(new BigDecimal(cuotas), 2, RoundingMode.HALF_UP));
+	        p.setEstado("Pendiente"); 
 
 	        pNegocio.agregar(p);
 
@@ -115,7 +118,7 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        request.setAttribute("error", "Hubo un error al registrar el préstamo.");
-	        // request.getRequestDispatcher("nuevoPrestamo.jsp").forward(request, response);
+	        
 	    }
 	}
 
