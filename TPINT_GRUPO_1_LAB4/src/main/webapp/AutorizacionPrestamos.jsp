@@ -1,9 +1,9 @@
-<%@page import="entidad.Cuenta"%>
-<%@page import="entidad.Cliente"%>
-<%@page import="entidad.Prestamo"%>
-<%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="entidad.Cuenta" %>
+<%@ page import="entidad.Cliente" %>
+<%@ page import="entidad.Prestamo" %>
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
