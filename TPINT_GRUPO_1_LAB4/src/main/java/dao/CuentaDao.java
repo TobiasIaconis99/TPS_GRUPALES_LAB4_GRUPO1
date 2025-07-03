@@ -18,6 +18,7 @@ public interface CuentaDao {
     List<Cuenta> listarCuentas();
     List<Cuenta> listarCuentasActivas();
     List<Cuenta> listarCuentasPorCliente(int idCliente);
+    List<Cuenta> obtenerCuentaPorClienteId(int id);
     
     boolean existeNumeroCuenta(String numeroCuenta);
     boolean existeCbu(String cbu);
