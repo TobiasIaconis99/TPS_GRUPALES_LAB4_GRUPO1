@@ -46,7 +46,7 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
            
 
     private static final String INSERT_CUOTA =
-        "INSERT INTO Cuota (idPrestamo, numeroCuota, monto, fechaVencimiento, pagada) VALUES (?, ?, ?, ?, ?)";
+        "INSERT INTO Cuota (idPrestamo, numeroCuota, monto, fechaPago, pagada) VALUES (?, ?, ?, ?, ?)";
 
     private static final String UPDATE_PRESTAMO_ESTADO = 
         "UPDATE Prestamo SET estado = ? WHERE idPrestamo = ?"; // Ahora el estado será un String (ej. "Aprobado")
