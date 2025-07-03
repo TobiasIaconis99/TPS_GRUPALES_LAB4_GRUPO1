@@ -1,6 +1,8 @@
 package negocio;
 
 import entidad.Cuenta;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CuentaNegocio {
@@ -20,6 +22,7 @@ public interface CuentaNegocio {
     
     boolean existeNumeroCuenta(String numeroCuenta);
     boolean existeCbu(String cbu);
+    public boolean descontarSaldo(int idCuenta, BigDecimal monto);
     
     Cuenta obtenerCuentaPorId(int id);
     Cuenta obtenerCuentaPorNumero(String numeroCuenta);

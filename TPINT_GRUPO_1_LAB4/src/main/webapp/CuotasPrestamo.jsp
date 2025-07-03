@@ -82,8 +82,7 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
-				<form action="ServletPagarCuota"
-					method="post">
+				<form action="ServletPagarCuota" method="post">
 					<input type="hidden" name="accion" value="modificar">
 
 					<div class="modal-header">
@@ -137,10 +136,10 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
-						<input id="idPrestamoHidden" type="hidden"> 
-						<input id="idMontoCuota" type="hidden">
-						<input id="idCuota" type="hidden" name="idCuotaHidden">
-							
+						<input id="idPrestamoHidden" type="hidden"> <input
+							id="idMontoCuota" type="hidden" name="idMontoCuota"> <input id="idCuota"
+							type="hidden" name="idCuotaHidden"> <input id="idCuenta"
+							type="hidden" name="idCuentaHidden">
 					</div>
 				</form>
 			</div>
@@ -153,8 +152,10 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 		document.getElementById('idMontoCuota').value = montoCuota;
 		document.getElementById('idCuota').value = idCuota;
 		
+		
 		console.log("Monto cuota guardado:", montoCuota);
 		console.log("id cuota guardado:", idCuota);
+		
 	}
 
 	function cuentaSeleccionada(selectElement) {

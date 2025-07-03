@@ -35,7 +35,7 @@ public class CuotaDaoImpl implements CuotaDao {
                     c.setNumeroCuota(rs.getInt("numeroCuota"));
                     c.setMonto(rs.getBigDecimal("monto"));
                     c.setFechaPago(rs.getDate("fechaPago"));
-                    c.setPagada(rs.getBoolean("pagada")); // BIT(1) → getBoolean
+                    c.setPagada(rs.getBoolean("pagada")); 
                     
                     cuotas.add(c);
                 }

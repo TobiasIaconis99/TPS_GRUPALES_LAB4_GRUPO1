@@ -1,13 +1,17 @@
 package servlet;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.CuentaDao;
 import dao.CuotaDao;
+import daoImpl.CuentaDaoImpl;
 import daoImpl.CuotaDaoImpl;
 
 /**
@@ -38,9 +42,16 @@ public class ServletPagarCuota extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String idCuotaString = request.getParameter("idCuotaHidden");
-		int idCuota = Integer.parseInt(request.getParameter("idCuotaHidden"));
+		int idCuota = Integer.parseInt(idCuotaString);
+		String idCuentaString = request.getParameter("cuentaDestino");
+		int idCuenta = Integer.parseInt(idCuentaString);
 		CuotaDao cDao = new CuotaDaoImpl();
 		cDao.pagarCuota(idCuota);
+		CuentaDao cuentaDao = new CuentaDaoImpl();
+		String montoCuotaString = request.getParameter("idMontoCuota");
+		BigDecimal montoCuota = new BigDecimal(montoCuotaString);
+		
+		cuentaDao.descontarSaldo(idCuenta, montoCuota);
 		doGet(request, response);
 	}
 

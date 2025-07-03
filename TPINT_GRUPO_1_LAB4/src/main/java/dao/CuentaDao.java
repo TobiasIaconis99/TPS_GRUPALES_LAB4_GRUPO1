@@ -27,4 +27,5 @@ public interface CuentaDao {
     Cuenta obtenerCuentaPorNumero(String numeroCuenta);
     Cuenta obtenerCuentaPorCBU(String cbu);
     public boolean modificarSaldo(int idCuenta, BigDecimal monto, boolean sumar);
+    public boolean descontarSaldo(int idCuenta, BigDecimal monto);
 }
