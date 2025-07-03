@@ -67,11 +67,11 @@
 							<td><%=p.getIdCliente()%></td>
 							<td><%=p.getIdCuenta()%></td>
 							<td><%=p.getFechaAlta()%></td>
-							<td>$<%=p.getMontoSolicitado()%></td>
+							<td>$<%=p.getImportePedido()%></td>
 							<td><%=p.getPlazoMeses()%></td>
 							<td><%=p.getCantidadCuotas()%></td>
 							<td>$<%=p.getMontoCuota()%></td>
-							<td><%=p.getEstado() == 1 ? "Activo" : "Inactivo"%></td>
+							<td><%=p.getEstado()%></td>
 						</tr>
 						<%
 						}
