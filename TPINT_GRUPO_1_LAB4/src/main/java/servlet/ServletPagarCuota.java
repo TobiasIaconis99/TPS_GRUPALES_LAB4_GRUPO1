@@ -88,6 +88,7 @@ public class ServletPagarCuota extends HttpServlet {
 	    movimiento.setTipoMovimiento(tipoMovimiento);
 	    movimiento.setFecha(new java.util.Date());
 	    movimiento.setImporte(montoCuota.negate());
+	    movimiento.setDetalle("Se pago una cuota de un prestamo");
 	    mDao.agregar(movimiento);
 	    
 
