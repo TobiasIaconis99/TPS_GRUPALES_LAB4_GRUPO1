@@ -149,6 +149,14 @@
 								prestamo</button>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-4 d-flex justify-content-start">
+							<a href="PagoPrestamos.jsp" target="_blank"
+								class="btn btn-primary"> Ver mis prestamos </a>
+						</div>
+						<div class="col-md-8"></div>
+					</div>
+
 				</form>
 			</div>
 		</div>
