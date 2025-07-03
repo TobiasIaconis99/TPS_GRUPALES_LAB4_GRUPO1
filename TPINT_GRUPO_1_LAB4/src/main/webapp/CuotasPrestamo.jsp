@@ -2,6 +2,10 @@
 <%@page import="negocioImpl.NegocioCuotaImpl"%>
 <%@page import="negocio.NegocioCuota"%>
 <%@page import="java.util.List"%>
+<%@page import="entidad.Cliente"%>
+<%@page import="negocio.CuentaNegocio"%>
+<%@page import="entidad.Cuenta"%>
+<%@page import="negocioImpl.CuentaNegocioImpl"%>
 
 <%
 int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
@@ -19,12 +23,13 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 	rel="stylesheet" />
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+	
 </script>
 
 </head>
 <body>
 
-<%@ include file="includes/NavbarCliente.jsp"%>
+	<%@ include file="includes/NavbarCliente.jsp"%>
 	<h2>
 		Cuotas del préstamo N°
 		<%=idPrestamo%></h2>
@@ -80,19 +85,50 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 
 					<div class="modal-header">
 						<i class="bi bi-pencil-square fs-5 me-1"></i>
-						<h5 class="modal-title" id="modalEditarUsuarioLabel">Préstamo
-							- Cuotas</h5>
+						<h5 class="modal-title" id="modalEditarUsuarioLabel">Pagar cuota</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Cerrar"></button>
 					</div>
 
-					<div class="modal-body"></div>
+					<div class="modal-body">
+						<div class="mb-3">
+							<label for="cuentaDestino" class="form-label">Seleccione una cuenta para 
+							pagar la cuota</label>
+							<%
+							Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
+							int idCliente = -1;
+							if (cliente != null) {
+								idCliente = cliente.getId();
+							}
+
+							CuentaNegocio cNegocio = new CuentaNegocioImpl();
+							List<Cuenta> cuentas = cNegocio.obtenerCuentaPorClienteId(idCliente);
+							%>
+
+							<select class="form-select" id="cuentaDestino"
+								name="cuentaDestino" required>
+								<option value="">Seleccione una cuenta...</option>
+								<%
+								for (Cuenta c : cuentas) {
+								%>
+								<option value="<%=c.getIdCuenta()%>">
+									<%=c.getTipoCuenta().getNombreTipoCuenta()%> -
+									<%=c.getNumeroCuenta()%> - $<%=c.getSaldo()%>
+								</option>
+
+								<%
+								}
+								%>
+							</select>
+						</div>
+
+					</div>
 
 
 					<div class="modal-footer">
 						<button type="submit" class="btn btn-primary"
 							data-bs-toggle="tooltip" data-bs-placement="top"
-							title="Guardar los cambios">Guardar</button>
+							title="Guardar los cambios">Pagar</button>
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
