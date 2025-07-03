@@ -4,6 +4,6 @@
         <a class="nav-link fw-semibold" href="ServletCliente?accion=listar">Clientes</a>
         <a class="nav-link fw-semibold" href="ServletUsuario?accion=listar">Usuarios</a>
         <a class="nav-link fw-semibold" href="ServletCuenta?accion=listar">Cuentas</a>
-        <a class="nav-link fw-semibold" href="AutorizacionPrestamos.jsp">Préstamos</a>
+        <a class="nav-link fw-semibold" href="ServletAutorizacionPrestamos?accion=listar">Préstamos</a>
     </nav>
 </div>

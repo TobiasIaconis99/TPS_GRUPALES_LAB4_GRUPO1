@@ -2,6 +2,7 @@
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="entidad.Cliente" %>
 <%@ page import="entidad.Prestamo" %>
+<%@ page import="daoImpl.ClienteDaoImpl" %>
 <%@ page import="java.util.List" %>
 
 <!DOCTYPE html>
@@ -45,9 +46,9 @@
 						<div class="col-md-4 col-sm-12">
 							<select name="filtro" class="form-select">
 								<option value="" <%= "".equals(currentFiltro) ? "selected" : "" %>>Todos los estados</option>
-								<option value="1" <%= "1".equals(currentFiltro) ? "selected" : "" %>>Pendiente</option>
-								<option value="2" <%= "2".equals(currentFiltro) ? "selected" : "" %>>Aprobado</option>
-								<option value="0" <%= "0".equals(currentFiltro) ? "selected" : "" %>>Rechazado</option>
+								<option value="Pendiente" <%= "Pendiente".equals(currentFiltro) ? "selected" : "" %>>Pendiente</option>
+								<option value="Aprobado" <%= "Aprobado".equals(currentFiltro) ? "selected" : "" %>>Aprobado</option>
+								<option value="Rechazado" <%= "Rechazado".equals(currentFiltro) ? "selected" : "" %>>Rechazado</option>
 							</select>
 						</div>
 
@@ -87,11 +88,20 @@ List<Prestamo> listaPrestamos = (List<Prestamo>) request.getAttribute("listaPres
 
 if (listaPrestamos != null && !listaPrestamos.isEmpty()) {
     for (Prestamo p : listaPrestamos) {
+    	
+    	ClienteDaoImpl clDaoImp = new ClienteDaoImpl();
+    	Cliente cliente = clDaoImp.obtenerPorId(p.getIdCliente());
+		
+
+		//CuentaNegocio cNegocio = new CuentaNegocioImpl();
+		//List<Cuenta> cuentas = cNegocio.obtenerCuentaPorClienteId(idCliente);
 %>
     <tr>
         <td><%= p.getIdPrestamo() %></td>
-        <td><%= p.getCliente().getNombre() %> <%= p.getCliente().getApellido() %> (<%= p.getCliente().getDni() %>)</td>
-        <td><%= p.getCuenta().getNumeroCuenta() %></td>
+<%--         <td><%= p.getCliente().getNombre() %> <%= p.getCliente().getApellido() %> (<%= p.getCliente().getDni() %>)</td> --%>
+		<td><%= cliente.getNombre()%> <%= cliente.getApellido()%></td>
+        <%--<td><%= p.getCuenta().getNumeroCuenta() %></td>--%>
+        <td><%= p.getIdCuenta() %></td>
         <td><%= p.getFechaAlta() %></td>
         <td>$<%= String.format("%,.2f", p.getImportePedido()) %></td>
         <td><%= p.getPlazoMeses() %></td>

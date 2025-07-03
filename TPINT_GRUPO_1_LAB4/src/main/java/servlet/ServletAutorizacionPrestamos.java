@@ -55,7 +55,7 @@ public class ServletAutorizacionPrestamos extends HttpServlet {
             List<Prestamo> listaPrestamos = negocioPrestamo.listarPrestamosPaginado(
                 busquedaDNI, estadoFiltro, paginaActual, registrosPorPagina
             );
-
+            
             request.setAttribute("listaPrestamos", listaPrestamos);
             request.setAttribute("paginaActual", paginaActual);
             request.setAttribute("totalPaginas", totalPaginas);

@@ -25,19 +25,25 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
         return GestorConexionBD.getConnection();
     }
 
+   // private static final String BASE_SELECT_SQL =
+     //   "SELECT p.idPrestamo, p.idCliente, p.idCuenta, p.fechaAlta, p.importePedido, " +
+       // "p.plazoMeses, p.cantidadCuotas, p.montoCuota, p.estado, " + // La columna 'estado' se leerá como String
+        //"c.id AS idCliente, c.DNI, c.nombre, c.apellido, c.sexo, c.nacionalidad, c.fechaNacimiento, c.direccion, " +
+        //"l.nombreLocalidad AS nombreLocalidadAlias, " +
+        //"pr.nombreProvincia AS nombreProvinciaAlias, " +
+        //"c.email, c.telefono, c.estado AS estadoCliente, " +
+        //"cu.idCuenta, cu.numeroCuenta, cu.fechaCreacion, cu.tipoCuenta, cu.saldo, cu.CBU, cu.estado AS estadoCuenta " +
+        //"FROM Prestamo p " +
+        //"INNER JOIN Cliente c ON p.idCliente = c.id " +
+        //"INNER JOIN Cuenta cu ON p.idCuenta = cu.idCuenta " +
+        //"INNER JOIN Localidad l ON c.idLocalidad = l.idLocalidad " +
+        //"INNER JOIN Provincia pr ON l.idProvincia = pr.idProvincia ";
+    
     private static final String BASE_SELECT_SQL =
-        "SELECT p.idPrestamo, p.idCliente, p.idCuenta, p.fechaAlta, p.importePedido, " +
-        "p.plazoMeses, p.cantidadCuotas, p.montoCuota, p.estado, " + // La columna 'estado' se leerá como String
-        "c.id AS idCliente, c.DNI, c.nombre, c.apellido, c.sexo, c.nacionalidad, c.fechaNacimiento, c.direccion, " +
-        "l.nombreLocalidad AS nombreLocalidadAlias, " +
-        "pr.nombreProvincia AS nombreProvinciaAlias, " +
-        "c.email, c.telefono, c.estado AS estadoCliente, " +
-        "cu.idCuenta, cu.numeroCuenta, cu.fechaCreacion, cu.tipoCuenta, cu.saldo, cu.CBU, cu.estado AS estadoCuenta " +
-        "FROM Prestamo p " +
-        "INNER JOIN Cliente c ON p.idCliente = c.id " +
-        "INNER JOIN Cuenta cu ON p.idCuenta = cu.idCuenta " +
-        "INNER JOIN Localidad l ON c.idLocalidad = l.idLocalidad " +
-        "INNER JOIN Provincia pr ON l.idProvincia = pr.idProvincia ";
+            "SELECT p.idPrestamo, p.idCliente, p.idCuenta, p.fechaAlta, p.importePedido, " +
+            "p.plazoMeses, p.cantidadCuotas, p.montoCuota, p.estado " +
+            "FROM Prestamo p ";
+           
 
     private static final String INSERT_CUOTA =
         "INSERT INTO Cuota (idPrestamo, numeroCuota, monto, fechaVencimiento, pagada) VALUES (?, ?, ?, ?, ?)";
@@ -148,29 +154,36 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
             List<String> conditions = new ArrayList<>();
             List<Object> params = new ArrayList<>();
 
-            if (busquedaDNI != null && !busquedaDNI.trim().isEmpty()) {
-                conditions.add("(c.DNI LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ?)");
-                params.add("%" + busquedaDNI.trim() + "%");
-                params.add("%" + busquedaDNI.trim() + "%");
-                params.add("%" + busquedaDNI.trim() + "%");
-            }
+//            if (busquedaDNI != null && !busquedaDNI.trim().isEmpty()) {
+//                conditions.add("(c.DNI LIKE ? OR c.nombre LIKE ? OR c.apellido LIKE ?)");
+//                params.add("%" + busquedaDNI.trim() + "%");
+//                params.add("%" + busquedaDNI.trim() + "%");
+//                params.add("%" + busquedaDNI.trim() + "%");
+//            }
 
+            
+            
+            
             if (filtroEstado != null && !filtroEstado.isEmpty()) {
-                // Aquí convertimos el filtro numérico del JSP a la cadena de texto de la DB
-                String estadoDB = "";
+               // // Aquí convertimos el filtro numérico del JSP a la cadena de texto de la DB            	
+            	String estadoDB = "";
                 switch(filtroEstado) {
-                    case "0": estadoDB = "Rechazado"; break;
-                    case "1": estadoDB = "Pendiente"; break;
-                    case "2": estadoDB = "Aprobado"; break;
+                    case "Rechazado": estadoDB = "Rechazado"; break;
+                    case "Pendiente": estadoDB = "Pendiente"; break;
+                    case "Aprobado": estadoDB = "Aprobado"; break;
                     default: // Si es un valor inesperado, no agregamos la condición de estado
                         estadoDB = null;
                         break;
                 }
                 if (estadoDB != null) {
-                    conditions.add("p.estado = ?");
+                   conditions.add("p.estado = ?");
                     params.add(estadoDB); // <--- CAMBIO CLAVE AQUÍ: Agregar el String del estado
                 }
             }
+//            else {
+//            	conditions.add("p.estado = ?");
+//                params.add("Pendiente"); // <--- CAMBIO CLAVE AQUÍ: Agregar el String del estado
+//            }
 
             if (!conditions.isEmpty()) {
                 sql.append(" WHERE ").append(String.join(" AND ", conditions));
@@ -267,6 +280,8 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
     private Prestamo mapResultSetToPrestamo(ResultSet rs) throws SQLException {
         Prestamo p = new Prestamo();
         p.setIdPrestamo(rs.getInt("idPrestamo"));
+        p.setIdCliente(rs.getInt("idCliente"));
+        p.setIdCuenta(rs.getInt("idCuenta"));
         p.setFechaAlta(rs.getDate("fechaAlta"));
         p.setImportePedido(rs.getBigDecimal("importePedido"));
         p.setPlazoMeses(rs.getInt("plazoMeses"));
@@ -274,43 +289,43 @@ public class AutorizacionPrestamoDaoImpl implements AutorizacionPrestamoDao {
         p.setMontoCuota(rs.getBigDecimal("montoCuota"));
         p.setEstado(rs.getString("estado")); // <--- CAMBIO CLAVE AQUÍ: Obtener el estado como String
 
-        Cliente cliente = new Cliente();
-        cliente.setId(rs.getInt("idCliente"));
-        cliente.setDni(rs.getString("DNI"));
-        cliente.setNombre(rs.getString("nombre"));
-        cliente.setApellido(rs.getString("apellido"));
-        cliente.setSexo(rs.getString("sexo"));
-        cliente.setNacionalidad(rs.getString("nacionalidad"));
-        cliente.setFechaNacimiento(rs.getDate("fechaNacimiento"));
-        cliente.setDireccion(rs.getString("direccion"));
-        
-        Localidad localidad = new Localidad();
-        localidad.setNombreLocalidad(rs.getString("nombreLocalidadAlias"));
-        
-        Provincia provincia = new Provincia();
-        provincia.setNombreProvincia(rs.getString("nombreProvinciaAlias"));
-        
-        localidad.setProvincia(provincia);
-        cliente.setLocalidad(localidad);
-        
-        cliente.setCorreo(rs.getString("email"));
-        cliente.setTelefono(rs.getString("telefono"));
-        cliente.setEstado(rs.getBoolean("estadoCliente")); 
-        p.setCliente(cliente);
-
-        Cuenta cuenta = new Cuenta();
-        cuenta.setIdCuenta(rs.getInt("idCuenta"));
-        
-        TipoCuenta tipoCuenta = new TipoCuenta();
-        tipoCuenta.setNombreTipoCuenta(rs.getString("tipoCuenta"));
-        cuenta.setTipoCuenta(tipoCuenta); 
-
-        cuenta.setNumeroCuenta(rs.getString("numeroCuenta"));
-        cuenta.setCbu(rs.getString("CBU"));
-        cuenta.setSaldo(rs.getBigDecimal("saldo"));
-        cuenta.setFechaCreacion(rs.getDate("fechaCreacion"));
-        cuenta.setEstado(rs.getBoolean("estadoCuenta")); 
-        p.setCuenta(cuenta);
+       // Cliente cliente = new Cliente();
+        //cliente.setId(rs.getInt("idCliente"));
+//        cliente.setDni(rs.getString("DNI"));
+//        cliente.setNombre(rs.getString("nombre"));
+//        cliente.setApellido(rs.getString("apellido"));
+//        cliente.setSexo(rs.getString("sexo"));
+//        cliente.setNacionalidad(rs.getString("nacionalidad"));
+//        cliente.setFechaNacimiento(rs.getDate("fechaNacimiento"));
+//        cliente.setDireccion(rs.getString("direccion"));
+//        
+//        Localidad localidad = new Localidad();
+//        localidad.setNombreLocalidad(rs.getString("nombreLocalidadAlias"));
+//        
+//        Provincia provincia = new Provincia();
+//        provincia.setNombreProvincia(rs.getString("nombreProvinciaAlias"));
+//        
+//        localidad.setProvincia(provincia);
+//        cliente.setLocalidad(localidad);
+//        
+//        cliente.setCorreo(rs.getString("email"));
+//        cliente.setTelefono(rs.getString("telefono"));
+//        cliente.setEstado(rs.getBoolean("estadoCliente")); 
+//        p.setCliente(cliente);
+//
+//        Cuenta cuenta = new Cuenta();
+//        cuenta.setIdCuenta(rs.getInt("idCuenta"));
+//        
+//        TipoCuenta tipoCuenta = new TipoCuenta();
+//        tipoCuenta.setNombreTipoCuenta(rs.getString("tipoCuenta"));
+//        cuenta.setTipoCuenta(tipoCuenta); 
+//
+//        cuenta.setNumeroCuenta(rs.getString("numeroCuenta"));
+//        cuenta.setCbu(rs.getString("CBU"));
+//        cuenta.setSaldo(rs.getBigDecimal("saldo"));
+//        cuenta.setFechaCreacion(rs.getDate("fechaCreacion"));
+//        cuenta.setEstado(rs.getBoolean("estadoCuenta")); 
+//        p.setCuenta(cuenta);
 
         return p;
     }
