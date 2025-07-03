@@ -133,10 +133,10 @@
 										<%
 										if (cuota.getPagada()) {
 										%> <span class="badge bg-success">Pagada</span> <%
- } else {
- %> <span class="badge bg-warning text-dark">Pendiente</span> <%
- }
- %>
+									 } else {
+									 %> <span class="badge bg-warning text-dark">Pendiente</span> <%
+									 }
+									 %>
 									</td>
 								</tr>
 								<%
@@ -170,6 +170,8 @@
 		console.log("ID préstamo:", idPrestamo);
 		document.getElementById('idPrestamoHidden').value = idPrestamo;
 	}
+	
+
 </script>
 
 </html>

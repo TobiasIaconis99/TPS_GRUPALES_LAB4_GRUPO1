@@ -134,4 +134,10 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	public List<Cuenta> obtenerCuentaPorClienteId(int id) {
 		return cuentaDao.listarCuentasPorCliente(id);
 	}
+
+	@Override
+	public boolean descontarSaldo(int idCuenta, BigDecimal monto) {
+		
+		return cuentaDao.descontarSaldo(idCuenta, monto);
+	}
 }

@@ -116,6 +116,12 @@ public class PrestamoNegocioImpl implements PrestamoNegocio, CuentaNegocio {
 		return null;
 	}
 
+	@Override
+	public boolean descontarSaldo(int idCuenta, BigDecimal monto) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 }

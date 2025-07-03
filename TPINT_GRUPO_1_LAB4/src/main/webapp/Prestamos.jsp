@@ -67,7 +67,7 @@
 		</div>
 		<%
 		}
-		// Mensaje error
+		
 		String mensajeError = (String) session.getAttribute("mensajeError");
 		if (mensajeError != null) {
 		session.removeAttribute("mensajeError");

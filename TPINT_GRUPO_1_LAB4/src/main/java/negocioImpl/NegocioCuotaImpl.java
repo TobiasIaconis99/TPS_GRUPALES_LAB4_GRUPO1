@@ -42,4 +42,10 @@ public class NegocioCuotaImpl implements NegocioCuota {
 		return cDao.obtenerCuotasPorIdPrestamo(idPrestamo);
 	}
 
+	@Override
+	public boolean pagarCuota(int idCuota) {
+		// TODO Auto-generated method stub
+		return cDao.pagarCuota(idCuota);
+	}
+
 }
