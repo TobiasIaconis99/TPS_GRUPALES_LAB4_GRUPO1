@@ -59,13 +59,11 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 						<%=c.getPagada() ? "Pagada" : "Sin pagar"%>
 				</span></td>
 				<td>
-				    <button type="button" class="btn btn-primary btn-sm"
-				        <%=c.getPagada() ? "disabled" : ""%>
-				        onclick="guardarMontoCuota(<%= c.getMonto() %>)" 
-				        data-bs-toggle="modal"
-				        data-bs-target="#modalPagarCuota">
-				        Pagar
-				    </button>
+					<button type="button" class="btn btn-primary btn-sm"
+						<%=c.getPagada() ? "disabled" : ""%>
+						onclick="guardarMontoCuota(<%=c.getMonto()%>)"
+						data-bs-toggle="modal" data-bs-target="#modalPagarCuota">
+						Pagar</button>
 				</td>
 
 
@@ -83,9 +81,8 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 	<div class="modal fade" id="modalPagarCuota" tabindex="-1"
 		aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
-			<!-- ampliamos el tamaño -->
 			<div class="modal-content">
-				<form action="<%=request.getContextPath()%>/ServletUsuario"
+				<form action="ServletPagarCuota"
 					method="post">
 					<input type="hidden" name="accion" value="modificar">
 
@@ -135,13 +132,13 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 
 					<div class="modal-footer">
 						<button type="submit" class="btn btn-primary" disabled="disabled"
-							data-bs-toggle="tooltip" data-bs-placement="top" id="btnPagarCuota"
-							title="Guardar los cambios">Pagar</button>
-						<button type="button" class="btn btn-secondary" 
+							data-bs-toggle="tooltip" data-bs-placement="top"
+							id="btnPagarCuota" title="Guardar los cambios">Pagar</button>
+						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal" data-bs-toggle="tooltip"
 							data-bs-placement="top" title="Cancelar y cerrar">Cancelar</button>
-						<input id="idPrestamoHidden" type="hidden">
-						<input id="idMontoCuota" type="hidden">
+						<input id="idPrestamoHidden" type="hidden"> <input
+							id="idMontoCuota" type="hidden">
 					</div>
 				</form>
 			</div>
@@ -149,7 +146,7 @@ List<Cuota> cuotas = negocioCuota.obtenerCuotasPorIdPrestamo(idPrestamo);
 	</div>
 
 
-<script>
+	<script>
 	function guardarMontoCuota(montoCuota){
 		document.getElementById('idMontoCuota').value = montoCuota;
 		console.log("Monto cuota guardado:", montoCuota);
