@@ -88,27 +88,29 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 	    PrestamoNegocio pNegocio = new PrestamoNegocioImpl();
 
 	    try {
-	    	Prestamo p = new Prestamo();
+	        Prestamo p = new Prestamo();
 
-	    	HttpSession session = request.getSession();
-	    	Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
+	        HttpSession session = request.getSession();
+	        Cliente cliente = (Cliente) session.getAttribute("clienteLogueado");
 
-	    	p.setDniCliente(cliente.getDni());
-	    	p.setIdCuentaDestino(Integer.parseInt(request.getParameter("cuentaDestino")));
-	    	p.setFechaAlta(new java.sql.Date(System.currentTimeMillis())); // Fecha actual
+	        p.setIdCliente(cliente.getId()); // ahora usamos el ID del cliente
+	        p.setIdCuenta(Integer.parseInt(request.getParameter("cuentaDestino"))); // idCuenta
+	        p.setFechaAlta(new java.sql.Date(System.currentTimeMillis())); // fecha actual
 
-	    	BigDecimal monto = new BigDecimal(request.getParameter("montoSolicitado"));
-	    	int cuotas = Integer.parseInt(request.getParameter("cuotas"));
-	    	p.setMontoSolicitado(monto);
-	    	p.setCuotasTotales(cuotas);
-	    	p.setMontoPorCuota(monto.divide(new BigDecimal(cuotas), 2, RoundingMode.HALF_UP));
+	        BigDecimal importe = new BigDecimal(request.getParameter("montoSolicitado"));
+	        int plazo = Integer.parseInt(request.getParameter("cuotas"));
+	        int cuotas = Integer.parseInt(request.getParameter("cuotas"));
 
-	    	p.setEstado(1); // Estado pendiente
+	        p.setImportePedido(importe);
+	        p.setPlazoMeses(plazo);
+	        p.setCantidadCuotas(cuotas);
+	        p.setMontoCuota(importe.divide(new BigDecimal(cuotas), 2, RoundingMode.HALF_UP));
 
-	    	pNegocio.agregar(p);
+	        p.setEstado("Pendiente"); // estado ENUM como String
 
-	    	response.sendRedirect("Prestamos.jsp");
+	        pNegocio.agregar(p);
 
+	        response.sendRedirect("Prestamos.jsp");
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -116,6 +118,7 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 	        // request.getRequestDispatcher("nuevoPrestamo.jsp").forward(request, response);
 	    }
 	}
+
 
 
 }

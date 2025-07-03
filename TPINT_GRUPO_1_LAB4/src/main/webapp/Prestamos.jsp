@@ -37,6 +37,8 @@
 
 	<div class="container my-5">
 
+
+		
 		<!-- Título -->
 		<div class="list-group mb-4">
 			<h4>Préstamos</h4>
@@ -96,8 +98,7 @@
 								<%=c.getTipoCuenta().getNombreTipoCuenta()%> -
 								<%=c.getNumeroCuenta()%> - $<%=c.getSaldo()%>
 							</option>
-							<input type="hidden" id="hiddenIdCuenta"
-							value="<%=c.getIdCuenta()%>" name="idCuentaName">
+						
 							<%
 							}
 							%>
